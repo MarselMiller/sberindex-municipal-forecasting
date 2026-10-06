@@ -1,0 +1,87 @@
+# E04a: protocol fixed before synthetic validation/test; E01-E03 unchanged.
+experiment: online_detection_v1
+experiment_date: '2026-10-06'
+seed: 42
+source:
+  e01_dir: outputs/prophet_comparison_v1
+  data_path: data/input/consumption_all_categories.csv
+  category: Все категории
+  forecast_model: SeasonalNaiveYoY
+  horizon: 1
+  selection_timing: chosen_after_viewing_E01
+preparation:
+  warmup_observations: 4
+  relative_scale_floor: 0.03
+  absolute_scale_floor: 1.0
+  cooldown_months: 2
+  release_lag_months: 0
+  scaling: fixed_median_MAD_first_four_available_raw_residuals
+  scale_floor_basis: median_absolute_prediction_of_warmup_only
+  missing: preserve_calendar_skip_update
+  reset: after_emitted_alarm_only
+  cooldown: update_state_suppress_next_two_calendar_months
+forecast:
+  yearly_growth_window: 3
+  yearly_growth_bounds: [0.5, 2.0]
+  min_history_observations: 12
+  max_staleness_months: 1
+generator:
+  months: 24
+  start_period: '2023-01'
+  base_level: 10000.0
+  seasonality_fraction: 0.10
+  trend_per_month_fraction: 0.004
+  noise_fractions: [0.01, 0.03]
+  strengths: [2.0, 4.0, 6.0]
+  replicates_per_cell: 30
+  validation_seed: 100000
+  test_seed: 200000
+  event_start_indices: [16, 17, 18, 19, 20]
+  warmup_event_index: 14
+  end_event_index: 22
+  main_scenarios: [no_change, outlier, level_up, level_down, slope_up, slope_down, variance_up]
+  secondary_edge_scenarios: [level_warmup, level_end]
+  level_definition: additive_shift_persists_to_end_at_least_three_months_main
+  amplitude: strength_times_base_level_times_noise_fraction
+  slope_definition: added_amplitude_times_months_since_event_inclusive_divided_by_three
+  variance_definition: multiply_noise_standard_deviation_by_strength_after_event
+  outlier_definition: one_month_additive_amplitude_alternating_sign_no_structural_event
+detectors:
+  CUSUM:
+    allowance: [0.5, 1.0]
+    threshold: [3.0, 5.0, 8.0]
+  EWMA:
+    alpha: [0.2, 0.4]
+    threshold: [2.5, 3.0, 4.0]
+  BOCPD:
+    hazard: [0.041666666666666664, 0.016666666666666666]
+    threshold: [0.2, 0.4, 0.6]
+    recent_run_max: [2]
+    prior_mean: [0.0]
+    prior_kappa: [1.0]
+    prior_alpha: [2.0]
+    prior_beta: [1.0]
+evaluation:
+  detection_window_months: 3
+  matching: chronological_one_to_one_first_alarm_in_inclusive_window
+  repeated_alarms: unmatched_repeats_are_false_alarms
+  incomplete_windows: exclude_from_main_recall_and_mark_alarms_in_excluded_event_windows
+  false_alarm_budget_per_12_months: 1.0
+  budget_controls: [no_change, outlier]
+  budget_rule: each_control_scenario_must_meet_budget_on_validation
+  primary_scenarios: [level_up, level_down]
+  selection_rule: highest_validation_primary_F1_then_recall_then_lowest_max_control_FAR_then_delay_then_candidate_id
+  no_feasible_candidate: method_not_selected_no_budget_relaxation
+  bootstrap_replicates: 500
+  bootstrap_seed: 300000
+  bootstrap_unit: entire_series_within_reported_stratum
+illustrations:
+  selection_rule: three_smallest_numeric_E01_identifiers_and_smallest_identifier_without_monitoring
+  n_smallest: 3
+output_dir: outputs/online_detection_v1
+smoke_output_dir: outputs/online_detection_smoke_v2
+report_path: reports/results/E04a_online_detection.md
+sources:
+  - https://www.itl.nist.gov/div898/handbook/pmc/section3/pmc323.htm
+  - https://www.itl.nist.gov/div898/handbook/pmc/section3/pmc324.htm
+  - https://arxiv.org/abs/0710.3742
