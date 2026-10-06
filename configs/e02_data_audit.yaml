@@ -1,0 +1,22 @@
+# E02a: только сбор обучающих пар и аудит; модели не обучаются.
+experiment: e02_data_audit
+seed: 42
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+  release_lag_months: 0
+backtest:
+  first_origin: 2023-12
+  last_origin: 2024-11
+  horizons: [1, 3, 6, 12]
+# Эти требования относятся только к текущим прогнозным случаям E01.
+forecast_cohort:
+  min_history_observations: 12
+  max_staleness_months: 1
+  source_results: outputs/prophet_comparison_v1
+direct_training:
+  modes: [legacy, strict12]
+  # Нет ограничения давности у обучающих примеров E01. В strict12 меняем
+  # только число фактов, чтобы не смешивать два изменения требований.
+  max_staleness_months: null
+output_dir: outputs/e02_data_audit
