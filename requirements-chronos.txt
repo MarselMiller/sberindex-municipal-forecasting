@@ -1,0 +1,9 @@
+# E03: отдельное окружение Python 3.12; CPU wheel без CUDA.
+# После установки полный фактический состав сохраняется в requirements-chronos-lock.txt.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.8.0+cpu
+chronos-forecasting==2.3.2
+numpy==2.3.5
+pandas==2.2.3
+PyYAML==6.0.3
+pytest==9.0.2

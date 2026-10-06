@@ -3,7 +3,7 @@
 Дата исходного описания: 2026-10-05.
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
-Исходный паспорт дополнен фактически проверенными результатами E01, E02a и E02b
+Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b и E03
 на 2026-10-06. Источник каждого нового вывода указан ниже.
 
 ## Цель
@@ -77,11 +77,11 @@ GitHub-репозиторий: код, README, конфигурации, тес�
 сводок потребуется отдельное место, например reports/results/ и reports/figures/.
 
 ## Последний согласованный шаг
-E02b: отдельный CatBoostDirect в режиме legacy и первый эксперимент на протоколе
-E01. Обучение прямых моделей разрешено пользователем; параметры и seed фиксированы,
-strict12 не запускается как прогнозный эксперимент. Данные, код и результаты E01,
-аудит E02a и посторонние изменения сохраняются. Установка зависимостей, подбор
-параметров, commit и push не разрешены.
+E03: amazon/chronos-2 в zero-shot режиме на протоколе E01, сравнение с сохранёнными
+E01/E02b. Пользователь разрешил отдельную .venv-chronos на Python 3.12, зависимости
+только в неё, официальные веса, smoke на двух МО и полный запуск после его успеха.
+Исходная .venv, прежние requirements, данные, код и результаты E01/E02 сохраняются.
+Fit/fine-tuning, подбор параметров, системные компоненты, commit и push не выполняются.
 
 ## E01: завершённая диагностика сопоставимости
 Источник: outputs/prophet_comparison_v1/{config_resolved.yaml,sample_ids.json,
@@ -285,3 +285,127 @@ E02b выполнен: код подготовлен, команды выпол�
 МО и уже просмотренном holdout, не независимая проверка и не полный набор МО.
 Следующий предмет обсуждения — разбор ошибок h=3/h=6 по МО и датам по сохранённым
 прогнозам; дальнейший эксперимент требует отдельного фиксированного протокола.
+
+## E03: Chronos-2 zero-shot завершён
+Источник: outputs/chronos_zero_shot_v1/; smoke: outputs/chronos_zero_shot_smoke_v1/;
+отчёт: reports/results/E03_chronos_zero_shot.md. Конфигурация:
+configs/chronos_zero_shot.yaml; скрипт: scripts/run_chronos.py.
+Git HEAD на запуске: 4eee7762112b2866e3efbf0010be951a3751f96f (E02b);
+dirty и существующая .vscode/ отражены в manifest. Commit/push E03 не выполнялись.
+
+Официальные API и исходники проверены до запуска. chronos-forecasting==2.3.2,
+torch==2.8.0+cpu, transformers==5.18.0, accelerate==1.15.0,
+huggingface_hub==1.33.0, safetensors==0.8.0; numpy==2.3.5/pandas==2.2.3.
+requirements-chronos.txt задаёт отдельные зависимости с CPU-индексом;
+requirements-chronos-lock.txt фиксирует все 47 установленных пакетов.
+pip check: No broken requirements found. Старая .venv не изменялась.
+.gitignore дополнен только /.venv-chronos/; веса и кэш остаются в outputs.
+
+Среда: Python 3.12.10, Windows 11, 8 логических CPU; RAM около 6.94 GiB,
+на первоначальной проверке доступно 1.27 GiB, на диске свободно около 264 GiB.
+Обнаружена AMD Radeon Vega 8; torch.cuda.is_available()=False.
+Запуск CPU, float32, batch_size=1, cpu_threads=2, seed=42, context_length=8192.
+Checkpoint amazon/chronos-2: revision 29ec3766d36d6f73f0696f85560a422f50e8498c,
+119477664 параметра, model.safetensors 477930472 байта,
+SHA256 ddcda3c7508bf2528087723e98a20707cc04b7f370ae275a9fd88078ddba4f42.
+Веса загружаются один раз на запуск; локальный fit/fine-tuning отсутствует.
+
+Отдельные chronos_model.py, chronos_experiment.py, chronos_evaluation.py и
+chronos_report.py используют data/backtest/metrics прежнего проекта.
+Chronos импортируется только при реальной загрузке модели; прежние тесты
+в .venv не требуют Chronos и не скачивают веса. Независимые МО передаются
+как отдельные одномерные массивы, cross_learning=False; внешних признаков нет.
+Явно используется quantiles[i][0,:,0] при quantile_levels=[0.5].
+Выход уже в исходной шкале; anchor не добавляется, отрицательные значения
+не обрезаются и прогнозы после просмотра ошибок не изменяются.
+
+История заканчивается на O−L, а не на последнем непустом факте. NaN внутри
+и на конце сохраняют месячные позиции, модель автоматически маскирует их.
+Бесконечные значения входа отклоняются, не заполняются. Путь начинается
+в следующем месяце после cutoff; для цели O+h берётся шаг L+h (индекс L+h−1).
+Неконечный выход/ошибка дают failed/NaN/reason, без резервной модели.
+В январе 2024 модель реально получила один trailing NaN МО 1471 и успешно
+выпустила прогнозы; МО не исключалось заранее из-за будущих пропусков.
+
+Preflight сверил исходные данные, конфигурации, 64 фактических ID, прежний код,
+хеши источников E01 из manifest E02, все множества KEY и y_true, включая NaN.
+Сохранены даты, горизонты, граница validation/holdout, лаг L=0 и допуск МО E01.
+Полная область определяется наличием факта независимо от failed Chronos;
+ошибки дают неполную метрику группы. Общее успешное пересечение сохранено
+отдельно вместе с ключами и причинами исключений. На h=12 чистый Direct
+обозначен no_training_pairs и исключён из состава годовых участников;
+годовые Chronos/YoY/Recursive/оба Prophet сравниваются на тех же 63 ключах.
+SeasonalNaive из резерва E02 не назван прогнозом CatBoostDirect.
+
+Точные основные команды:
+```powershell
+.\.venv\Scripts\python.exe -B -X utf8 -m venv .venv-chronos
+.\.venv-chronos\Scripts\python.exe -B -X utf8 -m pip install --disable-pip-version-check --cache-dir outputs/e03_checks/pip_cache --retries 0 --timeout 20 --report outputs/e03_checks/install_report.json -r requirements-chronos.txt
+.\.venv-chronos\Scripts\python.exe -B -X utf8 -m pip check
+.\.venv\Scripts\python.exe -B -X utf8 -m pytest -p no:cacheprovider --basetemp=outputs/e03_checks/pytest_full_run3
+.\.venv-chronos\Scripts\python.exe -B -X utf8 -m pytest tests/test_chronos_model.py tests/test_chronos_evaluation.py -p no:cacheprovider --basetemp=outputs/e03_checks/pytest_chronos_run1
+.\.venv-chronos\Scripts\python.exe -B -X utf8 scripts/run_chronos.py --config configs/chronos_zero_shot.yaml --preflight-only
+.\.venv-chronos\Scripts\python.exe -B -X utf8 scripts/run_chronos.py --config configs/chronos_zero_shot.yaml --smoke
+.\.venv-chronos\Scripts\python.exe -B -X utf8 scripts/run_chronos.py --config configs/chronos_zero_shot.yaml
+```
+Полный pytest перед smoke: 137 passed, 1 warning, 17.25 s, код 0.
+39 тестов адаптера/оценки в новом окружении: 39 passed, 4.28 s, код 0.
+Предупреждение полного pytest — прежняя синтетическая проверка Inf в E02a.
+Перед окончательным прогоном устранена несовместимость WindowsPath с
+psutil.disk_usage(str(root)); это ошибка диагностики ресурсов, не прогнозов.
+Раннюю проверку импорта во время незавершённой распаковки пакетов повторили
+после завершения установки: импорт успешен. Веса тогда ещё не скачивались.
+Chronos сообщает о deprecated torch_dtype и неавторизованных запросах HF;
+эти сообщения не стали ошибками, токены не использовались.
+
+Smoke: МО 21 и 25 (заранее — два минимальных числовых ID E01), декабрь 2023,
+путь 12×2 на январь–декабрь 2024, все значения конечны, код 0.
+Инференс 0.4303 s; загрузка с первоначальным скачиванием 53.0682 s;
+общее время 60.7735 s, пик working set процесса 0.7835 GiB.
+Полный запуск требует успешного smoke с тем же fingerprint кода/конфигурации.
+
+Полный E03: 12 выпусков, код 0, 1897 native, 0 failed, 0 fallback;
+семь случаев без факта сохранены. Оцениваемых случаев 1890, покрытие Chronos 100%.
+Полная и общая успешная области совпали во всех семи split/h группах.
+12 журналов ошибок пусты. Инференс 147.6206 s; загрузка из кэша 25.9709 s;
+время до сохранения итогового run_status 186.7685 s (manifest после проверки
+сохранности: 187.0326 s). Пик working set полного процесса около 0.7825 GiB.
+
+MAE macro Chronos на holdout h=1/3/6/12:
+1947.35 / 2526.33 / 4150.59 / 9163.47.
+На h=1/3/6 Chronos хуже всех пяти сравнимых соперников; на h=12 лучше
+Recursive, но хуже YoY и обоих Prophet. Годовой Direct не обучался.
+Validation h=1/3/6: 2316.65 / 3064.93 / 2754.10; Chronos лучше Recursive
+и ProphetYearly, но хуже ProphetAuto на всех этих горизонтах. h=6 содержит
+одну дату оценки, validation h=12 отсутствует. MAE micro и pooled R² всех
+моделей сохранены в metrics_full/common_success.csv. Превосходство Chronos
+не подтверждено; проигрыш сохранён без изменения протокола.
+
+Независимый расчёт из сохранённых прогнозов подтвердил 82 числовые группы
+MAE macro/micro/R², 5166 строк метрик МО, 41 ячейку MAE отчёта и 21 ячейку
+дополнительных метрик. Максимальное числовое отклонение 1.82e-12.
+Проверены все 3735 позиций прогнозных путей, календарная когорта и хеши
+кода/данных/источников/весов. Итоговая проверка 295 защищённых файлов
+до/после и 30 пакетов исходной .venv подтвердила их неизменность.
+Артефакты: outputs/e03_checks/independent_verification.json,
+preservation_checks.json, test_validation.json; ссылки на них также в manifests.
+Тестировавшийся код и файлы тестов после запуска не менялись.
+
+Официальный публичный релиз Chronos-2 — 20.10.2025, позже всех наших выпусков.
+E03 — ретроспективное применение современного checkpoint к 2023–2024,
+а не доказательство его доступности на историческую дату. Предобучение:
+подмножества Chronos Datasets/GIFT-Eval Pretrain плюс синтетика; отсутствие
+пересечения с нашим набором не доказано. Источники:
+[официальный README](https://github.com/amazon-science/chronos-forecasting),
+[model card](https://huggingface.co/amazon/chronos-2#training-data),
+[статья, раздел 4](https://arxiv.org/html/2510.15821v1#S4).
+Дополнительные ограничения: короткая история 12–23 календарных месяцев,
+63 оцениваемых МО, одна годовая дата, непроверенные публикации/пересмотры,
+уже просмотренный holdout. Нет основания переносить результат на полную
+прогнозную панель или систему предупреждения шоков.
+
+E03 выполнен: код подготовлен, окружение установлено, команды выполнены,
+тесты и smoke пройдены, полный zero-shot запуск и сравнение завершены.
+Следующий шаг для обсуждения — разбор сохранённых ошибок по МО/датам;
+дальнейший опыт требует отдельного протокола и не становится независимым
+тестом от переименования уже просмотренного holdout.
