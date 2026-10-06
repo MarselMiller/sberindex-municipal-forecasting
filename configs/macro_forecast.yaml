@@ -1,0 +1,62 @@
+experiment: macro_forecast_v1
+experiment_date: '2026-10-07'
+seed: 42
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+  release_lag_months: 0
+backtest:
+  first_origin: 2023-12
+  last_origin: 2024-11
+  horizons: [1, 3, 6, 12]
+  validation_target_end: 2024-06
+  min_history_observations: 12
+  max_staleness_months: 1
+  max_series: 64
+models:
+  catboost:
+    iterations: 300
+    depth: 6
+    learning_rate: 0.05
+    l2_leaf_reg: 5.0
+    loss_function: MAE
+    thread_count: 2
+  yearly_growth_window: 3
+  yearly_growth_bounds: [0.5, 2.0]
+direct_training:
+  mode: legacy
+  max_staleness_months: null
+  no_training_pairs_fallback: SeasonalNaive
+comparison:
+  source_dir: outputs/prophet_comparison_v1
+  direct_source_dir: outputs/catboost_direct_v1
+  sample_ids_path: outputs/prophet_comparison_v1/sample_ids.json
+  models: [LastValue, SeasonalNaive, SeasonalNaiveYoY, CatBoostRecursive, ProphetAuto, ProphetYearly]
+  report_models: [SeasonalNaiveYoY, ProphetAuto, ProphetYearly]
+  h1_absolute_tolerance: 0.00000001
+macro:
+  source_dir: outputs/macro_data_audit_v1
+  source_audit_record: outputs/e05c_checks/source_audit.json
+  source_status: A
+  geography: national
+  publication_convention: month_end
+  target_year_rule: calendar_year_of_target_month
+  publication_rule: latest_published_and_available_on_own_release
+  value_rule: official_central_else_published_range_midpoint_else_nan
+  feature_suffixes: ['', _range_width_pp, _midpoint_used, _missing, _publication_age_days]
+  variants:
+    M0: []
+    M1: [forecast_inflation_dec_dec_pct]
+    M2: [forecast_inflation_dec_dec_pct, forecast_consumption_growth_annual_pct]
+  train_variants: [M1, M2]
+  missing_training_rows: preserve
+  category_B_enabled: false
+  deflation_enabled: false
+  add_trend_enabled: false
+  one_hot_enabled: false
+smoke_origin: 2024-03
+validation_record: outputs/e05c_checks/test_result.json
+preservation_record: outputs/e05c_checks/initial_preservation.json
+holdout_status: previously_inspected_not_independent
+output_dir: outputs/macro_forecast_v1
+report_path: reports/results/E05c_macro_forecast.md
