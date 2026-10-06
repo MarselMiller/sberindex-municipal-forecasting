@@ -1,0 +1,52 @@
+# E05a: источники, point-in-time признаки и покрытие; никаких fit/predict.
+experiment: macro_data_audit_v1
+seed: 42
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+  release_lag_months: 0
+comparison:
+  source_dir: outputs/prophet_comparison_v1
+  first_origin: 2023-12
+  last_origin: 2024-11
+  horizons: [1, 3, 6, 12]
+direct_training:
+  mode: legacy
+  max_staleness_months: null
+sources:
+  raw_dir: outputs/macro_data_audit_v1/raw
+  rosstat_failure_catalog: outputs/e05a_checks/rosstat_catalog.json
+  download_by_default: false
+scenarios:
+  strict_confirmed_vintages: null
+  current_vintage_with_assumed_publication_lags:
+    # Предположения, не установленные сроки публикации. B остаётся B.
+    cpi_mom_index: 1
+    cpi_yoy_index: 1
+    nominal_wage_rub: 2
+    # При неизвестном дне выпуска — конец указанного месяца, не дата цели.
+    forecast_inflation_dec_dec_pct: 0
+    forecast_inflation_annual_average_pct: 0
+    forecast_nominal_wage_growth_annual_pct: 0
+    forecast_real_wage_growth_annual_pct: 0
+forecast_indicators:
+  - forecast_inflation_dec_dec_pct
+  - forecast_inflation_annual_average_pct
+  - forecast_nominal_wage_growth_annual_pct
+  - forecast_real_wage_growth_annual_pct
+  - forecast_consumption_growth_annual_pct
+price_index:
+  base_period: 2022-12
+e05b_specification:
+  status: specified_not_run
+  trend_annual_difference_window_months: 6
+  trend_min_annual_pairs: 3
+  seasonal_template_months: 12
+  damped_phi: 0.9
+  trend_fallback: SeasonalNaiveYoY
+  macro_model: CatBoostDirect_legacy
+  macro_model_config: configs/catboost_direct.yaml
+  staged_components: [none, cpi, cpi_and_wages, cpi_wages_and_archived_expectations]
+  holdout_status: previously_inspected_not_independent
+output_dir: outputs/macro_data_audit_v1
+report_path: reports/results/E05a_macro_data_audit.md
