@@ -1,0 +1,54 @@
+experiment: trend_calendar_v1
+experiment_date: '2026-10-06'
+seed: 42
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+  release_lag_months: 0
+backtest:
+  first_origin: 2023-12
+  last_origin: 2024-11
+  horizons: [1, 3, 6, 12]
+  validation_target_end: 2024-06
+  min_history_observations: 12
+  max_staleness_months: 1
+  max_series: 64
+models:
+  catboost:
+    iterations: 300
+    depth: 6
+    learning_rate: 0.05
+    l2_leaf_reg: 5.0
+    loss_function: MAE
+    thread_count: 2
+  yearly_growth_window: 3
+  yearly_growth_bounds: [0.5, 2.0]
+direct_training:
+  mode: legacy
+  max_staleness_months: null
+  no_training_pairs_fallback: SeasonalNaive
+comparison:
+  source_dir: outputs/prophet_comparison_v1
+  direct_source_dir: outputs/catboost_direct_v1
+  sample_ids_path: outputs/prophet_comparison_v1/sample_ids.json
+  models: [LastValue, SeasonalNaive, SeasonalNaiveYoY, CatBoostRecursive, ProphetAuto, ProphetYearly]
+  h1_absolute_tolerance: 0.00000001
+trends:
+  variants: [SeasonalTrendLinear, SeasonalTrendDamped]
+  annual_difference_window_months: 6
+  min_annual_pairs: 3
+  seasonal_template_months: 12
+  phi: 0.9
+  fallback: SeasonalNaiveYoY
+calendar:
+  saved_reference: K0
+  train_encodings: [K1, K2]
+  one_hot_max_size: 12
+  cat_features: [month_category]
+  categorical_features_documentation: https://catboost.ai/docs/en/features/categorical-features
+validation_record: outputs/e05b_checks/test_result.json
+preservation_record: outputs/e05b_checks/initial_preservation.json
+holdout_status: previously_inspected_not_independent
+macro_features_enabled: false
+output_dir: outputs/trend_calendar_v1
+report_path: reports/results/E05b_trend_calendar.md
