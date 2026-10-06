@@ -1,0 +1,51 @@
+# Те же параметры, что baseline_v1, но отдельная папка для вашего запуска.
+experiment: baseline_local
+seed: 42
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+  release_lag_months: 0
+backtest:
+  first_origin: 2023-12
+  last_origin: 2024-11
+  horizons:
+  - 1
+  - 3
+  - 6
+  - 12
+  validation_target_end: 2024-06
+  min_history_observations: 12
+  max_staleness_months: 1
+  max_series: null
+models:
+  enabled:
+  - LastValue
+  - SeasonalNaive
+  - SeasonalNaiveYoY
+  - CatBoostRecursive
+  unvalidated_horizon_fallback: SeasonalNaive
+  yearly_growth_window: 3
+  yearly_growth_bounds:
+  - 0.5
+  - 2.0
+  catboost:
+    iterations: 300
+    depth: 6
+    learning_rate: 0.05
+    l2_leaf_reg: 5.0
+    loss_function: MAE
+    thread_count: 2
+  prophet:
+    changepoint_prior_scale: 0.05
+    seasonality_prior_scale: 1.0
+    yearly_fourier_order: 3
+    min_observations: 12
+detection:
+  calibration_min_observations: 4
+  relative_scale_floor: 0.03
+  cusum_allowance: 0.5
+  cusum_threshold: 5.0
+  ewma_alpha: 0.3
+  ewma_threshold: 3.0
+  cooldown_months: 2
+output_dir: outputs/baseline_local

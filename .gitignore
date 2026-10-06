@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+# Данные и модельные результаты предоставлены пользователю приватно.
+# Не публиковать автоматически, особенно справочник и географические файлы.
+data/input/*
+!data/input/.gitkeep
+outputs/*
+!outputs/.gitkeep
+catboost_info/
+# Секреты и архивы
+.env
+.env.*
+*.pem
+*.key
+*.zip
+*.rar
+*.7z
+
+# Временно не публикуем до проверки сохранённых выводов и содержимого
+/notebooks/
+/reports/

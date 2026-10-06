@@ -1,0 +1,25 @@
+# Снимок реально установленных зависимостей основного запуска, Python 3.13.5/Linux.
+catboost==1.2.8
+contourpy==1.3.3
+cycler==0.12.1
+fonttools==4.63.0
+graphviz==0.21
+iniconfig==2.3.0
+kiwisolver==1.5.0
+matplotlib==3.10.8
+narwhals==2.21.2
+numpy==2.3.5
+packaging==25.0
+pandas==2.2.3
+pillow==12.3.0
+plotly==6.5.2
+pluggy==1.6.0
+Pygments==2.20.0
+pyparsing==3.3.2
+pytest==9.0.2
+python-dateutil==2.9.0.post0
+pytz==2026.2
+PyYAML==6.0.3
+scipy==1.17.0
+six==1.17.0
+tzdata==2026.2
