@@ -1,0 +1,2 @@
+# E05d CPU benchmark; use native train API, numpy/scipy already in main .venv.
+lightgbm==4.6.0

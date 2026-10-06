@@ -1,0 +1,75 @@
+experiment: national_local_lightgbm_v1
+experiment_date: '2026-10-07'
+seed: 42
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+  release_lag_months: 0
+backtest:
+  first_origin: 2023-12
+  last_origin: 2024-11
+  horizons: [1, 3, 6, 12]
+  validation_target_end: 2024-06
+  min_history_observations: 12
+  max_staleness_months: 1
+  max_series: 64
+models:
+  catboost:
+    iterations: 300
+    depth: 6
+    learning_rate: 0.05
+    l2_leaf_reg: 5.0
+    loss_function: MAE
+    thread_count: 2
+  yearly_growth_window: 3
+  yearly_growth_bounds: [0.5, 2.0]
+direct_training:
+  mode: legacy
+  max_staleness_months: null
+  no_training_pairs_fallback: SeasonalNaive
+comparison:
+  source_dir: outputs/prophet_comparison_v1
+  direct_source_dir: outputs/catboost_direct_v1
+  sample_ids_path: outputs/prophet_comparison_v1/sample_ids.json
+  models: [LastValue, SeasonalNaive, SeasonalNaiveYoY, CatBoostRecursive, ProphetAuto, ProphetYearly]
+  report_models: [SeasonalNaiveYoY, ProphetAuto, ProphetYearly]
+  h1_absolute_tolerance: 0.00000001
+lightgbm:
+  objective: regression_l1
+  n_estimators: 300
+  learning_rate: 0.05
+  num_leaves: 31
+  random_state: 42
+  n_jobs: 2
+  device_type: cpu
+  deterministic: true
+  force_col_wise: true
+  verbosity: -1
+lightgbm_version: 4.6.0
+national_local:
+  variants: [C0, L0, CN, LN]
+  train_variants: [L0, CN, LN]
+  national_statistic: median_finite_all_available_municipalities
+  missingness_population: first_observed_by_current_month_inclusive
+  national_forecaster: unchanged_SeasonalNaiveYoY
+  national_forecast_step: horizon_plus_release_lag
+  local_ratio: expense_divided_by_positive_finite_same_month_national_median
+  local_target: future_ratio_minus_last_available_ratio
+  restore: max_zero_national_forecast_times_predicted_ratio
+  invalid_denominator: nan_with_explicit_diagnostics
+  feature_pipeline: unchanged_direct_features_K0_19_on_own_history
+  fallback: expense_SeasonalNaive
+  future_actual_national_for_prediction: false
+macro_features_enabled: false
+one_hot_enabled: false
+trend_features_enabled: false
+news_features_enabled: false
+new_calendar_features_enabled: false
+holdout_status: previously_inspected_not_independent
+forecasting_model_search_final: true
+smoke_origin: 2024-03
+validation_record: outputs/e05d_checks/test_result.json
+environment_record: outputs/e05d_checks/environment_verification.json
+preservation_record: outputs/e05d_checks/initial_preservation.json
+output_dir: outputs/national_local_lightgbm_v1
+report_path: reports/results/E05d_national_local_lightgbm.md
