@@ -27,6 +27,7 @@
 | E07b | Full-panel early warning feasibility; условные B0–B4 | Выполнен: полная разметка, признаки, аудит, отчёт и один полный pytest; условное обучение пропущено по gate | 2190 МО, 73 weak events/6 onset-дат/71 МО; k1 train14/test4 positives, train1/test2 onset-даты; k3 train/test0; оба gate отказали, все 24 календарных варианта отказали; 138 числовых признаков, 1247 passed, 213 защищённых файлов неизменны |
 | E07c | Controlled synthetic early-warning benchmark | Completed: код, unit tests, smoke/full, метрики, bootstrap, 3 графика, независимая сверка и один полный pytest; research phase closed | 600/200/300 ряда по24месяца;360/120/180событий;TRAIN fit/VALIDATION threshold/TEST;1367passed/1warning;160защищённыхфайлов и frozenYAML сохранены;результаты только synthetic |
 | E08a | Leading Financial Indicators: source / availability / vintage audit | Выполнен; полный vintage/availability ledger остаётся E08b | Ветка research/e08-leading-indicators; 10 series A2/B7/C1, шесть shortlist families / восемь representations; primary key rate+official FX; B только sensitivity, unsecured C и top10 исключены; metadata/схемы/ссылки/causal assumptions проверены; без fits, feature matrix, metrics, commit/push |
+| E08b | Causal loading и origin-aware financial features | E08b complete; Ready for E08c feature layer | Только A key rate/official USD-RUB; 1016/990 observations, 36 решений/23 changes; 12 прежних origins × 10 features, missing 0; own-cutoff/effective/future mutation/determinism/holiday/national/June checks PASS, 65 synthetic tests; 240 independently checked cells; без моделей/метрик/EW training/commit/push |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -46,6 +47,33 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08b — causal loading and origin-aware leading financial features.
+Выполнен 2026-10-07 только в research/e08-leading-indicators, base f6f0cef.
+Сначала feature smoke на 2 origins, затем полный аудит 12 origins, оба code 0.
+Загружены только A key rate/USD-RUB за 2021–2024: 1016/990 observations;
+36 решений (23 изменения), exact timing 20/date-only 16 (changes 9/14).
+Неизвестное время — next-day midnight; in-force дополнительно effective≤O.
+FX — conservative effective midnight, без next-business-day backfill.
+Матрица 12×10 на existing origins 2023-12…2024-11, все 120 значений доступны.
+Max effective/availability operands≤own origin; future mutation/removal 12/12,
+детерминизм cache/перестановки, national equality и June2024 boundary — PASS.
+65 релевантных synthetic tests passed (1.92 s); ожидаемые критерии не ослаблялись.
+Первый общий pytest дал 5 setup errors из-за отсутствующего parent basetemp;
+parent создан внутри ignored outputs, итоговый запуск code 0, без models.
+Независимо пересчитаны 120 matrix и 120 manual feature cells: mismatches 0,
+max_abs=3.47e-18. Anchors покрывают date-only emergency 2022, same-day 2023,
+weekend/month-end, June setting/effective switch и July2024 future-effective rate.
+Код/config/tests и project docs изменены; raw cache/numeric features/report
+остаются ignored, .gitignore/index не менялись. Main и E01–E07/F1–F7 заморожены.
+Sources/feature manifest: outputs/leading_financial_e08b_v1/run_manifest.json;
+матрица/anchors: reports/results/e08b/; [отчёт E08b](../reports/results/E08b_leading_financial_features.md).
+NO MODEL FITS; NO FORECASTING METRICS; NO EARLY-WARNING TRAINING; NO COMMIT/PUSH.
+Ready for E08c — готовность causal feature layer при official archive trust,
+а не предиктивный вывод. Следующий шаг: отдельно согласовать E08c forecasting
+ablation, сохраняя cases/own-r training availability и прежние ограничения цели.
+Real early-warning feasibility gate не меняется; B/C не подключать автоматически.
+
+## E08a: сохранённая предыдущая задача
 ID: E08a — Leading Financial Indicators source/availability/vintage audit.
 Выполнен 2026-10-07 только в research/e08-leading-indicators, base 70c95d6.
 Main и результаты E01–E07/F1–F7, README/final reports/presentation заморожены.

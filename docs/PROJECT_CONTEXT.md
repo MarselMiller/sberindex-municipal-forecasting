@@ -7,7 +7,75 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
-## E08a: новый отдельный аудит leading financial indicators
+## E08b: causal loader и признаки на собственной origin
+
+Выполнен 2026-10-07 в research/e08-leading-indicators, исходный HEAD
+f6f0cef87889d01d3dd121b2858bf123eabf7264; рабочая папка перед задачей чистая.
+Main остаётся 70c95d6d4686a991aa225d7e0649dda0d8e9b0ff. Использованы только
+два A-ряда E08a: key rate и официальный USD/RUB; B/C не подключены.
+Запрос источников 2021-01-01…2024-12-31: ставка 1016 daily observations
+(2021-01-04…2024-12-30), FX 990 settings (2021-01-01…2024-12-29).
+36 архивных решений включают 23 изменения и 13 unchanged; все изменения
+сопоставлены с официальным daily transition. Effective dates трёх изменений
+указаны прямо в core, двадцати — подтверждены переходом daily history.
+Точный announcement timestamp подтверждён для 20 решений (9 changes),
+остальные 16 (14 changes) имеют date-only availability со следующего дня.
+Неподтверждённый footer 00:00 и время из URL не считаются publication time.
+
+Существующие backtest.origins_from_config + data.period_end дают 12 origins
+2023-12-31…2024-11-30; сохранён cutoff 00:00 Europe/Moscow. Key in-force
+требует effective и announcement availability≤own origin. Bootstrap известен
+со следующего дня, без выдуманной даты последнего изменения. Delta_last
+пересчитывается из двух доступных уровней на own origin; unchanged не reset.
+FX availability — conservative effective midnight bound, не actual published_at.
+Выходные/праздники используют только предыдущий допустимый setting.
+Окна DateOffset(months=n) сохраняют календарный день: 29.02−1m=29.01,
+а не прежнюю month-end origin. Нижний level anchor известен на own lower cutoff.
+Log changes не умножаются на 100; FX vol — std(ddof=1) log returns между
+оригинальными settings, ending effective dates в (lower,O], без annualisation
+и artificial holiday zero returns. Нужен anchor≤lower и минимум 2 returns;
+неполная история даёт NaN и отдельные missing flags, без future backfill.
+
+Десять features: key_rate_level, key_rate_delta_last, key_rate_change_3m,
+key_rate_change_6m, months_since_rate_change, usd_rub_last, usd_rub_change_1m,
+usd_rub_change_3m, usd_rub_vol_1m, usd_rub_vol_3m. На 12 actual origins
+120/120 значений доступны. National copies по МО не независимы.
+June 2024 method metadata различает setting boundary 13.06, известную с
+объявления 14:40, и inferred first effective 14.06 по next-calendar-day rule;
+пересечение режимов помечено в окнах, сравнимость volatility ограничена.
+
+Минимальный feature run: 2 origins, code 0; затем полный 12-origin audit, code 0.
+Команды: .\.venv\Scripts\python.exe -B -X utf8 scripts/build_leading_financial_features.py
+--config configs/leading_financial_e08b.yaml [--smoke только для первого запуска].
+Релевантный pytest (без model fits): .\.venv\Scripts\python.exe -B -X utf8 -m pytest
+tests/test_leading_financial.py tests/test_leading_financial_sources.py -p no:cacheprovider
+--basetemp=outputs/e08b_checks/pytest_final_v1 — 65 passed, 1.92 s, code 0.
+Для повторного pytest нужен новый basetemp внутри outputs с существующим parent.
+Default внешняя tmp_path была недоступна; первая общая попытка с отсутствующим
+parent дала 5 setup errors, исправлена созданием parent без изменения tests.
+Cutoff/effective maxima, mutation/removal future inputs на каждой origin,
+детерминизм loader/permutation, national equality и June boundary — PASS.
+Независимый пересчёт без builder: 120 matrix + 120 manual cells, mismatches 0,
+max_abs=3.47e-18. Manual anchors подтверждают date-only 28.02.2022→01.03,
+same-day 15.08.2023 10:30, weekend month ends и announcement/effective July 2024.
+
+Артефакты: configs/leading_financial_e08b.yaml, leading_financial.py,
+leading_financial_sources.py, scripts/build_leading_financial_features.py,
+два synthetic test files; ignored outputs/leading_financial_e08b_v1/
+(raw cache, source hashes/times, config, seed/versions/commit/dirty/command),
+reports/results/e08b/financial_features_by_origin.csv и manual_anchors.csv,
+reports/results/E08b_leading_financial_features.md. .gitignore/index не менялись;
+raw финансовые observations и post-row features не добавлены в Git.
+Официальный nonrevision archive остаётся доверенным допущением, old independent
+SHA нет; полнота отсутствующих setting dates независимо не доказана.
+24 target months, L=0, target vintages и просмотренный holdout остаются
+ограничениями. Target/future labels не использованы; прежние claims заморожены.
+NO MODEL FITS; NO FORECASTING METRICS; NO EARLY-WARNING TRAINING; NO COMMIT/PUSH.
+E08b complete; Ready for E08c относится к feature layer. Следующий конкретный
+шаг — отдельно согласовать forecasting ablation E08c на прежних cases, строя
+training features на собственной historical r. Real-EW sufficiency gate не снят.
+
+## E08a: сохранённый предыдущий аудит leading financial indicators
 
 E08 открыт пользователем отдельно от завершённой фазы E01–E07/F1–F7.
 Работа разрешена только в research/e08-leading-indicators. E08a выполнен

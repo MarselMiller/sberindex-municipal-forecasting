@@ -1,0 +1,30 @@
+experiment: leading_financial_e08b_v1
+seed: 42
+origin_config: configs/macro_forecast.yaml
+expected_origins: 12
+origin_convention: last_calendar_day_midnight_Europe_Moscow
+sources:
+  start: '2021-01-01'
+  end: '2024-12-31'
+  cache_dir: outputs/leading_financial_e08b_v1/cache
+  key_xml: key_rate_2021_2024.xml
+  fx_xml: usd_rub_2021_2024.xml
+  decision_dir: key_decisions
+  key_url: https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx
+  fx_url: https://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=01/01/2021&date_req2=31/12/2024&VAL_NM_RQ=R01235
+  fx_method_source_url: https://cbr.ru/press/pr/?id=39834
+features:
+  key_change_windows_months: [3, 6]
+  fx_windows_months: [1, 3]
+  fx_change: natural_log_ratio
+  fx_volatility: sample_std_setting_log_returns_ddof_1_unannualised
+  fx_minimum_returns: 2
+  months_since_rate_change: difference_of_calendar_month_indices
+  missing_history: NaN_with_explicit_missing_flag
+  unavailable_observations: exclude_before_all_window_calculations
+  future_backfill: forbidden
+  geography: national
+output_dir: outputs/leading_financial_e08b_v1
+smoke_output_dir: outputs/leading_financial_e08b_smoke_v1
+audit_dir: reports/results/e08b
+report_path: reports/results/E08b_leading_financial_features.md
