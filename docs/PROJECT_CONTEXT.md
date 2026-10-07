@@ -79,13 +79,66 @@ GitHub-репозиторий: код, README, конфигурации, тес�
 сводок потребуется отдельное место, например reports/results/ и reports/figures/.
 
 ## Последний согласованный шаг
-E07a: подготовлены данные, слабая разметка и аудит временной возможности
-раннего предупреждения; classifier не обучается. Старые прогнозные модели,
-метрики и news v1/v2 сохранены; обычный forecasting search остаётся закрыт.
-Полноценная проверка E07b на этой истории не обеспечена: у k1 одна train-дата
-с одним positive и две test-даты без positive; у k3 нет временной train/test пары.
-Следующий шаг — человеческий просмотр очереди и отдельное решение о более
-длинной истории/проверенной доступности, без автоматического обучения.
+E07b завершён: расширение неизменного E07a на все2190МО, полная разметка,
+признаки, аудит, отчёт и один полный pytest. B0–B4 не обучались: фиксированный
+gate не пройден ни для k1, ни для k3. Старые E01–E07a артефакты сохранены,
+обычный forecasting search закрыт. Следующий этап после E07b — отдельная
+финальная сборка отчёта/презентации/README; человеческая разметка и более
+длинная история остаются условиями будущего исследования early warning.
+
+## E07b: устойчивый протокол full-panel feasibility
+Новая configs/early_warning_full_panel.yaml (SHA1fed3b0ae32855c70999263fb9950614c653de85641806684fbeec71cff54dc6)
+зафиксирована до реального подсчёта. Наследуется E07a protocol SHA3027d57dce91fd87d83dbb7d5f1ef462019fd0e20853466d4ce51f58445a2c65,
+weak definition, release lag0, uniform label availabilityO+k+2,
+цензурирование и causal active exclusion; без изменения thresholds/windows.
+Все sourceUID сохраняются на12исходных origins, eligibility толькоprefix
+minhistory12/staleness≤1 изE01, включая ineligible audit rows. Новые h1
+SeasonalNaiveYoY prefix forecasts без model fit,768pilot residual keys
+совпали сE07a с абсолютным допуском1e-8; maxpredictiondifference7.28e-12.
+73weak events/6onset months/71МО(3.242%) — не независимые экономические шоки.
+Fixedgate отдельноk1/k3: positivestrain≥30/test≥10 и уникальныеpositive
+onset datestrain≥3/test≥2; MO-row count не заменяет число календарных дат.
+СохранёнJuly2024label-informationcutoff/testOAug–Nov2024: k1train14positive,
+2009negative,1O/1positiveonsetdate; test4positive,3970negative,2O/2onsetdates.
+k3train/test0. Все12calendarcutoff alternatives проверены безclassifiermetrics;
+gate не проходит нигде. k1train3onsetdates требуетcutoff≥Sep2024, тогда
+нет subsequent evaluabletest; k3firstknowntrainSep позжеlatest evaluableOJul.
+Подмена split для получения fit не обоснована, classifiertraining запрещён.
+ГруппыA/B/C/D fixed: история с changes/volatility, толькоonline statesE04,
+admittedmacroE05, admittednewsE06/E07a. Offlinebreakpoints/retrospectiveinside
+не features. Train-only constants/allmissing/exactduplicates, median/scaling;
+fixedLR C1,class_weightNone,threshold.5, no test tuning. Sklearn отсутствует,
+установок нет. Наличие varyingtestnews не позволяет обучиться на constanttrain.
+News national copies не независимыеobservations; temporalvectors иmissingflags
+считаются раздельно. FixedE04parameters используются ретроспективно: causal
+prefix replay условен на них, historical выбор параметров наO не подтверждён.
+Results outputs/early_warning_full_panel_v1/, report reports/results/E07b_early_warning_full_panel.md.
+Feasibility629.966s/peak0.239GiB; features1513.989s/peak0.215GiB,
+CPU sequential/jobs1; оценка памяти0.569GiB, ниже ограничения5.5GiB.
+Сохранены26280feature rows,138numeric candidates(A40/B36/C10/D52),
+70provenance files; finite value-cell coverage без flags A90.162%, B74.855%,
+C87.5%, D82.051%. Это доля заполненных ячеек признаков, не доля МО с полным
+вектором. Own-origin dependency audit: violations0/missing coverage records0.
+Train-only filter для k1 оставил13A, остальные группы0: allmissing/constant/
+exactduplicate; k3 no training rows. Вся панель содержит7temporal news vectors;
+train k1 только1O, все news columns постоянны, varying values/flags0; test2O,
+6varying values/3flags, обе даты информативны по частичному news90d-корпусу.
+Польза detectors/macro/news, PR-AUC и прочие model/event metrics не оценены.
+Ни warning success, ни false alert, ни missed event не приписываются модели
+без выпущенных predictions/alerts. Пустые файлы имеют схемы и явный skip-status.
+Pilot features768rows/126numeric columns PASS; label audit118checks,
+saved tables/artifact hashes135checks PASS. Первый JSON-string equivalence
+отказал на последних float digits; decoded numeric equivalence с исходным
+atol1e-8 пройдён, данные и criterion не менялись. Full features DtypeWarning
+на evidence metadata устранён reader low_memory=False до финального pytest.
+Один полный pytest1247passed/1warning/270.73s/exit0; warning из прежнего
+test_direct_training на inf; code/test/config SHA неизменны во время прогона.
+213защищённых прежних файлов и frozen YAML неизменны; повторного аудита9005
+файлов не было. Логи/проверки outputs/e07b_checks/, команды/seed42/версии/
+Git HEAD и dirty/SHA в manifest; сети/установок/commit/push нет. README и
+исходная .vscode/ не изменены. Weak labels остаются непроверенной разметкой
+сдвига ошибки baseline; отсутствие достаточного split не доказывает
+невозможность раннего предупреждения при другой, более длинной истории.
 
 ## E07a: устойчивые решения и фактическая подготовка
 Конфигурация configs/early_warning_feasibility.yaml зафиксирована до подсчёта

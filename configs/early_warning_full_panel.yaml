@@ -1,0 +1,71 @@
+# E07b requirements fixed before full-panel event/label counts or model metrics.
+experiment: early_warning_full_panel_v1
+experiment_date: '2026-10-07'
+seed: 42
+protocol:
+  path: configs/early_warning_feasibility.yaml
+  sha256: 3027d57dce91fd87d83dbb7d5f1ef462019fd0e20853466d4ce51f58445a2c65
+  immutable: [data, weak_label, early_warning.horizons_months, early_warning.target_window,
+    early_warning.label_known_at, early_warning.positive, early_warning.negative, early_warning.right_censoring]
+panel:
+  scope: all_municipality_ids_in_source_panel_no_future_completeness_cohort
+  first_origin: '2023-12'
+  last_origin: '2024-11'
+  eligibility_source: outputs/prophet_comparison_v1/config_resolved.yaml
+  min_history_observations: 12
+  max_staleness_months: 1
+  residual_model: SeasonalNaiveYoY
+  residual_horizon: 1
+  yearly_growth_window: 3
+  yearly_growth_bounds: [0.5, 2.0]
+  residual_generation: existing_baseline_predict_on_each_origin_prefix_no_forecast_model_fit
+  unknown_before_first_observation: retain_audit_row_ineligible_not_usable_training_case
+split:
+  train_information_cutoff: '2024-07'
+  test_first_origin: '2024-08'
+  test_last_origin: '2024-11'
+  test_after_information_cutoff: true
+  alternatives: all_month_end_cutoffs_in_original_origin_calendar_diagnostics_not_metric_selection
+  selection: retain_E07a_if_nonempty_test_else_first_chronological_calendar_cutoff_meeting_both_gates
+gate:
+  train_positives_min: 30
+  test_positives_min: 10
+  train_positive_dates_min: 3
+  test_positive_dates_min: 2
+  date_definition: unique_onset_dates_of_weak_events_linked_to_positive_at_risk_eligible_examples
+  skip_all_baselines_if_failed: true
+models:
+  names: [B0, B1, B2, B3, B4]
+  classifier: sklearn_LogisticRegression
+  C: 1.0
+  class_weight: null
+  solver: lbfgs
+  max_iter: 2000
+  n_jobs: 1
+  alert_threshold: 0.5
+  threshold_selection: fixed_no_separate_validation_no_test_tuning
+  imputation: training_median_existing_missing_indicators
+  scaling: training_StandardScaler
+  feature_filter: training_only_all_missing_constant_exact_numeric_duplicates
+  event_matching: chronological_earliest_pre_onset_alert_one_event_once_repeats_marked_not_extra_success
+  calibration_bins: 10
+features:
+  detector_parameters: outputs/online_detection_v1/selected_parameters.json
+  detector_preparation: outputs/online_detection_v1/config_resolved.yaml
+  macro_table: outputs/macro_data_audit_v1/macro_table.csv.gz
+  macro_source_ids: outputs/macro_forecast_v1/source_ids.json
+  news_documents: outputs/news_events_v3/documents.csv.gz
+  geography_dictionary: outputs/news_events_v3/geography_dictionary.csv.gz
+  source_archive_complete: false
+  offline_breakpoints: forbidden_as_features
+runtime:
+  label_batch_size: 64
+  feature_batch_size: 64
+  parallel_jobs: 1
+  max_parallel_jobs: 2
+  memory_stop_gib: 5.5
+  dense_matrix_policy: small_float64_numeric_matrices_only_after_gate
+  provenance: batch_write_not_all_full_panel_lineage_in_RAM
+output_dir: outputs/early_warning_full_panel_v1
+smoke_output_dir: outputs/early_warning_full_panel_smoke_v1
+report_path: reports/results/E07b_early_warning_full_panel.md

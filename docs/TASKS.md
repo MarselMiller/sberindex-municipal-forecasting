@@ -7,7 +7,7 @@
 
 | ID | Задача | Статус | Критерий завершения |
 |---|---|---|---|
-| ENV01 | Проверить среду | Частично подтверждена | CPU/RAM/revision E03 сохранены; отдельная .venv-chronos; pytest E07a: 1167 passed; версии сохранены в manifest, установок нет; прежний pip check E06a успешен; точное расширение VS Code не проверено |
+| ENV01 | Проверить среду | Частично подтверждена | CPU/RAM/revision E03 сохранены; отдельная .venv-chronos; один полный pytest E07b: 1247 passed, 1 warning; версии сохранены в manifest, установок нет; прежний pip check E06a успешен; точное расширение VS Code не проверено |
 | ENV02 | Разобрать один ряд и минимальный запуск | Объяснение автором не проверено | Отдельный исходный критерий объяснения цели, горизонта и MAE сохраняется |
 | GIT01 | Проверенный начальный Git-репозиторий | Git существует; аудит публикации не подтверждён | HEAD на начало E02a: ab3aa50; проверку всего состава публичной публикации не приписывать этому шагу |
 | E01 | Локальный пилот Prophet и диагностика сопоставимости | Выполнены; диагностика принята | Совпадают множества ключей шести моделей; переход 64→63 объяснён, метрики/покрытие сверены, ошибки/резервы проверены |
@@ -24,19 +24,64 @@
 | E06a | PELT + Binary Segmentation | Выполнен: код, pytest, smoke, synthetic, real/prefix, проверки и отчёт | 865 passed; прежние 1260 validation + 1260 test рядов E04a; оба penalty=4 в бюджете; 208 групп метрик/728 CI; 63 МО/160 полных кандидатов/1512 префиксов; отдельная online-справка, ограничение native PELT сохранено, 3975 прежних файлов неизменны |
 | E06b | News/events | Выполнен: код, pytest, сбор, реальные events/features, аудит и отчёт; историческое покрытие ограничено | 1064 passed; 93 документов / 93 canonical events / 768 keys / 26 features+flags; 4 historical PDF по archive-trust, regional historical=0; независимая сверка PASS; E07 classifier не запускался |
 | E07a | Подготовка данных и слабой разметки | Выполнена: код, реальные таблицы, аудит, отчёт и один полный pytest | Source audit; отдельная news v3; зафиксированный конечный weak criterion; 1536 cases, причинные признаки, temporal availability, manual queue; без classifier fit |
-| E07b | Early warning classifier | Не начат; полноценная оценка на этой истории невозможна | k1: одна train-дата/один positive, две test-даты без positive; k3: нет train/test; сначала человеческий аудит слабых меток и отдельное решение о более длинной истории |
+| E07b | Full-panel early warning feasibility; условные B0–B4 | Выполнен: полная разметка, признаки, аудит, отчёт и один полный pytest; условное обучение пропущено по gate | 2190 МО, 73 weak events/6 onset-дат/71 МО; k1 train14/test4 positives, train1/test2 onset-даты; k3 train/test0; оба gate отказали, все 24 календарных варианта отказали; 138 числовых признаков, 1247 passed, 213 защищённых файлов неизменны |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
 | C01 | Определить шок и протокол разметки | Синтетический E04a и weak E07a подготовлены; независимых реальных меток нет | E07a размечает трёхмесячный сдвиг сохранённой ошибки SeasonalNaiveYoY, не уровень расходов и не истинный экономический шок; human review pending |
 | C02 | Сравнить онлайн-детекторы и ретроспективную сегментацию отдельно | Онлайн E04a и offline E06a выполнены; реальная оценка без меток не выполнена | Раздельные таблицы/доступ к будущему; precision/recall/F1/FAR/miss/локализация+whole-series CI; real/prefix hindsight и native-library ограничения; общий победитель/early warning не объявлены |
 | N01 | Подготовить новости с датами доступности и территорией | E06b сохранён; E07a добавляет ограниченную v3 | 17 official decision cores под явным archive trust; 4 PDF объединены с релизами; исторических regional/municipal событий0; полная новостная интенсивность не установлена |
-| N02 | Проверить риск будущих шоков и вклад новостей | Не начата | Есть baseline, оценка предупреждений, время упреждения и сравнение без/с новостями |
+| N02 | Проверить риск будущих шоков и вклад новостей | Feasibility E07a/E07b выполнен; predictive utility не оценена из-за недостатка дат/меток | Для продолжения нужны достаточные причинные train/test периоды; baseline, оценка предупреждений, время упреждения и сравнение без/с новостями |
 | I01 | Проверить объединённую модель и интерпретировать ошибки | Не начата | Проверен вклад компонентов, показаны успех, ложная тревога и пропуск при их наличии |
 | D01 | Подготовить русский отчёт и PDF-презентацию | Не начата | Все выводы связаны с результатами запусков; отражены архитектура, метрики и ограничения |
 | D02 | Проверить финальную воспроизводимость и публикацию | Не начата | Из чистой копии воспроизводится согласованный сценарий; данные не раздаются без проверки условий |
 
 ## Карточка текущей задачи
+ID: E07b — full-panel feasibility по неизменному E07a, условные B0–B4 только
+при достаточных данных. HEAD на начало bf99872; исходная .vscode/ не изменяется.
+Новая configs/early_warning_full_panel.yaml зафиксирована до полного подсчёта,
+SHA1fed3b0ae32855c70999263fb9950614c653de85641806684fbeec71cff54dc6.
+Результаты outputs/early_warning_full_panel_v1/; отчёт
+reports/results/E07b_early_warning_full_panel.md сформирован из сохранённых CSV.
+Все2190UID×12origin сохранены, eligibility на каждом prefix; не future cohort.
+Weak criterion/цензурирование/L0/active exclusion/k1,k3 не изменялись.
+26280 cases на k, 52560 суммарно; registry73events/6onset-дат/71МО(3.242%).
+k1 rawknown12183(73pos/12110neg), unknown14097; at-risk-evaluable12069
+(71pos/11998neg). k3 rawknown8101(156pos/7945neg), unknown18179;
+at-risk-evaluable8087(154pos/7933neg). Unknown не становится negative.
+Cutoff2024-07/testoriginsAug–Nov сохранён: k1train2023(14pos/2009neg),
+1warning/1positive-onset date; test3974(4pos/3970neg),2warning/2onset dates.
+k3train0/test0. Все12cutoff×2k сохранены, ни один не проходит
+30/10positive rows и3/2positive onset dates. Обучение B0–B4 не разрешено
+gate; sklearn отсутствует, установки нет. Feasibility full выполнен exit0,
+629.966s/peak0.239GiB; equivalence768pilot residual keys PASS.
+Целевые новые unit tests80passed (adapter3/labels19/features20/models24/audit14).
+Full features выполнен exit0: 26280строк, 138числовых candidates A40/B36/C10/D52,
+70provenance files; 1513.989s/peak0.215GiB, оценка памяти0.569GiB, CPU/jobs1.
+Finite value-cell coverage (без missing flags): A90.162%, B74.855%, C87.5%,
+D82.051%; зависимостей позже собственной O и отсутствующих coverage-records0.
+Train-only audit k1 оставил13A; B/C/D0 после allmissing/constant/exactduplicate
+filter; k3 no training rows. Во всей панели7temporal news vectors, в train0
+varying news values/flags, в test6values/3flags и2информативные даты. Национальные
+копии не независимы. B0–B4/инкрементальные/event metrics и оценённые примеры
+не вычислялись; пустые файлы имеют схемы и skip-status, это не нулевые метрики.
+Pilot feature equivalence768rows/126numeric columns PASS; независимая сверка
+разметки118checks и135проверок сохранённых таблиц/artifact hashes PASS.
+Первый буквальный JSON-evidence check отказал из-за последних float digits;
+decoded numeric check использует исходный atol1e-8, данные/criterion не менялись.
+Full feature run выдал pandas DtypeWarning на смешанных evidence metadata;
+reader до финального pytest исправлен на low_memory=False, числовая сверка PASS.
+Один полный pytest: 1247 passed, 1 warning in270.73s; exit0, код/тесты/config
+неизменны во время проверки. Warning из прежнего test_direct_training с inf.
+213защищённых файлов E01–E07a и SHA новой YAML неизменны; большой аудит9005
+старых файлов повторно не выполнялся. Проверки/точные команды/логи сохранены
+в outputs/e07b_checks/, seed42/versions/Git dirty/команды/время/память/SHA —
+в manifest.json. Реально выполнены smoke/features-smoke, feasibility, features,
+baselines (skip до fit), audit-report и preserve-after. Commit/push/сети/
+установок/обучения нет; README и исходная .vscode/ не изменялись.
+Следующий отдельный этап после E07b: финальная сборка отчёта/презентации/README.
+
+## E07a: сохранённая предыдущая задача
 ID: E07a — подготовка и feasibility, без обучения классификатора.
 Новая конфигурация configs/early_warning_feasibility.yaml зафиксирована до
 подсчёта событий, SHA3027d57dce91fd87d83dbb7d5f1ef462019fd0e20853466d4ce51f58445a2c65.
