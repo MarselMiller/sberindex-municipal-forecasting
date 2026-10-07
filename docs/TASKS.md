@@ -29,6 +29,7 @@
 | E08a | Leading Financial Indicators: source / availability / vintage audit | Выполнен; полный vintage/availability ledger остаётся E08b | Ветка research/e08-leading-indicators; 10 series A2/B7/C1, шесть shortlist families / восемь representations; primary key rate+official FX; B только sensitivity, unsecured C и top10 исключены; metadata/схемы/ссылки/causal assumptions проверены; без fits, feature matrix, metrics, commit/push |
 | E08b | Causal loading и origin-aware financial features | E08b complete; Ready for E08c feature layer | Только A key rate/official USD-RUB; 1016/990 observations, 36 решений/23 changes; 12 прежних origins × 10 features, missing 0; own-cutoff/effective/future mutation/determinism/holiday/national/June checks PASS, 65 synthetic tests; 240 independently checked cells; без моделей/метрик/EW training/commit/push |
 | E08c | Fixed forecasting ablation financial indicators | E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT | F0 E05d exact reproduction; 232 fits, 4249.700 s; 83 tests и independent 26860-cell audit PASS; LN/F3 paired improvement только h6, нужно >=2h; own-r/cases/params checks PASS; h12 descriptive fallback; без tuning/new family/SoT changes/commit/push |
+| E08d | REAL financial early-warning diagnostic | E08d real financial early-warning diagnostic complete; NO REAL PRECURSOR EVIDENCE | Только frozen E07b/E08b; 12 unique origins, k1 6 positive/0 negative, k3 4 positive/0 negative; unknown сохранены; 7 CSV/2 figures/manifest, independent1788numeric+976NA PASS; contrasts/permutation/Holm NONESTIMABLE; без synthetic data, fits и tuning |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -48,6 +49,44 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08d — REAL early-warning diagnostic with leading financial indicators.
+Разрешена 2026-10-07, только research/e08-leading-indicators, base 394e3e5;
+рабочая папка перед началом чистая, main 70c95d6 не меняется.
+Код/config подготовлены; минимальная event-study таблица на двух реальных датах
+и полный расчёт выполнены с code0. Финальный расчёт: 1.760387 s, без обучения.
+Статистическая единица — unique forecast origin, не 73 events и не МО×origin.
+Входы: 52560 frozen label cases E07b, 73 weak events, 6 onset months,
+71 МО с events, 2190 МО панели; 12 origins × 10 real financial features E08b.
+Strict OR использует eligible_at_origin & at_risk и только fully-known labels.
+k1: eligible6/positive6/negative0/unknown6; k3: eligible4/positive4/negative0/unknown8.
+Dec2023…Mar2024 left-insufficient; поздние окна right-censored, не negative controls.
+Known positive witness не означает полноту event_count: observed registry counts
+и monitored known-positive counts сохранены раздельно; affected share /2190 descriptive.
+Primary P1 rate change3m/P2 FX change1m/P3 FX change3m/P4 FX vol3m фиксированы;
+signed values и descriptive abs раздельны. Negative summaries, mean/median
+differences, rank effects, все 8 raw/Holm p — NA/NONESTIMABLE; permutations0.
+18 реальных t−1/t−2/t−3 windows и 84 leave-one-onset-out строки сохранены.
+Все 12 leave-out действий удаляют окна; negative controls не появляются,
+sign/magnitude stability не оценена, ONE-EVENT-DRIVEN не утверждается.
+Итоговый уровень: NO REAL PRECURSOR EVIDENCE — контраст не установлен,
+это не доказательство отсутствия предвестников. E07 classifier gate не снят;
+E08c NO STABLE FORECASTING UPLIFT относится к отдельному forecasting вопросу.
+Результаты outputs/real_financial_early_warning_e08d_v1/, reports/results/e08d/;
+отчёт reports/results/E08d_real_financial_early_warning.md сформирован из saved CSV.
+REAL artifact/reversal/preservation check PASS: 7 таблиц, 120 financial values,
+2346 SHA-проверок; независимый stdlib checker PASS, 1.57713 s:
+1788 numeric + 976 NA cells, 0 mismatches, max_abs1.11e-16.
+Две real figures проверены визуально; manifest финализирован и mirrored;
+complete validation и git diff --check PASS, HEAD/main/index сохранены.
+Proofs: outputs/e08d_checks/{real_validation,independent_validation,
+completion_validation}.json. E08d real financial early-warning diagnostic complete.
+Существующий pytest не запускался: synthetic fixtures запрещены в E08d.
+Следующий конкретный шаг — отдельно согласовать, требуется ли расширение реальной
+истории с сопоставимыми known negative dates; новые sources/models не запускались.
+REAL DATA ONLY; NO SYNTHETIC DATA; NO CLASSIFIER FITS; NO THRESHOLD TUNING;
+NO COMMIT/PUSH. README/final reports/presentation/Source of Truth не меняются.
+
+## E08c: завершённая предыдущая задача
 ID: E08c — fixed forecasting ablation with leading financial indicators.
 Разрешена 2026-10-07, branch research/e08-leading-indicators, base cb4db21.
 E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT.

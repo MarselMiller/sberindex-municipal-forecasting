@@ -7,6 +7,77 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## E08d: реальная date-level диагностика финансовых предвестников
+
+Отдельно разрешена пользователем 2026-10-07, только research/e08-leading-indicators.
+Исходный HEAD 394e3e54ece9d3624232c903db644a2b5762a031; рабочая папка чистая,
+main 70c95d6d4686a991aa225d7e0649dda0d8e9b0ff. Новая YAML
+configs/e08d_real_financial_early_warning.yaml; старые E07/E08a/b/c и F1–F7,
+README/final reports/presentation/Source of Truth не изменяются.
+Доступны только frozen REAL E07b labels/registry и десять REAL E08b features.
+Новые event definitions, classifier fits, thresholds, synthetic data/fixtures,
+E07c inputs и сетевые обращения исключены. Seed42, версии/SHA/команды/Git dirty
+сохраняются отдельно; исходные данные и прежние outputs не пересоздаются.
+
+73 weak events относятся к 71 МО из 2190; всего 6 onset months May…Oct2024,
+а не 73 независимых наблюдения национального financial signal. Onset_date
+является month-end display marker; день начала внутри месяца неизвестен.
+Статистическая единица — одна из 12 исходных calendar origins Dec2023…Nov2024.
+Date-level outcome — strict OR исходных fully-known labels в causal cohort
+eligible_at_origin & at_risk: positive при хотя бы одной known-positive witness;
+negative только при непустом cohort, где все labels fully-known negative;
+иначе unknown. Retrospective active membership не заменяет causal state.
+Сохраняются исходные прошлые residual baselines и uniform O+k+2 availability.
+
+Новое существенное ограничение: k1 имеет 6 known dates Apr…Sep2024, все positive;
+k3 — 4 known dates Apr…Jul2024, все positive. Negative dates отсутствуют.
+Dec2023…Mar2024 нельзя использовать как negatives из-за left insufficiency;
+поздние даты right-censored. Числа unknown: 6/8 для k1/k3.
+Поэтому mean/median contrasts, rank-biserial effects, exact p и Holm
+не идентифицированы и остаются NA, а не effect0/p1. Planned primary family
+P1 rate change3m/P2 FX change1m/P3 FX change3m/P4 FX vol3m × k1/k3 фиксирована.
+Signed change — основной diagnostic, abs — только descriptive magnitude;
+остальные шесть features secondary. Exact test не выполнялся: evaluated0;
+при доступном контрасте предполагались полный fixed-count date-level перебор,
+двусторонняя signed mean difference и Holm8, без p<0.05 success gate.
+Temporal exchangeability не подтверждена, k3 windows перекрываются.
+
+Observed registry counts не являются установленным числом всех событий
+monitoring cohort: unknown municipal labels остаются даже при known-positive OR.
+Полный registry и known-positive at-risk counts сохранены раздельно;
+affected share /2190 — описательная доля, не probability of risk.
+Distance to next onset — retrospective evaluation-only, не model feature.
+Spearman intensity считается на unique known dates с average ranks/ties,
+без p-values; positive-only correlation не оценивает event discrimination.
+Для всех 6 onset months сохранены фиксированные t−1/t−2/t−3 значения.
+Leave-one-onset-out удаляет все originally-known windows, содержащие onset,
+и сохраняет remaining labels: не превращает positive в negative. Все 12
+действий REMOVED, но negative class по-прежнему пуст; нельзя установить
+sign stability или заявить ONE-EVENT-DRIVEN для неоценённого контраста.
+
+Реальный финальный расчёт выполнен, 1.760387 s, code0; минимальный прогон
+на двух сохранённых датах выполнен отдельно. Artifact/reversal/preservation
+check PASS; 2346 SHA-проверок сохранили прежние файлы, HEAD/main/index.
+Независимый stdlib checker PASS, 1.57713 s: 7 CSV, 1788 numeric + 976 NA cells,
+0 mismatches, max_abs1.11e-16; 120 financial values/72 cutoff cells,
+18 real event windows, 90 Spearman rows и 84 leave-out rows проверены.
+Отчёт и две real figures готовы из saved CSV; визуальная проверка PASS.
+Manifest финализирован и зеркально сохранён; complete validation PASS.
+Артефакты: outputs/real_financial_early_warning_e08d_v1/, reports/results/e08d/;
+отчёт reports/results/E08d_real_financial_early_warning.md.
+Итоговый уровень NO REAL PRECURSOR EVIDENCE означает, что evidence
+не установлен при отсутствии controls, а не доказанное отсутствие pattern.
+Реальные финансовые признаки не добавили comparative early-warning evidence
+на имеющейся истории 2023–2024. Это отдельный вопрос от E08c
+NO STABLE FORECASTING UPLIFT; недостаточность временной выборки E07 остаётся.
+Proofs: outputs/e08d_checks/{real_validation,independent_validation,
+completion_validation}.json. E08d real financial early-warning diagnostic complete.
+Следующий конкретный шаг — отдельно согласовать необходимость расширения
+реальной истории с сопоставимыми known negative dates; новые sources/models
+не запускались, интеграция financial indicators в final project не разрешалась.
+REAL DATA ONLY; NO SYNTHETIC DATA; NO CLASSIFIER FITS; NO THRESHOLD TUNING;
+NO COMMIT/PUSH. Существующий synthetic pytest не запускался.
+
 ## E08c: фиксированная forecasting ablation financial features
 
 Отдельно разрешена пользователем 2026-10-07, только research/e08-leading-indicators.
