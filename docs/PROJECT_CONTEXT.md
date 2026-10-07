@@ -4,7 +4,7 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c и E05d на 2026-10-07. Источник каждого нового вывода указан ниже.
+E04a, аудита E05a, E05b, E05c, E05d и E06a на 2026-10-07. Источник каждого нового вывода указан ниже.
 
 ## Цель
 Прогнозирование потребительских расходов на уровне муниципальных образований (МО)
@@ -78,17 +78,159 @@ GitHub-репозиторий: код, README, конфигурации, тес�
 сводок потребуется отдельное место, например reports/results/ и reports/figures/.
 
 ## Последний согласованный шаг
-E05d: код, полный pytest, мартовский smoke, полный запуск и отчёт выполнены.
-Сравнены заранее фиксированные C0/L0/CN/LN: исходный CatBoostDirect K0,
-LightGBMDirect и те же learners с National/Local decomposition. C0 и три
-ориентира переиспользованы без обучения; параметры по holdout не подбирались.
-Отчёт и результаты независимо сверены, включая построчное происхождение обучения.
+E06a: отдельный offline benchmark PELT/BinSeg выполнен на неизменном
+синтетическом генераторе E04a; получены test-метрики, реальные кандидаты
+для тех же 63 МО и диагностика исторических префиксов. Код/pytest/команды/
+метрики/независимые проверки и отчёт сохранены. Это ретроспективная
+сегментация, не раннее предупреждение; online-результаты E04a показаны отдельно.
 После E05d обычный forecasting model search закрыт.
-Дальше запланированы E06a — PELT + Binary Segmentation, E06b — news/events,
-E07 — early warning; эти этапы пока не выполнялись.
-E01–E05c, исходные данные, старые outputs, .gitignore и .vscode/ сохранены.
+Следующий отдельный этап E06b — news/events, затем E07 — early warning;
+оба запланированы, не выполнены и не запускаются автоматически в E06a.
+E01–E05d, исходные данные, старые outputs, .gitignore и .vscode/ сохранены.
 Национальные макропризнаки E05c, тренды E05b и one-hot не входят в E05d;
 макропризнаки в завершённый E04a не подключаются.
+
+## E06a: offline structural change benchmark
+Конфигурация configs/offline_detection.yaml; scripts/run_offline_detection.py;
+результаты outputs/offline_detection_v1/; технический smoke отдельно
+outputs/offline_detection_smoke_v1/; отчёт reports/results/E06a_offline_detection.md.
+Новые модули offline_detection/evaluation/experiment/report и четыре файла тестов.
+Старые forecasting/detection-модули, конфигурации и outputs не менялись.
+
+Основное событие — прежний устойчивый level shift >=3 месяцев; slope и variance
+дополнительные, no_change/outlier контрольные. В каждом split 1260 рядов:
+1140 основных и 120 граничных, 360 основных level-событий. Полностью сохранены
+E04a generator/параметры/seeds: validation 100000…101259, test 200000…201259.
+Фактические ключи и значения всех observations/residuals/events/series сверены,
+не только число строк. Test уже использовался и был просмотрен в E04a;
+повторение того же benchmark не является новой слепой независимой проверкой.
+Параметры E06a выбирались на validation и зафиксированы до воспроизведения test.
+
+Вход e_t=y_true_t−y_pred_t; причинный h=1 SeasonalNaiveYoY E04a не изменён.
+Фиксированные c=median первых четырёх конечных e и
+s=max(1.4826 median|e−c|, 0.03 median|warmup y_pred|, 1 рубль), z=(e−c)/s.
+После доступности калибровки offline анализирует все 12 residual-месяцев
+января–декабря 2024, включая warmup. Оценка и бюджет используют прежние восемь
+наблюдаемых monitoring-месяцев мая–декабря. Warmup-точки сохранены вне оценки;
+ими нельзя незаметно расширять знаменатель FAR до 12 фактически наблюдаемых месяцев.
+Будущие event labels не передаются fit. В historical prefix доступны только его
+собственные факты/калибровка; full-sample reference используется после fit.
+NaN не заполняется: finite observations для cost сохраняют исходный календарь.
+Граница b означает первый наблюдаемый месяц правого сегмента; terminal n не точка.
+При пропуске месяцев boundary_gap_calendar_months отражает неопределённость даты.
+
+Установлен только ruptures==1.1.10 (module v1.1.10), wheel CP312 Windows AMD64,
+SHA256 4be700aa3fee9057667062343a2fa728e25765f457ea54dac116fd2f4b7f49c9.
+Проверены официальный SHA/METADATA и pip check; 32 прежних пакета основной .venv
+сохранили версии, всего 33. requirements-ruptures.txt фиксирует единственный пакет;
+остальные requirements и отдельная Chronos-среда не менялись.
+
+До test фиксированы l2/min_size=2/jump=1 и penalty=[0.5,1,2,4,8,16] для обоих методов.
+Нет подбора cost, обязательного числа точек, online reset/cooldown или tuning по real.
+Бюджет <=1 FP/12 observed monitoring months отдельно на каждом no_change/outlier
+validation-контроле; затем F1, recall, max control FAR, абсолютная локализация, ID.
+Выбраны PELT_003 и BinSeg_003, оба penalty=4. Validation FAR no_change/outlier:
+PELT 0.425/0.825, BinSeg 0.350/0.608333. При отсутствии допустимого кандидата
+метод не выбирается; бюджет не расширяется. Selection seal сохранён 00:20:58 UTC,
+test воспроизведён после 00:22:32 UTC 2026-10-07; выбранные параметры неизменны.
+
+Основной test: PELT TP/FP/FN=111/136/249, precision=0.449393,
+recall=0.308333, F1=0.365733, miss=0.691667, FP/12=0.566667.
+BinSeg 93/118/267, precision=0.440758, recall=0.258333, F1=0.325744,
+miss=0.741667, FP/12=0.491667. Для обоих median absolute localisation error
+и median breakpoint offset=0 только среди detected. В окне T…T+3 до-T точки
+считаются FP; matched offsets>=0, поэтому эти две медианы совпадают по определению.
+Они не являются временем online detection и не компенсируют пропуск 69–74% событий.
+One-to-one; повторные/лишние monitoring-точки FP, неполные/ранние события явно исключены.
+Основные полные BP counts 269/232 включают 22/21 warmup-точку вне оценки;
+TP+FP=247/211 — оценочные точки. Все сценарии/сила/шум и исключения сохранены.
+
+F1 95% bootstrap CI: PELT [0.336120,0.392915], BinSeg [0.295944,0.351567].
+500 ресэмплов целых рядов внутри scenario×strength×noise, seed=300000;
+CI условны на выбранные параметры, их выбор не ресэмплируется.
+Интервалы пересекаются; парная значимость не проверена. PELT имеет большую
+точечную F1 именно этого offline опыта. Отдельная неизменная online-справка E04a:
+CUSUM/EWMA/BOCPD F1=0.484321/0.450450/0.451977,
+recall=0.386111/0.347222/0.333333; доступ только к текущему/прошлому префиксу.
+Общий победитель offline/online не выбран: режим доступа и смысл даты различаются.
+Test FAR no_change/outlier: PELT 0.350/0.708333; BinSeg 0.125/0.508333.
+
+Real — 63 прежних МО ×12 месяцев конечных ошибок; исходные sample/coverage
+на 64 МО сохранены. МО 1471 не имеет конечных warmup-ошибок, поэтому не сегментируется.
+81 PELT и 79 BinSeg retrospective candidate breakpoints, из них monitoring
+59/57 и warmup 22/22. Все 126 полных сегментаций complete, failed=0.
+Сохранены municipality_id/method/месяц/cost/gain/сегменты/estimated_shift в рублях.
+Без независимой реальной разметки precision/recall/F1 не вычислялись; кандидаты
+не являются подтверждёнными экономическими шоками. Иллюстрации: три минимальных
+valid numeric ID 21/25/37; у 1471 нет residual stream для сегментации/графика.
+
+1512 calendar-prefix диагностик: 1134 complete и 378 not_ready (первые три
+месяца каждого ряда), failed=0. Сопоставление с full BP только после независимых
+fit, фиксированный допуск +/-1 месяц, nearest one-to-one; не online alarm.
+Медиана first-prefix-month−full-BP-month=1 для обоих методов; это hindsight
+association, не detection delay. Даты пересматривались у 22/81 PELT и 22/79 BinSeg
+полных кандидатов; исчезновения после обнаружения у 9/81 и 12/79, max revision span=1 месяц.
+Сохранено 898 prefix-оценок (458/440), из них 72 временных unmatched появления
+(33/39), а не 72 уникальных экономических события. 1920 строк траекторий,
+160 full-BP summary, first/exact-prefix/пересмотры/исчезновения сохранены.
+
+Обнаружено ограничение установленной реализации PELT при min_size=2/jump=1:
+на 816 произвольных коротких toy-сигналах найдено 86 objective gaps из 4896 сравнений.
+Например z=[−1,1,−1,1,1,−1], penalty=1: native [3,6] objective=6.333333,
+непрореженный DP [6] objective=6.0; terminal 6 не breakpoint.
+Глобальная оптимальность этой реализации не гарантирована. В synthetic-аудите
+93 gaps >1e-8 из 10080 проверок, max=51.914884; выбранный validation — 6, test — 11.
+Числа включают повторную проверку selected validation после сетки, не уникальные ряды.
+В 630 дополнительных real/full-prefix проверках gaps=0. Native границы воспроизведены
+независимо; DP служит отдельной нижней границей, не заменой модели и не новым участником
+benchmark. Параметры, native breakpoints и метрики не изменялись. Все контрпримеры
+с ID/penalty/objectives сохраняют pelt_pruning_diagnostic.json и pelt_optimality_*.json.
+Отчёт дополнен из этих JSON после проверки; исходный текст/SHA/суффикс/команда сохранены.
+
+Полный pytest: 865 passed, 1 warning, 263.16 s, exit 0; прежний Inf-тест E02a.
+11 code/config/script/requirements/test файлов зафиксированы и после pytest не менялись.
+Smoke: 42 исходных validation ряда с replicate=0, 84 пары метод/ряд, 0 failed, 28.1002 s;
+не отбор моделей, test/real не запускались. Synthetic: 1260+1260, 0 failed, 752.1687 s.
+Real: 110.6777 s до графиков/отчёта; сумма этих этапов 862.8465 s, smoke отдельно.
+Независимый synthetic PASS: 1435192 проверки, 208 metric groups, 728 CI rows,
+15120 candidate-series, 5040 selected method-series, max numerical difference 5.0023e-12.
+CI проверены по point estimates/границам/метаданным, не повторным bootstrap.
+Full PASS: 114408 новых/common проверок, max 9.09495e-13; прежние synthetic
+входы/метрики/CI не пересчитывались, неизменность 36 файлов подтверждена SHA с цепочкой
+исходного checker. Новые prefix calibration/partitions/costs/dates/associations
+проверены независимо; вторичные before/after поля каждой prefix-строки целиком
+отдельно не пересчитывались. Full real BP statistics проверены, причинность всех
+prefix BP columns покрыта frozen unit-тестами. Восемь PNG имеют SHA источников;
+три основных графика дополнительно просмотрены. 3975 прежних файлов, включая
+.vscode/, данные, E01–E05d, сохранены; HEAD 313cf851a8ca26d5077ba2fefb675e57412f5457.
+Commit/push/публикация/обучение forecasting моделей отсутствуют.
+Числовая проверка финального отчёта PASS: 3141 проверка, 11 таблиц, 2356 ячеек
+(1019 числовых), 8 PNG и источники/SHA. Числа аннотации PELT и её цепочка
+original report → full audit → append-only suffix проверены отдельно.
+Максимальная разница отображения 0.0005 соответствует округлению таблиц до трёх
+знаков. Обе попытки проверки отчёта — PASS, сохранены отдельно; source не менялся.
+
+Доказательства outputs/e06a_checks/: test_result, smoke_verification,
+synthetic_verification, full_verification, report_verification,
+final_preservation и library diagnostics; JSON/исполненные скрипты и immutable attempts.
+L=0 и vintages расходов не подтверждены; 12 residual-месяцев/4 warmup/8 monitoring
+и Gaussian generator ограничивают перенос на реальные МО. Изменение ошибок может
+отражать адаптацию forecaster/пересмотры/состав данных. E06a не early warning,
+а уже просмотренные synthetic и real holdout не новые независимые проверки.
+
+Команды стадий и проверок:
+```powershell
+.\.venv\Scripts\python.exe -B -X utf8 -m pytest -p no:cacheprovider --basetemp=outputs/e06a_checks/pytest_full_run1
+.\.venv\Scripts\python.exe -B -X utf8 scripts/run_offline_detection.py --config configs/offline_detection.yaml --stage smoke
+.\.venv\Scripts\python.exe -B -X utf8 outputs/e06a_checks/verify_smoke.py
+.\.venv\Scripts\python.exe -B -X utf8 scripts/run_offline_detection.py --config configs/offline_detection.yaml --stage synthetic
+.\.venv\Scripts\python.exe -B -X utf8 outputs/e06a_checks/verify_results.py --stage synthetic
+.\.venv\Scripts\python.exe -B -X utf8 scripts/run_offline_detection.py --config configs/offline_detection.yaml --stage real
+.\.venv\Scripts\python.exe -B -X utf8 outputs/e06a_checks/verify_results.py --stage full
+.\.venv\Scripts\python.exe -B -X utf8 outputs/e06a_checks/finalize_report_audit.py
+.\.venv\Scripts\python.exe -B -X utf8 outputs/e06a_checks/verify_report.py
+.\.venv\Scripts\python.exe -B -X utf8 outputs/e06a_checks/verify_final_preservation.py
+```
 
 ## E05d: фиксированное National/Local и LightGBM
 Конфигурация configs/national_local_lightgbm.yaml; скрипт
@@ -211,7 +353,7 @@ smoke_verification.json, test_result.json в outputs/e05d_checks/.
 ### Следующие этапы после E05d
 Обычный forecasting model search закрыт после финальной сверки E05d;
 дополнительного выбора параметров/календаря/макроварианта по старому holdout нет.
-E06a — PELT + Binary Segmentation: запланирован, код/запуск ещё не выполнены;
+E06a — PELT + Binary Segmentation: выполнен отдельным опытом выше;
 ретроспективная сегментация не считается ранним предупреждением.
 E06b — news/events: запланирован, сбор/согласование дат доступности и территорий
 не выполнены. E07 — early warning: запланирован, протокол предупреждения

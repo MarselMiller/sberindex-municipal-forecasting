@@ -1,0 +1,2 @@
+# E06a only. Existing NumPy/SciPy remain unchanged in the main .venv.
+ruptures==1.1.10

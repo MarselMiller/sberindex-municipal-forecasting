@@ -1,0 +1,155 @@
+experiment: offline_detection_v1
+experiment_date: '2026-10-07'
+seed: 42
+reference:
+  e04_dir: outputs/online_detection_v1
+  e04_config: configs/online_detection.yaml
+  e04_report: reports/results/E04a_online_detection.md
+source:
+  e01_dir: outputs/prophet_comparison_v1
+  data_path: data/input/consumption_all_categories.csv
+  category: Все категории
+  forecast_model: SeasonalNaiveYoY
+  horizon: 1
+  selection_timing: chosen_after_viewing_E01
+preparation:
+  warmup_observations: 4
+  relative_scale_floor: 0.03
+  absolute_scale_floor: 1.0
+  cooldown_months: 2
+  release_lag_months: 0
+  scaling: fixed_median_MAD_first_four_available_raw_residuals
+  scale_floor_basis: median_absolute_prediction_of_warmup_only
+  missing: preserve_calendar_skip_update
+  reset: after_emitted_alarm_only
+  cooldown: update_state_suppress_next_two_calendar_months
+forecast:
+  yearly_growth_window: 3
+  yearly_growth_bounds:
+  - 0.5
+  - 2.0
+  min_history_observations: 12
+  max_staleness_months: 1
+generator:
+  months: 24
+  start_period: 2023-01
+  base_level: 10000.0
+  seasonality_fraction: 0.1
+  trend_per_month_fraction: 0.004
+  noise_fractions:
+  - 0.01
+  - 0.03
+  strengths:
+  - 2.0
+  - 4.0
+  - 6.0
+  replicates_per_cell: 30
+  validation_seed: 100000
+  test_seed: 200000
+  event_start_indices:
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  warmup_event_index: 14
+  end_event_index: 22
+  main_scenarios:
+  - no_change
+  - outlier
+  - level_up
+  - level_down
+  - slope_up
+  - slope_down
+  - variance_up
+  secondary_edge_scenarios:
+  - level_warmup
+  - level_end
+  level_definition: additive_shift_persists_to_end_at_least_three_months_main
+  amplitude: strength_times_base_level_times_noise_fraction
+  slope_definition: added_amplitude_times_months_since_event_inclusive_divided_by_three
+  variance_definition: multiply_noise_standard_deviation_by_strength_after_event
+  outlier_definition: one_month_additive_amplitude_alternating_sign_no_structural_event
+ruptures_version: 1.1.10
+offline_analysis:
+  cost_model: l2
+  min_size: 2
+  jump: 1
+  input: full_available_residual_history_including_calibration_months
+  standardization: fixed_E04a_first_four_finite_residuals_and_predictions
+  evaluation: only_E04a_monitoring_month_breakpoints_and_exposure
+  warmup_breakpoints: saved_outside_evaluation
+  future_access: whole_available_series
+  missing: omit_nonfinite_for_cost_preserve_original_calendar_mapping_no_fill
+  breakpoint_month: first_observed_month_of_right_segment
+  terminal_index: not_a_change
+  labels_in_fit: false
+  online_cooldown: false
+  prefix_matching_tolerance_months: 1
+  prefix_matching: nearest_offset_one_to_one_after_independent_prefix_fits
+  localisation_window_basis: observation_month_not_analysis_availability_date
+detectors:
+  PELT:
+    model: l2
+    min_size: 2
+    jump: 1
+    penalty:
+    - 0.5
+    - 1.0
+    - 2.0
+    - 4.0
+    - 8.0
+    - 16.0
+  BinSeg:
+    model: l2
+    min_size: 2
+    jump: 1
+    penalty:
+    - 0.5
+    - 1.0
+    - 2.0
+    - 4.0
+    - 8.0
+    - 16.0
+evaluation:
+  detection_window_months: 3
+  matching: chronological_one_to_one_first_breakpoint_in_inclusive_observation_month_window
+  repeated_alarms: unmatched_repeats_are_false_alarms
+  incomplete_windows: exclude_from_main_recall_and_mark_alarms_in_excluded_event_windows
+  false_alarm_budget_per_12_months: 1.0
+  budget_controls:
+  - no_change
+  - outlier
+  budget_rule: each_control_scenario_must_meet_budget_on_validation
+  primary_scenarios:
+  - level_up
+  - level_down
+  selection_rule: highest_validation_primary_F1_then_recall_then_lowest_max_control_FAR_then_absolute_localisation_error_then_candidate_id
+  no_feasible_candidate: method_not_selected_no_budget_relaxation
+  bootstrap_replicates: 500
+  bootstrap_seed: 300000
+  bootstrap_unit: entire_series_within_reported_stratum
+illustrations:
+  selection_rule: three_smallest_numeric_E01_identifiers_and_smallest_identifier_without_monitoring
+  n_smallest: 3
+smoke:
+  selection: first_original_replicate_per_scenario_strength_noise_cell
+  penalty: 4.0
+  metrics: technical_check_not_benchmark_or_selection
+forecasting_model_search_closed: true
+real_metrics: unlabelled_retrospective_candidates_only
+early_warning: false
+holdout_status: previously_inspected_not_independent
+validation_record: outputs/e06a_checks/test_result.json
+environment_record: outputs/e06a_checks/environment_verification.json
+preservation_record: outputs/e06a_checks/initial_preservation.json
+smoke_record: outputs/e06a_checks/smoke_verification.json
+synthetic_verification_record: outputs/e06a_checks/synthetic_verification.json
+output_dir: outputs/offline_detection_v1
+smoke_output_dir: outputs/offline_detection_smoke_v1
+report_path: reports/results/E06a_offline_detection.md
+sources:
+- https://centre-borelli.github.io/ruptures-docs/user-guide/detection/pelt/
+- https://centre-borelli.github.io/ruptures-docs/user-guide/detection/binseg/
+- https://centre-borelli.github.io/ruptures-docs/user-guide/costs/costl2/
+- https://pypi.org/project/ruptures/1.1.10/#files
