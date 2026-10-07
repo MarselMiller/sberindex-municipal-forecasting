@@ -81,6 +81,8 @@ Forecasting оценивает будущие расходы. Детекторы
 
 Разложение меняет масштаб признаков, обучающую цель и национальный прогноз, поэтому оценивается полная стратегия. Эффект нельзя приписать только библиотеке boosting или отдельному feature. Validation и промежуточные ablations приведены в сводке и подробных отчётах. Макропризнаки проверялись в отдельной ablation; устойчивый прирост качества не установлен.
 
+Дополнительно проверены ключевая ставка Банка России и официальный курс USD/RUB; для каждого forecast origin использовались только значения, доступные к моменту формирования прогноза. Фиксированное сравнение моделей не показало устойчивого улучшения: снижение MAE с FX наблюдалось только на h=6 и не было устойчивым по горизонтам. Для weak-event labels из E07 сравнительный early-warning эффект оценить не удалось, поскольку среди дат с известной меткой не было отрицательного класса ([подробности](reports/final/RESULTS_SUMMARY.md#leading-financial-indicators)).
+
 ![MAE macro на реальном pilot holdout; годовые direct-стратегии используют fallback](reports/final/figures/forecast_mae.png)
 
 ### Foundation model
@@ -256,7 +258,7 @@ reports/final/    — итоговая сводка, CSV/JSON, ограниче�
 reports/results/  — подробный experiment audit trail
 ```
 
-[reports/final/](reports/final/) — источник финальных чисел; [reports/results/](reports/results/) — подробный experiment audit trail E01–E07. Источники рисунков, SHA256 и правила выбора записаны в [figure_manifest.csv](reports/final/figure_manifest.csv).
+[reports/final/](reports/final/) — источник финальных чисел; [reports/results/](reports/results/) — подробный experiment audit trail E01–E08. Источники рисунков, SHA256 и правила выбора записаны в [figure_manifest.csv](reports/final/figure_manifest.csv).
 
 Для чтения без запуска: [итоговая сводка](reports/final/RESULTS_SUMMARY.md), [ограничения](reports/final/limitations.md) и [терминология](reports/final/terminology.md). Подробные таблицы содержат coverage и основания выводов.
 

@@ -1,0 +1,64 @@
+{
+  "real_data_only": true,
+  "no_synthetic_data": true,
+  "no_fitting": true,
+  "figures": [
+    {
+      "path": "outputs/real_financial_early_warning_e08d_v1/figures/e08d_financial_by_origin.png",
+      "sha256": "b552f40db8699e781642bcda0bc2277c97e925efee9c08e1f9e17938524c6810",
+      "source": "origin_event_study.csv and event_window_table.csv",
+      "panels": 4,
+      "financial_origin_rows": 12,
+      "plotted_financial_values": 48,
+      "onset_month_markers": 6,
+      "line_policy": "straight_segments_between_saved_real_points",
+      "onset_marker_rule": "month_end_display_marker_intra_month_day_unknown"
+    },
+    {
+      "path": "outputs/real_financial_early_warning_e08d_v1/figures/e08d_event_centered_financial.png",
+      "sha256": "ea297afacd5a4caeaf8ddbde4fcd779260b7cbc802ba89dd6ec1fb70d87ee9ba",
+      "source": "event_window_table.csv",
+      "panels": 4,
+      "onset_months": 6,
+      "saved_window_rows": 18,
+      "plotted_window_rows": 18,
+      "plotted_financial_values": 72,
+      "unique_financial_origins": 8,
+      "line_policy": "three_saved_points_no_interpolation_or_smoothing",
+      "overlapping_windows_are_not_independent": true
+    }
+  ],
+  "figure_count": 2,
+  "maximum_figures": 2,
+  "source_sha256": {
+    "origin_event_study.csv": "3bfc1e2766e704bcafbc94b041089ddfb73201bee518458c1fe378bcc1f14fd2",
+    "event_window_table.csv": "357aa020badb134f5099276462613b90b73e709150f23ef7b8f0e7951cfcb03f",
+    "diagnostic_comparisons.csv": "b5395c483d66923a6cc7e3078f6276ca5128d4a267e7b1688224aa68ca909c3d",
+    "permutation_results.csv": "e01c007858b61ea9df7b0fbbf663e3a4f46ded1a8a9ca95a2d3cf315c7d5c642",
+    "leave_one_event_out.csv": "28be93f0cbb30d72d7d284c2d32b7d44d89bf4522a797df0b3635b2024551486",
+    "event_intensity.csv": "1a665a5ea1f904be83433442362c7c7047156da7bf69887440977ad953b0625d",
+    "eligibility_summary.csv": "f8803e97fab956220ae566073f0fe4c342cf1572c313fbb4fc773bb32ba0b566"
+  },
+  "completed_diagnostic_manifest_sha256": "107316f4f1e6bddce1662b389b9ff4da0546d6cb1b054b3204f6ab49e662bdac",
+  "independent_validation_sha256": "7452046dc700fef9b1f9fecaf51d2c47631ae47789bb8a01511c955e0f281e7e",
+  "script_sha256": "f5c2e5503eb3790ce39a207e78e6a7af9dee99dfd6d73e3c8663dabe76ccc84c",
+  "independent_observed_run_manifest_sha256": "107316f4f1e6bddce1662b389b9ff4da0546d6cb1b054b3204f6ab49e662bdac",
+  "independent_validation_binding": "all_seven_numerical_table_sha256",
+  "command": ".venv/Scripts/python.exe -B -X utf8 scripts/report_real_financial_early_warning.py",
+  "commands": [
+    ".venv/Scripts/python.exe scripts/run_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml --smoke",
+    ".venv/Scripts/python.exe scripts/run_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml",
+    ".venv/Scripts/python.exe scripts/check_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml",
+    ".\\.venv\\Scripts\\python.exe -I -B -X utf8 outputs/e08d_checks/check_independent.py",
+    ".venv/Scripts/python.exe -B -X utf8 scripts/report_real_financial_early_warning.py"
+  ],
+  "additional_command_record_sha256": {
+    "outputs/real_financial_early_warning_e08d_smoke_v1/run_manifest.json": "de6b7b87d1d938b0710f22f8a88dbd65364d2cf5c60aedce636ed349384e1e62",
+    "outputs/e08d_checks/real_validation.json": "29417da111817da40dd762899ad512f3386c73e17d0498ed5075a15754365121"
+  },
+  "report_path": "reports/results/E08d_real_financial_early_warning.md",
+  "report_sha256": "8f068d88691e9b5863d4624acac281bc1090b30affd010c415c0c3ea792b034f",
+  "onset_dates_are_month_end_markers": true,
+  "intra_month_onset_days_known": false,
+  "generated_at_utc": "2026-10-07T18:43:58.686735+00:00"
+}

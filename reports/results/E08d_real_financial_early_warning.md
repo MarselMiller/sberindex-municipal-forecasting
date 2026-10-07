@@ -220,11 +220,11 @@ Spearman рассчитывается на уникальных известны
 
 ## Две фигуры из реальных значений
 
-![Financial indicators by real origin](../../outputs/real_financial_early_warning_e08d_v1/figures/e08d_financial_by_origin.png)
+![Financial indicators by real origin](e08d/figures/e08d_financial_by_origin.png)
 
 Каждая панель содержит 12 сохранённых financial values. Пунктир обозначает условные month-end onset markers; внутримесячный день события неизвестен. Линии соединяют измеренные точки, сглаживания и fitting нет.
 
-![Real event-centered financial trajectories](../../outputs/real_financial_early_warning_e08d_v1/figures/e08d_event_centered_financial.png)
+![Real event-centered financial trajectories](e08d/figures/e08d_event_centered_financial.png)
 
 Каждая линия показывает только три реальные предшествующие calendar origins. Окна разных onset months перекрываются; общие national observations повторяются в представлении и не считаются независимыми. Ни interpolated, ни synthetic points нет.
 
@@ -238,7 +238,7 @@ E08c дал **NO STABLE FORECASTING UPLIFT**. E08d задаёт отдельны
 
 ## Проверки, артефакты и runtime
 
-Проверены unique origins, сохранение unknown, own-origin financial source cutoffs, совпадение всех event-window values с реальной E08b matrix, неизменность входных SHA и завершённых output SHA. Независимая real-data проверка: [PASS](../../outputs/e08d_checks/independent_validation.json). Synthetic tests/benchmarks и classifier fits отсутствуют.
+Проверены unique origins, сохранение unknown, own-origin financial source cutoffs, совпадение всех event-window values с реальной E08b matrix, неизменность входных SHA и завершённых output SHA. Независимая real-data проверка: [PASS](e08d/independent_validation.json). Synthetic tests/benchmarks и classifier fits отсутствуют.
 
 ```powershell
 .venv/Scripts/python.exe scripts/run_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml --smoke
@@ -250,15 +250,15 @@ E08c дал **NO STABLE FORECASTING UPLIFT**. E08d задаёт отдельны
 
 Runtime основного расчёта: 1.760 s. Report/figure rendering — отдельная команда, без models или изменения исходных labels.
 
-[Run manifest](../../outputs/real_financial_early_warning_e08d_v1/run_manifest.json); [figure provenance](../../outputs/real_financial_early_warning_e08d_v1/figures/figure_manifest.json).
+[Run manifest](e08d/run_manifest.json); [figure provenance](e08d/figure_manifest.json).
 
-- [origin_event_study.csv](../../outputs/real_financial_early_warning_e08d_v1/origin_event_study.csv)
-- [event_window_table.csv](../../outputs/real_financial_early_warning_e08d_v1/event_window_table.csv)
-- [diagnostic_comparisons.csv](../../outputs/real_financial_early_warning_e08d_v1/diagnostic_comparisons.csv)
-- [permutation_results.csv](../../outputs/real_financial_early_warning_e08d_v1/permutation_results.csv)
-- [leave_one_event_out.csv](../../outputs/real_financial_early_warning_e08d_v1/leave_one_event_out.csv)
-- [event_intensity.csv](../../outputs/real_financial_early_warning_e08d_v1/event_intensity.csv)
-- [eligibility_summary.csv](../../outputs/real_financial_early_warning_e08d_v1/eligibility_summary.csv)
+- [origin_event_study.csv](e08d/origin_event_study.csv)
+- [event_window_table.csv](e08d/event_window_table.csv)
+- [diagnostic_comparisons.csv](e08d/diagnostic_comparisons.csv)
+- [permutation_results.csv](e08d/permutation_results.csv)
+- [leave_one_event_out.csv](e08d/leave_one_event_out.csv)
+- [event_intensity.csv](e08d/event_intensity.csv)
+- [eligibility_summary.csv](e08d/eligibility_summary.csv)
 
 F1–F7, E08a/b/c, README, final methodology report и presentation не обновляются. Следующий шаг — отдельно решить, нужна ли дополнительная реальная история с сопоставимыми known negative dates; новые sources/models этим diagnostic не разрешаются.
 

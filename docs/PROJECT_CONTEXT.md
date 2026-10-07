@@ -7,6 +7,76 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## E08d: переносимые ссылки перед merge
+
+2026-10-07, research/e08-leading-indicators; HEAD 7edcba4 и main не изменены.
+В E08d report изменены только 12 URL targets: семь CSV и run manifest ведут
+к прежним идентичным tracked copies в reports/results/e08d/. Два небольших JSON
+проверены целиком: audit/provenance metadata без raw/private rows, secrets
+и абсолютных локальных путей. Оба включены без изменений; исторические SHA,
+статусы и timestamps сохранены, включая report SHA до правки URL.
+Две PNG имеют побайтовые копии в reports/results/e08d/figures/, чтобы в отчёте
+не осталось clickable targets под outputs/. Original outputs/PNG/CSV не изменены.
+Для двух новых JSON добавлены точные -text rules в .gitattributes:
+source, working copy и indexed blob сохраняют одинаковый SHA.
+В index добавлены только четыре проверенные копии; commit/push не выполнялись.
+12/12 E08d links и 183 relative links проверенных материалов tracked и существуют.
+290 прочих working files и 1782 protected artifacts сохранены; прежние
+числовые результаты, NA, claims и остальная итоговая интеграция не изменены.
+E08 PRE-MERGE CHECK PASS. Proof: outputs/e08d_portability_checks/portability_check.json.
+Следующий шаг — review полного diff и решение автора о merge.
+Новых fits/experiments/tuning, генерации PNG и нового clean clone нет.
+
+## E08: последний pre-merge check до исправления ссылок
+
+2026-10-07, research/e08-leading-indicators, HEAD 7edcba4 не изменён.
+README paragraph заменён точным текстом пользователя; остальные claims/results
+не изменены. Все запрошенные E08 reports/CSV, обе E08d PNG и presentation PDF
+существуют и tracked. Строгая проверка доступности всех ссылок из Git — FAIL:
+E08d report содержит десять ссылок на local-only files. Для run_manifest.json
+и семи CSV имеются идентичные tracked copies в reports/results/e08d/;
+для independent_validation.json и figures/figure_manifest.json копий в Git нет.
+Локальный READY TO MERGE предыдущего этапа не покрывал это строгое требование.
+Итог pre-merge: NEEDS REVIEW. Артефакты не копируются и ссылки старого отчёта
+не меняются в задаче проверки. Proof: outputs/e08_integration_checks/pre_merge_check.json.
+Следующий шаг — устранить десять local-only ссылок отдельной навигационной правкой
+без изменения результатов и без автоматической публикации исходных данных.
+Новых fits/experiments/tuning, commit/push и сетевых обращений нет.
+
+## E08: финальная интеграция в исследовательские материалы
+
+Разрешена пользователем после E08d, 2026-10-07, только в
+research/e08-leading-indicators. Исходный HEAD 7edcba495076273142ead96e1f19016c9da41b4a,
+рабочая папка перед интеграцией чистая; main 70c95d6 не изменён. Интегрированы сохранённые
+выводы по муниципальным расходам СберИндекса, ключевой ставке и официальному
+USD/RUB Банка России и weak-event labels / onset months из E07.
+Новые эксперименты, обучение, tuning и пересборка числовой сводки запрещены.
+
+В README добавлен один короткий абзац; в RESULTS_SUMMARY и METHODOLOGY_REPORT —
+отдельные подразделы E08, в limitations и FINAL_AUDIT — компактные дополнения.
+Основной вывод forecasting: NO STABLE FORECASTING UPLIFT. Снижение MAE на h6
+для FX-only F2 составляет 1.67%/2.11% на validation/holdout, для combined F3 —
+1.67%/1.78%; F3 улучшает обе части только на одном из требуемых двух горизонтов.
+Эти варианты различаются и не подтверждают устойчивый predictive effect.
+E08d: 12 уникальных origins, k1 eligible/positive/negative=6/6/0, k3=4/4/0.
+Сравнительный опережающий эффект не оценён из-за отсутствия отрицательных дат;
+неоценённые эффекты и p-values не означают отсутствия предвестников.
+Национальные признаки не увеличивают число независимых временных наблюдений.
+
+В презентации заменён один устаревший financial-next-step bullet и уточнена
+подпись будущих шагов. PDF пересобран прежним локальным pipeline: 12 страниц,
+layout и текст первых 11 страниц сохранены. Исторический F4 verification не изменён.
+F1 CSV/JSON, таблицы и figures, E08a–E08d reports/outputs, data publication
+decisions и AI disclosure сохраняются. E08 не входил в исходный F5 clean-clone
+audit; новое полное clean-clone воспроизведение не выполнялось.
+Интеграция завершена: claims, saved MAE/counts, 183 relative links, новый PDF
+и preservation проверки PASS. Все 10 новых ссылок ведут к tracked files;
+старые ссылки E08d на полные outputs проверены только локально. Сохранены
+1783 защищённых файла, 284 прочих tracked contents и прежние таблицы.
+Доказательства интеграции сохраняются в outputs/e08_integration_checks/.
+READY TO MERGE для этого дополнения. Следующий шаг — review итогового diff
+и отдельное решение автора о merge; merge/commit/push не выполнялись.
+
 ## E08d: реальная date-level диагностика финансовых предвестников
 
 Отдельно разрешена пользователем 2026-10-07, только research/e08-leading-indicators.

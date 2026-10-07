@@ -30,6 +30,7 @@
 | E08b | Causal loading и origin-aware financial features | E08b complete; Ready for E08c feature layer | Только A key rate/official USD-RUB; 1016/990 observations, 36 решений/23 changes; 12 прежних origins × 10 features, missing 0; own-cutoff/effective/future mutation/determinism/holiday/national/June checks PASS, 65 synthetic tests; 240 independently checked cells; без моделей/метрик/EW training/commit/push |
 | E08c | Fixed forecasting ablation financial indicators | E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT | F0 E05d exact reproduction; 232 fits, 4249.700 s; 83 tests и independent 26860-cell audit PASS; LN/F3 paired improvement только h6, нужно >=2h; own-r/cases/params checks PASS; h12 descriptive fallback; без tuning/new family/SoT changes/commit/push |
 | E08d | REAL financial early-warning diagnostic | E08d real financial early-warning diagnostic complete; NO REAL PRECURSOR EVIDENCE | Только frozen E07b/E08b; 12 unique origins, k1 6 positive/0 negative, k3 4 positive/0 negative; unknown сохранены; 7 CSV/2 figures/manifest, independent1788numeric+976NA PASS; contrasts/permutation/Holm NONESTIMABLE; без synthetic data, fits и tuning |
+| E08 integration | Включить завершённые E08a–E08d в итоговые материалы | Выполнена; E08 PRE-MERGE CHECK PASS | Claims/results сохранены; 12 E08d links и 183 relative links tracked; четыре byte-identical metadata/PNG copies в index; исходные outputs неизменны |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -49,6 +50,52 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08d portability перед merge, 2026-10-07; research/e08-leading-indicators.
+В отчёте изменены только URL: семь CSV и run manifest перенаправлены к прежним
+tracked copies; два reviewed metadata JSON и две byte-identical PNG включены
+в reports/results/e08d/. Original outputs/PNG/calculations/NA не изменены.
+Два точных правила .gitattributes сохраняют SHA новых JSON при checkout.
+Index содержит только четыре разрешённые копии; source/working/index SHA совпадают.
+12 E08d links и 183 relative links checked/tracked; outputs link targets=0.
+Preservation и git diff checks PASS; остальные итоговые тексты/PDF сохранены.
+E08 PRE-MERGE CHECK PASS. Следующий шаг — review полного diff и решение о merge.
+Proof: outputs/e08d_portability_checks/portability_check.json.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08: предыдущий pre-merge check до исправления ссылок
+ID: E08 последний pre-merge check, 2026-10-07; ветка research/e08-leading-indicators.
+README E08 paragraph заменён точным текстом пользователя; другие claims/results
+и сохранённые артефакты не изменены. Artifact availability PASS: E08a–d reports,
+origin features, metrics, E08d CSV, две E08d PNG и presentation PDF tracked.
+Строгий tracked-link check FAIL: десять E08d report links ведут к local-only files.
+Восемь targets имеют идентичные tracked alternatives в reports/results/e08d/;
+independent_validation.json и figures/figure_manifest.json tracked copies не имеют.
+NEEDS REVIEW. Следующий шаг — отдельная правка навигации этих десяти ссылок.
+Proof: outputs/e08_integration_checks/pre_merge_check.json.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08 FINAL INTEGRATION: завершённый предыдущий этап
+ID: E08 FINAL INTEGRATION, разрешена 2026-10-07 после завершения E08d.
+Ветка research/e08-leading-indicators; исходный HEAD 7edcba4, до интеграции папка чистая.
+Добавлены только пояснения из сохранённых E08a–E08d: короткий README,
+подразделы сводки и методологического отчёта, ограничения и примечание audit.
+Стиль — назвать источник при первом упоминании, затем естественный текст;
+старые synthetic benchmarks и их маркировка сохраняются в своих разделах.
+Сохранённые MAE F0/F3 и проценты FX-only F2 / combined F3 сверены отдельно.
+Неустойчивый h6 signal не объявляется доказанным predictive effect;
+E08d comparative effect non-estimable: k1 6/6/0, k3 4/4/0, нет negative dates.
+В презентации заменён один устаревший financial-next-step bullet и уточнена подпись;
+layout и 12 страниц сохранены; PDF экспортирован прежним pipeline, проверки PASS.
+Согласованность, 183 относительные ссылки, preservation и PDF — PASS. Все 10 новых
+ссылок ведут к tracked files; старые E08d output-ссылки проверены только локально.
+1783 защищённых файла и 284 прочих tracked contents сохранены; F1 Source of Truth,
+старые reports/metrics/configs/data/AI disclosure не пересобраны.
+Новый полный clean-clone не выполнялся, F5 не включал E08. READY TO MERGE.
+Следующий конкретный шаг — review итогового diff и решение автора о merge;
+merge/commit/push не выполнялись. Proofs: outputs/e08_integration_checks/.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08d: завершённая предыдущая задача
 ID: E08d — REAL early-warning diagnostic with leading financial indicators.
 Разрешена 2026-10-07, только research/e08-leading-indicators, base 394e3e5;
 рабочая папка перед началом чистая, main 70c95d6 не меняется.
