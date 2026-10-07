@@ -1,0 +1,63 @@
+{
+  "months": 24,
+  "event_fraction": 0.6,
+  "unanticipated_fraction": 0.25,
+  "controls_false_precursor_fraction": 0.35,
+  "count_policy": "round_fraction_times_cohort_size_without_metric_selection",
+  "onset_index_range": [
+    16,
+    20
+  ],
+  "precursor_lead_range": [
+    1,
+    3
+  ],
+  "level_range": [
+    800.0,
+    1600.0
+  ],
+  "trend_monthly_fraction_range": [
+    -0.002,
+    0.003
+  ],
+  "seasonality_amplitude_fraction_range": [
+    0.08,
+    0.2
+  ],
+  "shift_magnitude_fraction_range": [
+    0.25,
+    0.5
+  ],
+  "shift_duration": "persistent_until_series_end",
+  "shift_direction": "equiprobable_positive_negative",
+  "high_noise_fraction": 0.25,
+  "low_noise_fraction_range": [
+    0.02,
+    0.05
+  ],
+  "high_noise_fraction_range": [
+    0.08,
+    0.12
+  ],
+  "strong_precursor_fraction": 0.5,
+  "weak_precursor_strength_range": [
+    0.35,
+    0.8
+  ],
+  "strong_precursor_strength_range": [
+    0.9,
+    1.7
+  ],
+  "endogenous_channel_probability": 0.7,
+  "external_channel_probability": 0.8,
+  "anticipated_channel_policy": "at_least_one_channel_with_stochastic_observations",
+  "endogenous_slope_fraction": 0.025,
+  "precursor_volatility_multiplier": 0.7,
+  "macro_ar_phi": 0.55,
+  "macro_noise_sigma": 0.6,
+  "macro_pulse_multiplier": 2.0,
+  "news_baseline_rate": 1.2,
+  "news_pulse_multiplier": 4.0,
+  "false_episode_policy": "same_precursor_distribution_as_anticipated_events_no_shift",
+  "series_seed_policy": "cohort_seed_times_100000_plus_series_index"
+}

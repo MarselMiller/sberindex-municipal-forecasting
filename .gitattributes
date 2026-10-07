@@ -1,0 +1,9 @@
+# F7: preserve physical bytes of hash-pinned data artifacts on every platform.
+data/inventory_files.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/manifest.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/preflight.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/metadata/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/schemas/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/synthetic/e07c_demo/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+data/synthetic/e07c_demo/*.gz -text
+data/synthetic/e07c_demo/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

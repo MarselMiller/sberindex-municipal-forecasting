@@ -4,8 +4,51 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F6 на 2026-10-07.
+E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
+
+## F7: публикация данных и data-layer воспроизводимость
+
+Base main e50e044. Research phase не возобновляется; Source of Truth,
+метрики, models/configs/старые outputs не меняются.
+Публикация основана на scope каждого источника, а не на доступности файла.
+Локальный PDF явно указывает CC BY-SA 4.0 для трёх Sber Parquet,
+но независимая official binding документа не установлена: UNCLEAR,
+PUBLISH_METADATA_ONLY. Отдельный муниципальный справочник этим grant не покрыт.
+CBR current terms содержат commercial restriction; Lenta reuse permission
+не установлено. Статусы и evidence записаны в data/metadata/*terms.json.
+
+Добавляются только source-free metadata, header contracts и пять byte-copy
+файлов ранее сохранённого SYNTHETIC smoke, без новой генерации/обучения.
+Inventory: 1877 entries; manifest: 90 решений; public data: 12 artifacts.
+Real derived files не считаются свободными автоматически: target может
+восстанавливаться из predictions/residuals/lags/history features.
+Уже tracked figure_data/rolling_forecast.csv содержит 12 real y_true;
+права требуют source confirmation, F1 bytes не меняются.
+Historical vintages/availability не заменяются текущими версиями.
+Preflight stdlib разделяет public, research key-input subset и original sources;
+его PASS не означает full historical experiment reproduction.
+Clean-clone проверка относится к proposed F7 tree с явным overlay,
+поскольку commit/push отсутствуют. Public: 12 PASS в новом clone и parent CWD;
+research: 9 MISSING, sources: 5 MISSING — ожидаемые private dependencies.
+Все 236 base tracked files на месте; 86 relative links F7 проверены.
+Широкий scan обнаружил 18 старых ссылок на ignored outputs в 3 архивных отчётах:
+global all-links не PASS, исторические отчёты сохранены. Все 228 защищённых
+файлов и 1815 inventory SHA не изменились.
+Итог PASS WITH LIMITATION для public data layer — в
+[F7 audit](../reports/final/DATA_PUBLICATION_AUDIT.md).
+
+Final review F7: PASS для proposed diff, 19 новых / 5 изменённых файлов,
+staged 0. Raw/private data отсутствуют; SberIndex UNCLEAR / PUBLISH_METADATA_ONLY,
+UNCLEAR + PUBLISH = 0. Существующие реальные figures/tables классифицированы
+как DERIVED VISUALIZATION / DERIVED REPORT OUTPUT и сохранены; их наличие
+не подтверждает raw redistribution rights. Из 18 historical links восемь
+целей также нужны повторной F1-сборке из saved outputs, не public preflight
+или inference; это documented exception, старые отчёты не переписаны.
+Повторно public12PASS, 110 relative links F7 без пропусков, security/path scan
+без секретов/private URLs/абсолютных локальных paths. Пять demo byte copies
+явно SYNTHETIC; 228 защищённых файлов неизменны. Новых sources/fits/experiments,
+builder, pytest, commit/push нет. F7 ready for commit в reviewed scope.
 
 ## F6: финальный audit и cleanup публичного репозитория
 

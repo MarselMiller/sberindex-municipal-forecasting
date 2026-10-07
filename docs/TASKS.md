@@ -32,6 +32,7 @@
 | F4 | Финальная презентация | Выполнена; доступна в проверенном GitHub commit 6ada526 | 12 русских слайдов, Markdown outline, HTML source и PDF 16:9; одна MAE-таблица и четыре существующих PNG; SHA и доступность повторно проверены в F5 |
 | F5 | Clean-clone reproduction audit | Выполнен: PASS WITH LIMITATION | Новый GitHub clone 6ada526; Python 3.12.10/pip 25.0.1; fresh install + pip check; 1432 passed/34 deselected/1 warning без новых fit; CLI/imports/links/figures/PDF PASS; clone clean; private data/full experiments NOT TESTED; исторические provenance paths сохранены |
 | F6 | Финальный audit и cleanup публичного репозитория | Выполнен: PASS WITH LIMITATION | Base3371a44 синхронизирован с GitHub; навигация и шесть private/ignored links исправлены; claims/AI/135 file links+4anchors/11PNG/PDF/manifests/security PASS; 23 historical paths сохранены с SHA-обоснованием; .vscode/build/temp ignored; docs-only, без pytest/fits/experiments/commit/push |
+| F7 | Data publication and reproducibility audit | Выполнен: PASS WITH LIMITATION | 90 решений/1877 inventory entries; 12 public artifacts (2.39 MB), SYNTHETIC byte-copy demo; primary terms/provenance; stdlib preflight public12PASS; новый GitHub base e50e044 + reviewed overlay; research9/sources5MISSING в clone; source rights/full experiments не подтверждены; старые local-only links сохранены; без fits/experiments/pytest/commit/push |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -44,6 +45,36 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: FINALIZATION / F7 — data publication and reproducibility audit. Выполнена 2026-10-07.
+Base: main, e50e044; рабочая папка до F7 чиста.
+Проверяется только data/documentation layer. Research phase закрыта.
+Новые fits, ML-эксперименты, пересчёт результатов, commit/push запрещены.
+Verdict: PASS WITH LIMITATION для proposed public data/documentation layer.
+19 новых / 5 изменённых файлов, 12 data artifacts; metadata без news bodies,
+numeric macro values и справочника. SYNTHETIC demo: 76 рядов, 1824 наблюдения,
+46 событий. Public preflight: 12 PASS; локальные research: 9 PASS; sources: 5 MISSING.
+Новый GitHub clone содержит 236 base files и 24 проверенных overlay files.
+Public: 12 PASS из clone/parent CWD; research: 9 MISSING; sources: 5 MISSING.
+Private inputs/outputs/weights/venv не копировались. Все 86 relative links F7
+проверены; 18 старых local-only links в 3 архивных отчётах ограничивают global check.
+Права на Sber Parquet и dictionary требуют independent official confirmation;
+уже tracked rolling example с 12 real y_true также требует проверки прав.
+228 защищённых файлов и 1815 inventory hashes неизменны; whitelist/security/size
+и git diff --check PASS; staged files: 0. Full real reproduction NOT TESTED.
+
+Final review перед commit: PASS для 19 новых / 5 изменённых F7 файлов.
+Raw/private/restricted payloads отсутствуют; UNCLEAR + PUBLISH = 0.
+Derived visual/report artifacts сохранены и отдельно классифицированы;
+это не подтверждение прав на raw source data. 18 local-only links документированы:
+восемь целей нужны повторной F1-сборке, не inference/public preflight.
+110 relative links F7 без пропусков; public12PASS; security/path scan PASS;
+пять SYNTHETIC demo files совпали с сохранённым smoke, 228 защищённых files неизменны.
+Новых sources/fits/experiments/pytest/builder/commit/push нет. F7 ready for commit.
+[F7 audit](../reports/final/DATA_PUBLICATION_AUDIT.md) содержит evidence и команды.
+Следующий шаг: review кандидатов и подтверждение официального grant,
+включая отдельный dictionary и права уже tracked real example.
+
+## F6: сохранённая предыдущая задача
 ID: FINALIZATION / F6 — финальный audit и cleanup. Выполнена 2026-10-07.
 Verdict: PASS WITH LIMITATION. Base3371a44 синхронизирован с origin/main и GitHub.
 README верхняя навигация ведёт к отчёту/PDF/сводке/ограничениям; report5 private

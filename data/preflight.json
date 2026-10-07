@@ -1,0 +1,753 @@
+{
+  "schema_version": "f7-preflight-v1",
+  "checked_at": "2026-10-07",
+  "base_revision": "e50e0440f74fe8484d33d9662d9ecc09aa4918a5",
+  "scope": "Read-only data layer; historical research profile is a key-input subset, not a full experiment reproduction",
+  "datasets": [
+    {
+      "dataset_id": "inventory_metadata",
+      "path": "data/inventory_files.csv",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 1470344,
+      "sha256": "7b58f62331cbec7f61c3a05e46ded1c34afcb1079988a8e46a1265acc644bea6",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "relative_path",
+          "group",
+          "group_role",
+          "entry_type",
+          "exists",
+          "n_files",
+          "bytes",
+          "sha256",
+          "sha_status",
+          "format",
+          "n_rows",
+          "row_count_method",
+          "n_columns",
+          "schema_path",
+          "header_json",
+          "balanced_csv_quotes",
+          "data_class",
+          "target_reconstructability",
+          "source_lineage",
+          "publication_status",
+          "notes"
+        ],
+        "rows": 1877,
+        "unique_key": [
+          "relative_path"
+        ],
+        "nonempty_columns": [
+          "relative_path",
+          "entry_type",
+          "data_class"
+        ]
+      }
+    },
+    {
+      "dataset_id": "csv_header_metadata",
+      "path": "data/schemas/csv_headers.json",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 506700,
+      "sha256": "098a2f063232a69be6c726e0c025bd0bb7a6cb597505a5d3bbde196175b5b593",
+      "format": "json",
+      "schema": {
+        "type": "object",
+        "required_keys": [
+          "schema_version",
+          "schemas"
+        ]
+      }
+    },
+    {
+      "dataset_id": "sberindex_schema_metadata",
+      "path": "data/schemas/sberindex_sources.json",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 1644,
+      "sha256": "da9ba662bc6f9424a78222a71b6969ecb99715578562298b7adc1a2adfe66f08",
+      "format": "json",
+      "schema": {
+        "type": "object"
+      }
+    },
+    {
+      "dataset_id": "news_snapshot_metadata",
+      "path": "data/metadata/news_snapshots.csv",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 152172,
+      "sha256": "c4e6ac7e445b8ef6ab5a547f80e187c40d1acff0b90ae8e476dfb913d59396ae",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "document_id",
+          "snapshot_id",
+          "source",
+          "source_url",
+          "source_domain",
+          "canonical_event_id",
+          "published_at",
+          "event_date",
+          "updated_at",
+          "available_at",
+          "retrieved_at",
+          "publication_date_precision",
+          "updated_date_precision",
+          "availability_status",
+          "historical_version_status",
+          "availability_mode",
+          "source_file_sha256",
+          "retrieval_source_url",
+          "content_hash",
+          "title_hash",
+          "topic",
+          "event_type",
+          "direction",
+          "is_canonical"
+        ],
+        "rows": 197,
+        "unique_key": [
+          "snapshot_id"
+        ],
+        "nonempty_columns": [
+          "document_id",
+          "snapshot_id",
+          "source_url",
+          "source_domain",
+          "availability_mode"
+        ]
+      }
+    },
+    {
+      "dataset_id": "macro_provenance_metadata",
+      "path": "data/metadata/macro_provenance.csv",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 158724,
+      "sha256": "76f915dc33a5a640b1d132e0222923e0b1f36bf02e326a273fea0ce1a6dfafad",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "provenance_id",
+          "series_id",
+          "indicator",
+          "geographic_level",
+          "reference_period",
+          "target_period",
+          "published_at",
+          "available_at",
+          "vintage_id",
+          "availability_status",
+          "source_url",
+          "source_domain",
+          "forecast_issue_date",
+          "original_forecast_issue_date",
+          "survey_issue_period",
+          "forecast_producer",
+          "aggregation_basis",
+          "forecast_interval_kind",
+          "central_method",
+          "source_snapshot_sha256",
+          "source_pdf_sha256",
+          "source_text_sha256",
+          "source_file_relative",
+          "source_bytes",
+          "source_retrieved_at",
+          "source_table_sha256"
+        ],
+        "rows": 227,
+        "unique_key": [
+          "provenance_id"
+        ],
+        "nonempty_columns": [
+          "provenance_id",
+          "series_id",
+          "source_url",
+          "availability_status"
+        ]
+      }
+    },
+    {
+      "dataset_id": "external_terms_metadata",
+      "path": "data/metadata/source_terms.json",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 19426,
+      "sha256": "d7a680c4e4dc2eefb6f6df3c41e1599e9426604792385ec97662afdb20aa8dd8",
+      "format": "json",
+      "schema": {
+        "type": "object",
+        "required_keys": [
+          "sources",
+          "checked_at",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "dataset_id": "sberindex_terms_metadata",
+      "path": "data/metadata/sberindex_terms.json",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 9799,
+      "sha256": "7e0f25e3a86cd035c6299f4f942e635dae106597553b4d590d3f28833994f966",
+      "format": "json",
+      "schema": {
+        "type": "object",
+        "required_keys": [
+          "status",
+          "components",
+          "live_grant_confirmed",
+          "checked_date"
+        ]
+      }
+    },
+    {
+      "dataset_id": "synthetic_demo_observations",
+      "path": "data/synthetic/e07c_demo/observations.csv.gz",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 43658,
+      "sha256": "3a52ccdbb609fbcda460fd8a07c9fc5c6c282d068b8720a9c90b09b26f8d29eb",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "series_id",
+          "month_index",
+          "cohort",
+          "y",
+          "macro_pressure",
+          "news_intensity"
+        ],
+        "rows": 1824,
+        "unique_key": [
+          "series_id",
+          "month_index"
+        ],
+        "nonempty_columns": [
+          "series_id",
+          "cohort"
+        ],
+        "numeric_columns": [
+          "month_index",
+          "y",
+          "macro_pressure",
+          "news_intensity"
+        ],
+        "nonnegative_columns": [
+          "month_index",
+          "news_intensity"
+        ]
+      }
+    },
+    {
+      "dataset_id": "synthetic_demo_events",
+      "path": "data/synthetic/e07c_demo/true_events.csv",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 4457,
+      "sha256": "85b9addf9a905c3e72a567b0cc893bb826e420b72f99d55a6ced8ef73559c09a",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "series_id",
+          "cohort",
+          "event_id",
+          "onset_index",
+          "is_anticipated",
+          "precursor_class",
+          "noise_class",
+          "direction",
+          "shift_magnitude_fraction"
+        ],
+        "rows": 46,
+        "unique_key": [
+          "event_id"
+        ],
+        "nonempty_columns": [
+          "series_id",
+          "cohort",
+          "event_id"
+        ],
+        "numeric_columns": [
+          "onset_index",
+          "shift_magnitude_fraction"
+        ]
+      }
+    },
+    {
+      "dataset_id": "synthetic_demo_metadata",
+      "path": "data/synthetic/e07c_demo/series_metadata.csv",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 20794,
+      "sha256": "10b56c7557a0793f09903ab50e52d99bca08c3cdfbc151c3a79fd53d89712377",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "series_id",
+          "cohort",
+          "has_event",
+          "is_anticipated",
+          "false_precursor",
+          "precursor_class",
+          "noise_class",
+          "series_seed",
+          "cohort_seed",
+          "base_level",
+          "trend_monthly_fraction",
+          "seasonality_amplitude_fraction",
+          "seasonal_phase",
+          "noise_fraction",
+          "shift_magnitude_fraction",
+          "shift_direction",
+          "precursor_strength",
+          "precursor_lead_months",
+          "precursor_start_index",
+          "precursor_end_index",
+          "endogenous_channel",
+          "external_channel",
+          "origin"
+        ],
+        "rows": 76,
+        "unique_key": [
+          "series_id"
+        ],
+        "fixed_values": {
+          "origin": "controlled_synthetic_generator_not_real_economic_data"
+        },
+        "nonempty_columns": [
+          "series_id",
+          "cohort"
+        ]
+      }
+    },
+    {
+      "dataset_id": "synthetic_demo_cohorts",
+      "path": "data/synthetic/e07c_demo/cohort_ids.csv",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 3126,
+      "sha256": "be5505dc81630b47634123d52997ef44e643a1980aaf21bf9bf58276107562c4",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "series_id",
+          "cohort",
+          "series_seed",
+          "cohort_seed"
+        ],
+        "rows": 76,
+        "unique_key": [
+          "series_id"
+        ],
+        "nonempty_columns": [
+          "series_id",
+          "cohort"
+        ],
+        "numeric_columns": [
+          "series_seed",
+          "cohort_seed"
+        ]
+      }
+    },
+    {
+      "dataset_id": "synthetic_demo_generator",
+      "path": "data/synthetic/e07c_demo/generator_config.json",
+      "profiles": [
+        "public"
+      ],
+      "size_bytes": 1549,
+      "sha256": "5f6d1dba5ae1a32011d75cc62f4a0e63e022585c1a30ab7ee20b07b1cbcdb1e2",
+      "format": "json",
+      "schema": {
+        "type": "object",
+        "required_keys": [
+          "months",
+          "series_seed_policy"
+        ]
+      }
+    },
+    {
+      "dataset_id": "original_connection",
+      "path": "data/raw/sberindex/connection.parquet",
+      "profiles": [
+        "sources"
+      ],
+      "size_bytes": 21904682,
+      "sha256": "20cbd5213d3ac1d0a867f097b485431811614b283d7366eb5cba9f65dc80493d",
+      "format": "parquet",
+      "schema": {
+        "required_columns": [
+          "territory_id_x",
+          "territory_id_y",
+          "distance",
+          "type"
+        ],
+        "rows": 5942364,
+        "use": "Initial metadata audit only; full values were not analysed or used as forecasting features. Snapshot 2024-12-31."
+      },
+      "expected_provenance": "Historical manifest; original bytes absent in F7"
+    },
+    {
+      "dataset_id": "original_consumption",
+      "path": "data/raw/sberindex/consumption.parquet",
+      "profiles": [
+        "sources"
+      ],
+      "size_bytes": 2373939,
+      "sha256": "9833ddaaee7b2a182ed4cceeed16469031700ea87d508bd976150c6770ef8a61",
+      "format": "parquet",
+      "schema": {
+        "required_columns": [
+          "date",
+          "territory_id",
+          "category",
+          "value"
+        ],
+        "rows": 303126,
+        "date_range": [
+          "2023-01",
+          "2024-12"
+        ],
+        "categories": 6,
+        "all_categories_rows": 50521,
+        "technical_index": "A physical pandas index may also be present; its exact field name is not asserted here.",
+        "naming_note": "The supplied description calls the indicator consumption; the historical audit records the actual field name value."
+      },
+      "expected_provenance": "Historical manifest; original bytes absent in F7"
+    },
+    {
+      "dataset_id": "original_market_access",
+      "path": "data/raw/sberindex/market_access.parquet",
+      "profiles": [
+        "sources"
+      ],
+      "size_bytes": 25163,
+      "sha256": "434258afe322b7e6e6610b2552d129ae47094613de72dae3d13f6965a28d1dc1",
+      "format": "parquet",
+      "schema": {
+        "required_columns": [
+          "territory_id",
+          "market_access"
+        ],
+        "rows": 2571,
+        "use": "Initial source audit only, not a forecasting feature; 2024 snapshot."
+      },
+      "expected_provenance": "Historical manifest; original bytes absent in F7"
+    },
+    {
+      "dataset_id": "original_municipal_attributes",
+      "path": "data/raw/municipal/t_dict_municipal_districts.xlsx",
+      "profiles": [
+        "sources"
+      ],
+      "size_bytes": 322024,
+      "sha256": "4150658c3298fbc87ed79838f503f3a5b9a28da33257ff803c7d9231ddb775d6",
+      "format": "xlsx",
+      "schema": {
+        "required_columns": [
+          "territory_id",
+          "year_from",
+          "year_to"
+        ],
+        "rows": 3101,
+        "column_count": 18,
+        "unique_territory_ids": 2660,
+        "contract_scope": "Partial column contract only; the complete original header was not recovered in F7.",
+        "redistribution_status": "UNCLEAR"
+      },
+      "expected_provenance": "Historical manifest; original bytes absent in F7"
+    },
+    {
+      "dataset_id": "original_municipal_geometry",
+      "path": "data/raw/municipal/t_dict_municipal_districts_poly.gpkg",
+      "profiles": [
+        "sources"
+      ],
+      "size_bytes": 74334208,
+      "sha256": "e62027630d48e4a13f9b6d173dd074d7358706743fe859ca3b7fa30fefa9813a",
+      "format": "gpkg",
+      "schema": {
+        "objects": 2660,
+        "epsg": 4326,
+        "geometry_validity": "NOT VERIFIED",
+        "redistribution_status": "UNCLEAR"
+      },
+      "expected_provenance": "Historical manifest; original bytes absent in F7"
+    },
+    {
+      "dataset_id": "research_prepared_target",
+      "path": "data/input/consumption_all_categories.csv",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 10236634,
+      "sha256": "9802b7b2448b42afbb4152c16a12346ebcb5d074ff6eedda8783669abf35a63c",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "date",
+          "territory_id",
+          "category",
+          "value",
+          "municipal_district_name",
+          "municipal_district_name_short",
+          "oktmo",
+          "region_code",
+          "region_name",
+          "year_from",
+          "year_to"
+        ],
+        "rows": 50521,
+        "required_columns": [
+          "date",
+          "territory_id",
+          "value"
+        ],
+        "unique_key": [
+          "territory_id",
+          "date"
+        ],
+        "nonempty_columns": [
+          "date",
+          "territory_id",
+          "value"
+        ],
+        "numeric_columns": [
+          "value"
+        ],
+        "nonnegative_columns": [
+          "value"
+        ],
+        "fixed_values": {
+          "category": "Все категории"
+        }
+      }
+    },
+    {
+      "dataset_id": "research_forecast_sample_ids",
+      "path": "outputs/prophet_comparison_v1/sample_ids.json",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 677,
+      "sha256": "40423e19ce1967845e8b9e0b081a61e5d44988ff7e45b4475202b249c79ee4ac",
+      "format": "json",
+      "schema": {
+        "type": "array"
+      }
+    },
+    {
+      "dataset_id": "research_forecast_predictions",
+      "path": "outputs/prophet_comparison_v1/predictions.csv.gz",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 173296,
+      "sha256": "f0a6c25ab103aa81f451d52c3402e979b6655b888860339187f0d4c304214285",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "municipality_id",
+          "forecast_origin",
+          "history_cutoff",
+          "target_period",
+          "horizon",
+          "model",
+          "y_true",
+          "y_pred",
+          "status",
+          "availability_assumption",
+          "split"
+        ],
+        "rows": 11382
+      }
+    },
+    {
+      "dataset_id": "research_online_parameters",
+      "path": "outputs/online_detection_v1/selected_parameters.json",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 1044,
+      "sha256": "fef49f124ef0e0f41719bfcf54db41c3ee5a47f6b66784d5c55d0ba0f187d3d7",
+      "format": "json",
+      "schema": {
+        "type": "object"
+      }
+    },
+    {
+      "dataset_id": "research_online_residuals",
+      "path": "outputs/online_detection_v1/real_residuals.csv.gz",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 14261,
+      "sha256": "cc453a23def2d7ed6929f6723c6619772b089ada37aa31833ed7fb7feb286a68",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "series_id",
+          "observation_period",
+          "forecast_origin",
+          "history_cutoff",
+          "target_period",
+          "horizon",
+          "model",
+          "y_true",
+          "y_pred",
+          "status",
+          "availability_assumption",
+          "split",
+          "source_prediction_present",
+          "source_forecast_max_abs_difference"
+        ],
+        "rows": 768
+      }
+    },
+    {
+      "dataset_id": "research_macro_table",
+      "path": "outputs/macro_data_audit_v1/macro_table.csv.gz",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 5468,
+      "sha256": "3d78ca3923b1c160c3945539ed5197880f00625d6a84ba607a875acd59163a8d",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "region_id",
+          "geographic_level",
+          "indicator",
+          "reference_period",
+          "target_period",
+          "value",
+          "unit",
+          "published_at",
+          "available_at",
+          "vintage_id",
+          "availability_status",
+          "source_url",
+          "forecast_issue_date",
+          "aggregation_basis",
+          "forecast_low",
+          "forecast_central",
+          "forecast_high",
+          "is_forecast",
+          "forecast_producer",
+          "survey_issue_period",
+          "forecast_interval_kind",
+          "central_method",
+          "original_forecast_issue_date",
+          "availability_note",
+          "source_pdf_sha256",
+          "source_text_sha256"
+        ],
+        "rows": 227
+      }
+    },
+    {
+      "dataset_id": "research_macro_source_ids",
+      "path": "outputs/macro_forecast_v1/source_ids.json",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 2861,
+      "sha256": "83a7ae09e74c55a297af08ea646152ad350d86c00d45bd36d53ddee2a79c630e",
+      "format": "json",
+      "schema": {
+        "type": "object"
+      }
+    },
+    {
+      "dataset_id": "research_news_documents",
+      "path": "outputs/news_events_v3/documents.csv.gz",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 214771,
+      "sha256": "1d20d8829c6f1537b3d4ecc6f08d70488054460937e817f16d40713da01550d0",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "document_id",
+          "snapshot_id",
+          "source",
+          "source_url",
+          "published_at",
+          "event_date",
+          "updated_at",
+          "available_at",
+          "retrieved_at",
+          "title",
+          "snippet",
+          "geography_level",
+          "region",
+          "region_id",
+          "municipality_id",
+          "geography_confidence",
+          "geography_rule",
+          "topic",
+          "event_type",
+          "direction",
+          "confidence",
+          "classification_rule",
+          "content_hash",
+          "title_hash",
+          "canonical_event_id",
+          "duplicate_count",
+          "is_canonical",
+          "availability_status",
+          "historical_version_status",
+          "availability_evidence",
+          "publication_date_precision",
+          "updated_date_precision",
+          "publication_date_evidence",
+          "geography_evidence",
+          "source_file_sha256",
+          "retrieval_source_url"
+        ],
+        "rows": 197
+      }
+    },
+    {
+      "dataset_id": "research_news_geography",
+      "path": "outputs/news_events_v3/geography_dictionary.csv.gz",
+      "profiles": [
+        "research"
+      ],
+      "size_bytes": 55084,
+      "sha256": "3962f10729d01b360f6d1f952b45ac6a08641340968f3ba43cc33b9d510055c2",
+      "format": "csv",
+      "schema": {
+        "columns": [
+          "municipality_id",
+          "municipality_name",
+          "municipality_name_short",
+          "region_id",
+          "region",
+          "municipality_aliases",
+          "region_aliases"
+        ],
+        "rows": 2190
+      }
+    }
+  ]
+}

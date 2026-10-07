@@ -16,6 +16,10 @@ data/input/*
 !data/input/.gitkeep
 # E06b: private source snapshots and per-document derived data.
 /data/external/news_raw/
+# F7: исходные архивы, справочники и непроверенные материалы не публикуются.
+/data/raw/
+/data/private/
+/data/restricted/
 outputs/*
 !outputs/.gitkeep
 catboost_info/
@@ -35,3 +39,5 @@ catboost_info/
 /reports/final/*
 # F6: проверенный итоговый audit; остальные локальные reports остаются приватными.
 !/reports/final/FINAL_AUDIT.md
+# F7: только проверенный отчёт о публикации данных.
+!/reports/final/DATA_PUBLICATION_AUDIT.md

@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0",
+  "checked_date": "2026-10-07",
+  "purpose": "F7 publication assessment of the specific user-provided SberIndex data components",
+  "status": "UNCLEAR",
+  "publication_decision": "METADATA_ONLY",
+  "real_target_values_publication_authorized": false,
+  "status_definition": "UNCLEAR means that the bundled document contains an explicit licence grant, but independent official-source binding of that grant to the supplied data was not established by this audit. It does not mean that publication is prohibited or that the grant is absent.",
+  "scope": {
+    "explicitly_named_in_bundled_licence": [
+      "consumption.parquet",
+      "market_access.parquet",
+      "connection.parquet"
+    ],
+    "not_covered_by_that_explicit_grant": [
+      "dictionaryterritorydata",
+      "t_dict_municipal_districts.xlsx",
+      "t_dict_municipal_districts_poly.gpkg"
+    ],
+    "blanket_permission_for_original_bundle_confirmed": false
+  },
+  "bundled_primary_document": {
+    "project_relative_path": "reports/Данные_СберИндекс_лицензия.pdf",
+    "document_title": "Описание набора данных СберИндекса по муниципальным данным",
+    "bytes": 538791,
+    "pages": 4,
+    "sha256": "030269e726f969250b911a1fcb72131a4b61c3952aad10c8470ce9c0736c472f",
+    "input_manifest_path": "reports/input_manifest.json",
+    "input_manifest_json_location": "$[7]",
+    "sha256_matches_input_manifest": true,
+    "creator": "Microsoft Word 2016",
+    "producer": "Microsoft Word 2016",
+    "creation_date": "2025-10-17",
+    "modification_date": "2025-10-17",
+    "encrypted": false,
+    "javascript_present": false,
+    "digital_signature_marker_found": false,
+    "author_metadata_present": true,
+    "author_metadata_institutional_Sber_binding_confirmed": false,
+    "upstream_authenticity_independently_verified": false,
+    "original_user_download_date": null,
+    "origin": "User-provided working bundle; the document is locally preserved and hash-bound to the input manifest. The original external archives were not opened by this audit.",
+    "embedded_official_links": [
+      "https://sberindex.ru/ru/research/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim",
+      "https://creativecommons.org/licenses/by-sa/4.0/deed.ru",
+      "https://creativecommons.org/licenses/by-sa/4.0/legalcode.ru"
+    ]
+  },
+  "components": [
+    {
+      "file": "consumption.parquet",
+      "status": "UNCLEAR",
+      "bundled_grant_present": true,
+      "licence_identifier": "CC-BY-SA-4.0",
+      "description_page": 1,
+      "licence_page": 2,
+      "citation_page": 2,
+      "grant_short_quote": "доступны по международной лицензии CC BY-SA 4.0",
+      "quote_whitespace_normalized": true,
+      "supplied_component_identity_in_input_manifest": "$[3]",
+      "citation_dataset_title": "Потребительские безналичные расходы на уровне муниципальных образований по категориям трат",
+      "publication_decision": "METADATA_ONLY_PENDING_OFFICIAL_SCOPE_BINDING",
+      "schema_note": "The PDF calls the measurement column consumption; reports/audit_report.md:42 documents the supplied Parquet column value. The association is by the named file and documented semantics, not exact identity of every column name."
+    },
+    {
+      "file": "market_access.parquet",
+      "status": "UNCLEAR",
+      "bundled_grant_present": true,
+      "licence_identifier": "CC-BY-SA-4.0",
+      "description_page": 2,
+      "licence_page": 3,
+      "citation_page": 3,
+      "grant_short_quote": "доступны по международной лицензии CC BY-SA 4.0",
+      "quote_whitespace_normalized": true,
+      "supplied_component_identity_in_input_manifest": "$[4]",
+      "citation_dataset_title": "Индекс доступности рынков на уровне муниципальных образований",
+      "publication_decision": "METADATA_ONLY_PENDING_OFFICIAL_SCOPE_BINDING"
+    },
+    {
+      "file": "connection.parquet",
+      "status": "UNCLEAR",
+      "bundled_grant_present": true,
+      "licence_identifier": "CC-BY-SA-4.0",
+      "description_page": 3,
+      "licence_page": 3,
+      "citation_page": 4,
+      "grant_short_quote": "доступны по международной лицензии CC BY-SA 4.0",
+      "quote_whitespace_normalized": true,
+      "supplied_component_identity_in_input_manifest": "$[2]",
+      "citation_dataset_title": "Автодорожные и железнодорожные связи между муниципальными образованиями",
+      "publication_decision": "METADATA_ONLY_PENDING_OFFICIAL_SCOPE_BINDING"
+    },
+    {
+      "component": "dictionaryterritorydata / t_dict_municipal attributes and geometry",
+      "files": [
+        "t_dict_municipal_districts.xlsx",
+        "t_dict_municipal_districts_poly.gpkg"
+      ],
+      "status": "UNCLEAR",
+      "bundled_three_table_grant_applies": false,
+      "explicit_component_licence_verified": false,
+      "official_landing_page": "https://sberindex.ru/ru/news/dataset-borders-and-changes-of-municipalities",
+      "primary_author_explanation": "https://habr.com/ru/companies/sberbank/articles/849682/",
+      "publication_decision": "METADATA_ONLY_PENDING_SEPARATE_LICENCE"
+    }
+  ],
+  "official_source_url": "https://sberindex.ru/ru/research/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim",
+  "official_direct_download_url": null,
+  "official_original_pdf_url": null,
+  "live_grant_confirmed": false,
+  "live_access": {
+    "tls_verification_disabled": false,
+    "raw_dataset_or_archive_downloads": 0,
+    "web_reader_dataset_page": "502 Bad Gateway",
+    "urllib_initial_attempt": "Sandbox socket access denied (WinError 10013)",
+    "urllib_authorized_attempt": "Certificate chain validation failure; verification was not disabled",
+    "system_curl_dataset_page": {
+      "http_status": 200,
+      "result": "JavaScript application shell, not the dataset description or licence",
+      "title": "СберИндекс",
+      "explicit_captcha_or_WAF_marker_found": false
+    },
+    "official_javascript_discovery": {
+      "loader_url": "https://sberindex.ru/static/js/main.18e545fe.js",
+      "loader_http_status": 200,
+      "application_chunk_url": "https://sberindex.ru/static/js/9554.9685f28d.chunk.js",
+      "application_chunk_http_status": 200,
+      "discovered_backend_prefix": "/api",
+      "research_metadata_route": "/researches/v1/list",
+      "news_metadata_route": "/news/v1/list",
+      "required_public_language_header": {
+        "X-Language": "ru"
+      }
+    },
+    "metadata_requests": [
+      {
+        "url": "https://sberindex.ru/api/researches/v1/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim?lang=ru",
+        "http_status": 403,
+        "result": "Exact-slug request did not provide description or licence binding"
+      },
+      {
+        "url": "https://sberindex.ru/api/researches/v1/list?lang=ru",
+        "http_status": 400,
+        "result": "The backend required an X-Language string header"
+      },
+      {
+        "url": "https://sberindex.ru/api/researches/v1/list",
+        "headers": {"X-Language": "ru"},
+        "http_status": 200,
+        "result": "Public metadata was accessible; bounded extraction did not establish the exact dataset/licence scope binding"
+      },
+      {
+        "url": "https://sberindex.ru/api/news/v1/list",
+        "headers": {"X-Language": "ru"},
+        "http_status": 200,
+        "result": "Public metadata was accessible; bounded extraction did not establish the exact dataset/licence scope binding"
+      }
+    ],
+    "limitation": "These outcomes report what this bounded audit retrieved. Failure to extract the matching grant is not evidence that an official grant is absent."
+  },
+  "cc_by_sa_4_0_conditions_if_scope_and_authenticity_are_confirmed": {
+    "official_deed_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "official_legal_code_url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.ru",
+    "official_terms_checked_date": "2026-10-07",
+    "copy_and_redistribute": true,
+    "modify_and_create_adaptations": true,
+    "commercial_use": true,
+    "attribution_required": true,
+    "licence_link_required": true,
+    "changes_must_be_indicated": true,
+    "adapted_material_share_alike_required": true,
+    "additional_restrictions_not_permitted": true,
+    "attribution_alone_is_sufficient": false,
+    "rights_of_uncovered_third_party_materials_confirmed": false,
+    "citation_wording": "Use the respective dataset title followed by SberIndex, the official source URL, and the actual download date, as requested by the PDF. Preserve the CC BY-SA 4.0 notice, link, and indication of changes. The original download date is unknown; the audit date must not be substituted for it."
+  },
+  "conditional_publication_after_confirmation": {
+    "possible": true,
+    "required_evidence": "An independently verified official source or official original document that explicitly binds CC BY-SA 4.0 to these particular data components; alternatively an explicit permission from the verified rights holder.",
+    "licence_compliance_required": true,
+    "dictionary_requires_separate_confirmation": true,
+    "automatic_change_to_publication_status": false
+  },
+  "audit_actions": {
+    "project_local_pdf_read": true,
+    "project_local_input_manifest_read": true,
+    "outside_project_user_archives_read": false,
+    "datasets_copied_or_modified": false,
+    "TLS_checks_bypassed": false,
+    "models_or_experiments_run": false,
+    "packages_installed": false
+  }
+}

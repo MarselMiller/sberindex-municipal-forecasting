@@ -1,0 +1,37 @@
+{
+  "schema_version": "f7-original-source-metadata-v1",
+  "evidence": "Historical reports/input_manifest.json and reports/audit_report.md; original files are absent from this checkout and were not remeasured in F7.",
+  "consumption.parquet": {
+    "required_columns": ["date", "territory_id", "category", "value"],
+    "rows": 303126,
+    "date_range": ["2023-01", "2024-12"],
+    "categories": 6,
+    "all_categories_rows": 50521,
+    "technical_index": "A physical pandas index may also be present; its exact field name is not asserted here.",
+    "naming_note": "The supplied description calls the indicator consumption; the historical audit records the actual field name value."
+  },
+  "market_access.parquet": {
+    "required_columns": ["territory_id", "market_access"],
+    "rows": 2571,
+    "use": "Initial source audit only, not a forecasting feature; 2024 snapshot."
+  },
+  "connection.parquet": {
+    "required_columns": ["territory_id_x", "territory_id_y", "distance", "type"],
+    "rows": 5942364,
+    "use": "Initial metadata audit only; full values were not analysed or used as forecasting features. Snapshot 2024-12-31."
+  },
+  "t_dict_municipal_districts.xlsx": {
+    "required_columns": ["territory_id", "year_from", "year_to"],
+    "rows": 3101,
+    "column_count": 18,
+    "unique_territory_ids": 2660,
+    "contract_scope": "Partial column contract only; the complete original header was not recovered in F7.",
+    "redistribution_status": "UNCLEAR"
+  },
+  "t_dict_municipal_districts_poly.gpkg": {
+    "objects": 2660,
+    "epsg": 4326,
+    "geometry_validity": "NOT VERIFIED",
+    "redistribution_status": "UNCLEAR"
+  }
+}
