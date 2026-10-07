@@ -27,6 +27,7 @@
 | E07b | Full-panel early warning feasibility; условные B0–B4 | Выполнен: полная разметка, признаки, аудит, отчёт и один полный pytest; условное обучение пропущено по gate | 2190 МО, 73 weak events/6 onset-дат/71 МО; k1 train14/test4 positives, train1/test2 onset-даты; k3 train/test0; оба gate отказали, все 24 календарных варианта отказали; 138 числовых признаков, 1247 passed, 213 защищённых файлов неизменны |
 | E07c | Controlled synthetic early-warning benchmark | Completed: код, unit tests, smoke/full, метрики, bootstrap, 3 графика, независимая сверка и один полный pytest; research phase closed | 600/200/300 ряда по24месяца;360/120/180событий;TRAIN fit/VALIDATION threshold/TEST;1367passed/1warning;160защищённыхфайлов и frozenYAML сохранены;результаты только synthetic |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
+| F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -35,10 +36,56 @@
 | N01 | Подготовить новости с датами доступности и территорией | E06b сохранён; E07a добавляет ограниченную v3 | 17 official decision cores под явным archive trust; 4 PDF объединены с релизами; исторических regional/municipal событий0; полная новостная интенсивность не установлена |
 | N02 | Проверить риск будущих шоков и вклад новостей | Feasibility E07a/E07b выполнен; predictive utility не оценена из-за недостатка дат/меток | Для продолжения нужны достаточные причинные train/test периоды; baseline, оценка предупреждений, время упреждения и сравнение без/с новостями |
 | I01 | Проверить объединённую модель и интерпретировать ошибки | Не начата | Проверен вклад компонентов, показаны успех, ложная тревога и пропуск при их наличии |
-| D01 | Подготовить русский отчёт и PDF-презентацию | F1 источник результатов готов; отчёт и PDF ещё не созданы | reports/final/RESULTS_SUMMARY.md и CSV/JSON — единый источник; будущие материалы используют его числа и ограничения |
-| D02 | Проверить финальную воспроизводимость и публикацию | F1 локальная сверка выполнена; clean reproduction и аудит публикации не выполнены | SHA/ссылки/CSV↔JSON/figures проверены; из чистой копии согласованный сценарий ещё не воспроизводился; приватные данные не публикуются автоматически |
+| D01 | Подготовить русский отчёт и PDF-презентацию | F1 сводка и F2 README готовы; финальный методологический отчёт и PDF ещё не созданы | reports/final/RESULTS_SUMMARY.md и CSV/JSON — единый источник; будущие материалы используют его числа и ограничения |
+| D02 | Проверить финальную воспроизводимость и публикацию | F1/F2 локальные сверки выполнены; clean reproduction и аудит публикации не выполнены | SHA/ссылки/CSV↔JSON/figures и CLI help/preflight проверены; clean-clone — отдельный F5; приватные данные не публикуются автоматически |
 
 ## Карточка текущей задачи
+ID: FINALIZATION / F2 — конкурсная витрина README. Выполнена 2026-10-07.
+Редакторское уточнение F2 выполнено отдельным проходом: 3166 → 2664 слова
+(−15.86%); вне таблиц 2674 → 2172 (−18.77%); воспроизведение 324 → 201 (−37.96%).
+Порядок и названия разделов, все 5 таблиц, 4 PNG, AI disclosure, ограничения,
+команды и все 41 вхождение относительных ссылок сохранены. Убраны смешанные
+формулировки об оценке early warning и вкладе news; доступность истории
+SeasonalNaiveYoY объяснена при первом употреблении. Mermaid содержит только
+компоненты: history + online state + external features → early warning;
+offline не входит в признаки. Фраза о выполнении foundation-критерия удалена.
+Синтаксис всех строк простого flowchart проверен; браузерный renderer не запускался.
+98 ячеек сверены с final CSV, исследовательские числа в тексте сохранены;
+31 файл Source of Truth побайтово неизменен. В этом проходе выполнялись только
+текстовые/числовые/link/hash проверки и git diff --check: PASS; CLI, pytest,
+model fits, builder, установки, сеть, commit/push не запускались.
+Следующий шаг остаётся прежним: методологический отчёт из F1, clean-clone — F5.
+
+Исходная версия README сохранена в Git HEAD f8541d5; до редактирования
+побайтовое совпадение с HEAD проверено, дублирующая копия не создавалась.
+README полностью переписан на русском из reports/final/ — единственного
+Source of Truth. Структура по результатам, без хронологии исследовательских этапов:
+4 результата, Mermaid, данные/backtest, 9 forecast-стратегий, Chronos-2,
+online/offline detection, news, реальные ограничения warning и synthetic S0–S3,
+статусы проверки, 8 ограничений, воспроизведение, структура и AI disclosure.
+MAE округлена непосредственно из полного CSV до 1 знака; synthetic метрики
+до 3 знаков. 98 табличных ячеек, 8 k-значений, fallback/bold и 24 группы
+inline/comparative claims сверены; исходные CSV/JSON согласованы по 150 строкам.
+Использованы только прежние forecast_mae, online_comparison,
+real_warning_sufficiency и synthetic_event_performance PNG. Реальные сигналы
+diagnostic, real classifier не обучался; просмотренный holdout, годовой fallback,
+L=0/архивные допущения, weak truth и Chronos overlap явно обозначены.
+Все относительные ссылки/anchors существуют; file links и directory contents
+подтверждены Git. Локальный Markdown parse/render проверил 5 таблиц, 4 code
+fences и 4 images; Mermaid проверена логически, отдельный graph renderer не запускался.
+Все 4 CLI-примера реально выполнены без fit: run.py --help,
+run_national_local_lightgbm.py --help, run_early_warning_synthetic.py --help,
+run_chronos.py --config configs/chronos_zero_shot.yaml --preflight-only; exit 0.
+Preflight подтвердил 64 исходных МО / 1897 raw / 1890 evaluable keys.
+Quickstart документирует Python 3.12 и requirements-ruptures.txt для обязательных
+offline-тестов; команды установки/pytest при F2 не выполнялись.
+31 файл reports/final/ сохранён побайтово, прежний код/config/outputs не менялись;
+исходная .vscode/ не затронута. Новых fits/experiments/tuning, сети, установок,
+сборки F1, commit/push нет. Изменены только README и два документа статуса.
+Непроверены GitHub/browser rendering Mermaid, clean-clone и публичный состав.
+Следующий конкретный шаг: методологический отчёт из F1; clean-clone отдельно в F5.
+
+## F1: сохранённая предыдущая задача
 ID: FINALIZATION / F1 — Final Results Summary. Выполнена 2026-10-07.
 Research phase закрыта на be6d993; новые fits, источники, tuning, holdout changes
 и исследовательские эксперименты запрещены. Старые reports/results/ и outputs
