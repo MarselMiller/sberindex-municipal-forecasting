@@ -6,7 +6,7 @@
 
 [Результаты](#результаты) · [Архитектура](#архитектура) · [Воспроизведение](#воспроизведение) · [Ограничения](#ограничения)
 
-[Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Конкурсные критерии](reports/final/competition_criteria.md)
+[Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Ограничения](reports/final/limitations.md) · [Терминология](reports/final/terminology.md)
 
 ## Результаты
 
@@ -195,7 +195,7 @@ Row-level F1 и сценарные метрики доступны в [early_war
 | Real early warning | Реальные | Не оценено: недостаточно событий |
 | Synthetic early warning | Synthetic | Оценено |
 
-Готовность pipeline не доказывает его прогнозную пользу; реальные сигналы без независимой разметки остаются диагностикой. Доказательства по конкурсным критериям собраны [отдельно](reports/final/competition_criteria.md), без присвоения баллов жюри.
+На реальных данных сигналы detection рассматриваются как диагностические: независимой разметки структурных изменений нет, поэтому их нельзя интерпретировать как подтверждённые true positives.
 
 ## Ограничения
 
@@ -256,7 +256,7 @@ reports/results/  — подробный experiment audit trail
 
 [reports/final/](reports/final/) — источник финальных чисел; [reports/results/](reports/results/) — подробный experiment audit trail E01–E07. Источники рисунков, SHA256 и правила выбора записаны в [figure_manifest.csv](reports/final/figure_manifest.csv).
 
-Для чтения без запуска: [итоговая сводка](reports/final/RESULTS_SUMMARY.md), [соответствие конкурсным критериям](reports/final/competition_criteria.md), [ограничения](reports/final/limitations.md). Подробные таблицы содержат coverage и основания выводов.
+Для чтения без запуска: [итоговая сводка](reports/final/RESULTS_SUMMARY.md), [ограничения](reports/final/limitations.md) и [терминология](reports/final/terminology.md). Подробные таблицы содержат coverage и основания выводов.
 
 ### Данные и условия использования
 
