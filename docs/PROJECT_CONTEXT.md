@@ -4,8 +4,44 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1/F2 на 2026-10-07.
+E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F3 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
+
+## F3: самостоятельный методологический отчёт
+Финальная редактура F3: 7382 → 6665 слов вне таблиц (−9.71%).
+Упрощены язык и повторы в §§1–14, пять основных выводов выделены в §12.
+Все таблицы, формулы, relative links, figure paths, source-строки, AI disclosure
+и приложения A–F сохранены. Scope вывода Chronos явно ограничен holdout;
+checkpoint сравнивается с периодом backtest, precursor наблюдается до onset.
+Редактура не меняет чисел, методологии или real/synthetic разделения.
+Локальные числовые/link/Markdown/hash проверки и diff PASS;
+pytest, model fits, builder, PDF, презентация, clean-clone и commit/push не выполнялись.
+
+F3 выполнена 2026-10-07 на исходном HEAD 2940ba9, без новой исследовательской
+фазы. [METHODOLOGY_REPORT.md](../reports/final/METHODOLOGY_REPORT.md) содержит
+15 предметных разделов и приложения A–F: 6665 слов вне таблиц,
+12 таблиц, 9 существующих figures и точную согласованную AI disclosure.
+Числа берутся из F1; методические детали — из проверенных config/artifacts
+и подробных reports. Первичное описание шести категорий и annual time-aware
+join явно отделено от повторного аудита исходных архивов, который не проводился.
+
+Forecasting, online/offline detection и pre-onset warning имеют разные
+доступность, truth и метрики. Real signals — diagnostic, real classifier —
+not_evaluated; synthetic S3 проверяет информацию generated precursor.
+Минимум National/Local + LightGBM ограничен девятью основными holdout
+стратегиями; validation не подтверждает устойчивого winner. Сезонная форма
+и эффект delta-target не объявлены отдельно доказанными. Yearly fallback,
+L=0/vintages, weak-label confirmation/censoring и Chronos overlap сохранены.
+
+[Table manifest](../reports/final/report_table_manifest.csv) фиксирует 21
+source-запись для 12 таблиц. 167 numerical/null cells, настройки и claims
+проверены; 78 relative links / 50 targets существуют. Markdown parse/render
+и PNG hashes PASS; PDF/browser/LaTeX renderer не выполнялся.
+README и 44 прежних reports побайтово сохранены; 106 F1 provenance source
+hashes совпали. Код/config/outputs не менялись; model fits, experiments,
+pytest, builder, сеть, установки и commit/push не выполнялись.
+Действующий /reports/ игнорирует новые F3-файлы; публикация и stage не
+выполнялись. Следующий материал — презентация; clean-clone audit отдельно F5.
 
 ## F2: конкурсный README из финальной сводки
 Редакторский проход F2 завершён: 3166 → 2664 слова (−15.86%), вне таблиц
