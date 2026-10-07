@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Прогнозирование расходов и структурные изменения</title>
+<style>
+:root{--ink:#16323b;--muted:#526b73;--teal:#087e72;--pale:#eaf5f1;--line:#dbe5e5;--orange:#a65427;--orange-pale:#fff2e9}
+*{box-sizing:border-box}body{margin:0;background:#dce5e5;color:var(--ink);font-family:Arial,sans-serif}
+.slide{width:1280px;height:720px;margin:28px auto;padding:42px 58px 40px;background:white;position:relative;overflow:hidden;break-after:page;page-break-after:always}
+.slide:last-child{break-after:auto;page-break-after:auto}.slide:before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--teal)}
+.kicker{color:var(--teal);font-size:17px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin:0 0 12px}
+h1{font-size:55px;line-height:1.15;letter-spacing:-1.4px;margin:28px 0 24px;max-width:1080px}
+h2{font-size:39px;line-height:1.13;letter-spacing:-.8px;margin:0 0 18px}h3{font-size:25px;line-height:1.2;margin:0 0 12px}
+p{font-size:25px;line-height:1.35;margin:0 0 18px}.muted{color:var(--muted)}.lead{font-size:29px;line-height:1.4}.small{font-size:20px;line-height:1.3}.tiny{font-size:17px;line-height:1.25}
+.tag{display:inline-block;font-size:16px;font-weight:700;letter-spacing:.5px;padding:7px 12px;border-radius:4px;background:var(--pale);color:var(--teal);margin-bottom:14px}
+.tag.synthetic{background:var(--orange-pale);color:var(--orange)}.tag.diagnostic{background:#edf1f5;color:#375b7b}
+.footer{position:absolute;bottom:19px;left:58px;right:58px;border-top:1px solid var(--line);padding-top:9px;display:flex;justify-content:space-between;gap:24px;font-size:14px;line-height:1.15;color:var(--muted)}
+.page{font-weight:700;white-space:nowrap}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:26px 0}.card{background:#f5f8f8;border:1px solid var(--line);border-radius:8px;padding:24px}.card p{font-size:23px;margin-bottom:15px}.card p:last-child{margin:0}
+.number{font-size:61px;line-height:1.1;font-weight:700;color:var(--teal);margin-bottom:12px}.metric-row{display:flex;gap:30px;margin:22px 0}.metric{flex:1;padding:20px 24px;border-left:4px solid var(--teal);background:#f5f8f8}.metric .number{font-size:45px}.metric p{font-size:22px;margin:0}
+.callout{background:var(--pale);border-left:4px solid var(--teal);padding:15px 20px;font-size:23px;line-height:1.3;margin:20px 0}.callout.synthetic{background:var(--orange-pale);border-color:var(--orange)}
+ul{margin:10px 0 0;padding-left:26px}li{font-size:25px;line-height:1.3;margin:0 0 15px}li::marker{color:var(--teal)}.compact li{font-size:22px;margin-bottom:10px}.two-columns{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.figure{display:block;max-width:100%;object-fit:contain;object-position:center;background:white;margin:0 auto}.caption{font-size:19px;line-height:1.3;color:var(--muted);margin:12px 0 0}
+.forecast-table{width:100%;border-collapse:collapse;margin:9px 0 12px;font-size:21px;line-height:1.18;font-variant-numeric:tabular-nums}.forecast-table th{text-align:right;background:var(--ink);color:white;padding:8px 16px;font-size:21px}.forecast-table td{padding:5px 16px;text-align:right;border-bottom:1px solid var(--line)}.forecast-table th:first-child,.forecast-table td:first-child{text-align:left}.forecast-table tbody tr:nth-child(even){background:#f6f9f9}.forecast-table .best{background:var(--pale);color:#00695f;font-weight:700}.forecast-notes p{font-size:19px;line-height:1.25;margin:7px 0}
+.findings{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:18px 28px}.finding{border-top:3px solid var(--teal);padding:14px 0 0}.finding h3{font-size:24px;margin-bottom:8px}.finding p{font-size:22px;line-height:1.3;margin:0}
+.title-slide{background:var(--ink);color:white}.title-slide:before{background:#50c6a9}.title-slide .kicker{color:#89dbc8}.title-slide .footer{color:#c5d8db;border-color:#41606a}.title-slide .tag{background:#27544f;color:#b8f0df}.title-slide .lead{color:#d7e8e8;max-width:900px}.title-slide .title-rule{width:115px;height:6px;background:#50c6a9;margin:30px 0}
+.pipeline{width:100%;height:367px;margin:2px 0}.pipeline text{font-family:Arial,sans-serif}.pipeline .box{fill:#f2f7f7;stroke:#8fa8ad;stroke-width:1.5}.pipeline .accent{fill:#eaf5f1;stroke:#087e72;stroke-width:2}.pipeline .edge{fill:none;stroke:#617e87;stroke-width:2.5;marker-end:url(#arrow)}.pipeline .online-edge{stroke:#087e72;marker-end:url(#green-arrow)}
+@page{size:1280px 720px;margin:0}
+@media print{html,body{width:1280px;margin:0;background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.slide{margin:0;box-shadow:none}.slide:last-child{break-after:auto}}
+@media screen and (max-width:1280px){.slide{margin:16px 0}}
+body.single-slide{background:white}.single-slide .slide{display:none;margin:0}.single-slide .slide.active{display:block}
+</style>
+</head>
+<body>
+<section class="slide title-slide" data-slide="1">
+  <p class="kicker">СберИндекс · муниципальная панель</p>
+  <h1>Прогнозирование потребительских расходов и обнаружение структурных изменений</h1>
+  <div class="title-rule"></div>
+  <p class="lead">Forecasting, detection и проверка возможности early warning на короткой месячной истории.</p>
+  <p class="tag">Реальные данные · диагностика · отдельный synthetic benchmark</p>
+  <div class="footer"><span>Зафиксированные результаты исследования · январь 2023 — декабрь 2024</span><span class="page">01 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="2">
+  <p class="kicker">Постановка задачи</p><h2>Три разных вопроса — три способа оценки</h2>
+  <div class="cards">
+    <div class="card"><h3>Forecasting</h3><p>Какими будут расходы через <strong>1 / 3 / 6 / 12 месяцев</strong>?</p><p class="small muted">Прогноз значения.<br>Основная метрика: MAE в рублях.</p></div>
+    <div class="card"><h3>Detection</h3><p>Началось ли устойчивое изменение ошибки прогноза?</p><p class="small muted">Online — последовательный сигнал.<br>Offline — ретроспективная граница.</p></div>
+    <div class="card"><h3>Early warning</h3><p>Начнётся ли событие в следующие k месяцев?</p><p class="small muted">Предупреждение до onset.<br>Event recall, ложные тревоги, lead time.</p></div>
+  </div>
+  <div class="callout">Низкая MAE и точная ретроспективная граница сами по себе не доказывают способность предупреждать события.</div>
+  <div class="footer"><span>Источник: ../METHODOLOGY_REPORT.md, §§1, 3, 7, 10</span><span class="page">02 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="3">
+  <p class="kicker">Реальные данные и temporal protocol</p><h2>Большая панель, короткая временная история</h2>
+  <div class="metric-row">
+    <div class="metric"><div class="number">24 месяца</div><p>Январь 2023 — декабрь 2024</p></div>
+    <div class="metric"><div class="number">2190 МО</div><p>Полная муниципальная панель</p></div>
+    <div class="metric"><div class="number">63 из 64</div><p>Оцениваемые МО forecasting pilot</p></div>
+  </div>
+  <p><strong>«Все категории»</strong> — средние безналичные расходы жителей, номинальные рубли.</p>
+  <ul class="compact">
+    <li>Rolling-origin backtest: только доступная история. Validation — цели до июня 2024; holdout — июль–декабрь 2024.</li>
+    <li>h=1/3/6: по 6 holdout origins. <strong>h=12: одна origin</strong>, без validation; direct-стратегии используют fallback.</li>
+    <li>Исторические даты публикации цели не подтверждены; L=0 — допущение. Holdout уже просмотрен.</li>
+  </ul>
+  <div class="footer"><span>Источники: ../results_summary.json → target, forecasting; ../METHODOLOGY_REPORT.md, §§2–3, 5</span><span class="page">03 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="4">
+  <p class="kicker">Pipeline</p><h2>Early warning использует доступную историю</h2>
+  <svg class="pipeline" viewBox="0 0 1120 367" role="img" aria-label="Forecasting формирует residuals для online и offline detection. Early warning использует историю, состояние online-детектора и external features. Offline detection в признаки не входит.">
+    <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#617e87"/></marker><marker id="green-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#087e72"/></marker></defs>
+    <path class="edge" d="M205 63 H245"/><path class="edge" d="M440 63 H485"/><path class="edge" d="M670 63 H720"/><path class="edge" d="M695 63 V153 H720"/>
+    <path class="edge" d="M125 100 V280"/><path class="edge online-edge" d="M985 63 H1037 V240 H520 V280"/>
+    <path class="edge online-edge" d="M255 312 H282 V358 H760 V335 H795"/><path class="edge online-edge" d="M645 312 H795"/><path class="edge online-edge" d="M405 216 V245 H760 V292 H795"/>
+    <rect class="box" x="45" y="25" width="160" height="75" rx="7"/><text x="125" y="55" text-anchor="middle" font-size="22">СберИндекс</text><text x="125" y="82" text-anchor="middle" font-size="19">/ macro</text>
+    <rect class="accent" x="245" y="25" width="195" height="75" rx="7"/><text x="342" y="70" text-anchor="middle" font-size="24">Forecasting</text>
+    <rect class="box" x="485" y="25" width="185" height="75" rx="7"/><text x="577" y="56" text-anchor="middle" font-size="22">Forecast</text><text x="577" y="82" text-anchor="middle" font-size="22">residuals</text>
+    <rect class="accent" x="720" y="25" width="265" height="75" rx="7"/><text x="852" y="70" text-anchor="middle" font-size="24">Online detection</text>
+    <rect class="box" x="720" y="115" width="265" height="75" rx="7"/><text x="852" y="146" text-anchor="middle" font-size="23">Offline detection</text><text x="852" y="173" text-anchor="middle" font-size="18" fill="#526b73">ретроспективная диагностика</text>
+    <rect class="box" x="295" y="148" width="220" height="68" rx="7"/><text x="405" y="177" text-anchor="middle" font-size="21">External features</text><text x="405" y="201" text-anchor="middle" font-size="18">macro / news</text>
+    <rect class="box" x="45" y="280" width="210" height="65" rx="7"/><text x="150" y="320" text-anchor="middle" font-size="24">History</text>
+    <rect class="accent" x="390" y="280" width="255" height="65" rx="7"/><text x="517" y="306" text-anchor="middle" font-size="21">Online detector</text><text x="517" y="331" text-anchor="middle" font-size="21">state</text>
+    <rect class="accent" x="795" y="280" width="220" height="65" rx="7"/><text x="905" y="320" text-anchor="middle" font-size="24">Early warning</text>
+  </svg>
+  <p class="small"><strong>Offline detection не входит в early-warning features.</strong> Residuals — факт минус прогноз SeasonalNaiveYoY по доступной истории.</p>
+  <p class="small muted">Real data: проверена достаточность данных. Synthetic: количественно проверен механизм при наблюдаемых предвестниках.</p>
+  <div class="footer"><span>Источники: ../../../README.md, «Архитектура»; ../METHODOLOGY_REPORT.md, §§3, 7, 10–11</span><span class="page">04 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="5">
+  <p class="kicker">Forecasting · real pilot holdout</p><h2>Сильный сезонный baseline трудно превзойти</h2>
+  <p class="small muted" style="margin-bottom:6px">MAE macro, рубли · одинаковые прогнозные случаи · меньше — лучше</p>
+  <table class="forecast-table"><thead><tr><th>Стратегия</th><th>h=1</th><th>h=3</th><th>h=6</th><th>h=12</th></tr></thead><tbody>
+    <tr><td>SeasonalNaive</td><td>4175.1</td><td>4175.1</td><td>4175.1</td><td>4322.1</td></tr>
+    <tr><td>SeasonalNaiveYoY</td><td>920.7</td><td>1240.4</td><td>1906.0</td><td>4322.1</td></tr>
+    <tr><td>ProphetAuto</td><td>1868.6</td><td>2041.3</td><td>2165.8</td><td>3054.2</td></tr>
+    <tr><td>ProphetYearly</td><td>1682.3</td><td>1679.6</td><td>1937.6</td><td>8496.0</td></tr>
+    <tr><td>CatBoostDirect</td><td>986.2</td><td>1939.2</td><td>3349.5</td><td>4322.1†</td></tr>
+    <tr><td>LightGBMDirect</td><td>1003.3</td><td>1449.8</td><td>2463.2</td><td>4322.1†</td></tr>
+    <tr><td>National/Local + CatBoost</td><td>823.4</td><td>1225.7</td><td>2132.7</td><td>4322.1†</td></tr>
+    <tr><td>National/Local + LightGBM</td><td class="best">799.6</td><td class="best">1212.7</td><td class="best">1897.2</td><td>4322.1†</td></tr>
+    <tr><td>Chronos-2</td><td>1947.4</td><td>2526.3</td><td>4150.6</td><td>9163.5</td></tr>
+  </tbody></table>
+  <div class="forecast-notes">
+    <p><strong>YoY лучше обоих Prophet на h=1/3/6.</strong> National/Local + LightGBM — минимум среди девяти основных стратегий на h=1/3/6; на validation уступает YoY.</p>
+    <p><strong>† h=12:</strong> SeasonalNaive fallback вместо обученного direct-прогноза; одна origin. Устойчивый победитель не установлен.</p>
+    <p>Chronos-2: checkpoint выпущен после периода backtest; pretraining overlap не исключён.</p>
+  </div>
+  <div class="footer"><span>Источник: ../results_summary.json → forecasting.records, holdout, mae_macro · округление до 1 знака</span><span class="page">05 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="6">
+  <p class="kicker">Forecasting · real data</p><h2>Один пример последовательных прогнозов</h2>
+  <p class="small muted">МО 21 · SeasonalNaiveYoY · h=1 · прогноз по истории на своей origin</p>
+  <img class="figure" src="../figures/rolling_forecast.png" alt="Реальные одномесячные прогнозы SeasonalNaiveYoY и факты для МО 21" style="width:1080px;height:438px">
+  <p class="caption">МО выбрано по числовому ID, без отбора по точности. Один ряд не заменяет panel MAE.</p>
+  <div class="footer"><span>Источники: ../figure_manifest.csv, группа 2; ../METHODOLOGY_REPORT.md, §5, рисунок 2</span><span class="page">06 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="7">
+  <p class="kicker">Change-point detection</p><h2>Online и offline имеют разный доступ к данным</h2>
+  <p class="small"><strong>Online:</strong> CUSUM / EWMA / BOCPD — последовательное обнаружение.<br><strong>Offline:</strong> PELT / Binary Segmentation — сегментация всего отрезка.</p>
+  <span class="tag synthetic">SYNTHETIC TEST · 360 устойчивых сдвигов</span>
+  <img class="figure" src="../figures/online_comparison.png" alt="SYNTHETIC TEST: precision, recall, F1 и ложные сигналы online-детекторов" style="width:1035px;height:285px">
+  <div class="callout" style="margin-top:14px;font-size:22px"><strong>REAL DATA:</strong> alerts и breakpoints — диагностика. Независимой разметки нет; confirmed true positives не установлены.</div>
+  <div class="footer"><span>Источники: ../figure_manifest.csv, группа 3; ../METHODOLOGY_REPORT.md, §§7–8 · online delay ≠ offline localisation</span><span class="page">07 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="8">
+  <p class="kicker">News / external data · real coverage</p><h2>Исторического покрытия недостаточно</h2>
+  <div class="metric-row">
+    <div class="metric"><div class="number">93</div><p>URL-документа</p></div>
+    <div class="metric"><div class="number">197</div><p>Сохранённых snapshots</p></div>
+    <div class="metric"><div class="number">89</div><p>Canonical groups</p></div>
+  </div>
+  <p><strong>26 features + 26 missing flags</strong>, но только <strong>7 уникальных временных векторов</strong>.</p>
+  <ul class="compact">
+    <li>Допуск публикаций по политике доступности на origin; snapshots и дубли не равны независимым историческим событиям.</li>
+    <li>Исторических региональных/муниципальных событий нет. Национальные features, повторённые по МО, не добавляют временной истории.</li>
+    <li>Устойчивый прирост от проверенных macro features также не установлен.</li>
+  </ul>
+  <div class="callout"><strong>Вклад news надёжно оценить нельзя. Predictive uplift не доказан.</strong></div>
+  <div class="footer"><span>Источники: ../results_summary.json → news, external; ../METHODOLOGY_REPORT.md, §§6, 9</span><span class="page">08 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="9">
+  <p class="kicker">Early warning · real data</p><h2>Классификатор не обучался: мало независимых дат</h2>
+  <p><strong>2190 МО · 73 weak events · 6 onset-дат.</strong></p>
+  <p class="small muted">Weak labels — автоматические метки изменения ошибки baseline, а не подтверждённые экономические шоки.</p>
+  <img class="figure" src="../figures/real_warning_sufficiency.png" alt="Реальная проверка достаточности: k=1, 14 train и 4 test positives, одна и две onset-даты; k=3 разбиение непригодно" style="width:1080px;height:326px">
+  <div class="callout" style="margin-top:12px;font-size:22px"><strong>Качество не оценено.</strong> Это результат проверки достаточности данных; pipeline не даёт недостающей временной истории.</div>
+  <div class="footer"><span>Источники: ../results_summary.json → real_early_warning; ../figure_manifest.csv, группа 7</span><span class="page">09 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="10">
+  <p class="kicker" style="color:var(--orange)">Controlled synthetic early-warning benchmark</p><h2>Предвестники позволяют проверить механизм</h2>
+  <p class="small"><strong>SYNTHETIC BENCHMARK — не оценка предсказания реальных экономических шоков.</strong></p>
+  <p class="small muted">S0: постоянная вероятность · S1: история · S2: + online states · S3: + synthetic external precursor features</p>
+  <img class="figure" src="../figures/synthetic_event_performance.png" alt="SYNTHETIC TEST: event recall и alert precision S0–S3, 180 событий" style="width:1050px;height:268px">
+  <div class="callout synthetic" style="margin-top:12px;font-size:20px"><strong>S3, k=1 / k=3:</strong> event recall <strong>0.428 / 0.617</strong>; median lead <strong>1 / 2 месяца</strong> среди успешных предупреждений. TEST: 180 событий.</div>
+  <p class="caption">Вывод условен на заданном генераторе и наблюдаемых до onset предвестниках; польза реальных news не доказана.</p>
+  <div class="footer"><span>Источники: ../results_summary.json → synthetic_early_warning; ../figure_manifest.csv, группа 9</span><span class="page">10 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="11">
+  <p class="kicker">Интерпретация результатов</p><h2>Что установлено</h2>
+  <div class="findings">
+    <div class="finding"><h3>Сильный seasonal baseline</h3><p>SeasonalNaiveYoY лучше обоих Prophet на holdout h=1/3/6.</p></div>
+    <div class="finding"><h3>National/Local перспективен</h3><p>Минимум основной holdout-таблицы на h=1/3/6; устойчивого преимущества на validation нет.</p></div>
+    <div class="finding"><h3>Chronos-2: zero-shot без преимущества</h3><p>На holdout не улучшил сильные baselines. Checkpoint позже периода backtest; pretraining overlap не исключён.</p></div>
+    <div class="finding"><h3>Real detection — диагностика</h3><p>Без независимой разметки сигналы не подтверждают структурное экономическое событие.</p></div>
+    <div class="finding"><h3>Real early warning требует истории</h3><p>Для обучения и оценки нужны новые периоды и больше независимых onset-дат.</p></div>
+    <div class="finding"><h3>Synthetic проверяет механизм</h3><p>Предвестники, наблюдаемые до onset, помогают в пределах заданного генератора.</p></div>
+  </div>
+  <div class="footer"><span>Источник: ../METHODOLOGY_REPORT.md, §12</span><span class="page">11 / 12</span></div>
+</section>
+
+<section class="slide" data-slide="12">
+  <p class="kicker">Ограничения и следующие шаги</p><h2>Следующая проверка требует новых данных</h2>
+  <div class="two-columns" style="margin-top:30px">
+    <div><h3>Границы текущих выводов</h3><ul><li>24 месяца; h=12 — одна origin и direct fallback.</li><li>Независимой разметки реальных структурных изменений нет.</li><li>News coverage ограничено.</li><li>Publication vintages не подтверждены; holdout уже просмотрен.</li></ul></div>
+    <div><h3>Направления будущей работы</h3><ul><li>Более длинная история и новые периоды с фиксированным протоколом.</li><li>Опережающие финансовые индикаторы.</li><li>Независимая разметка событий.</li><li>Подтверждённые даты публикации и исторические версии данных.</li></ul></div>
+  </div>
+  <p class="small muted" style="margin-top:20px">Это направления будущей работы. Новые эксперименты при подготовке презентации не проводились.</p>
+  <div class="footer"><span>Источники: ../METHODOLOGY_REPORT.md, §§12–15; ../limitations.md</span><span class="page">12 / 12</span></div>
+</section>
+<script>
+const selectedSlide = Number(new URLSearchParams(window.location.search).get('slide'));
+if (selectedSlide >= 1 && selectedSlide <= 12) {
+  document.body.classList.add('single-slide');
+  document.querySelector('[data-slide="' + selectedSlide + '"]').classList.add('active');
+}
+window.presentationLayoutCheck = () => Array.from(document.querySelectorAll('.slide')).map(slide => {
+  const footer = slide.querySelector('.footer').getBoundingClientRect();
+  const content = Array.from(slide.children).filter(el => !el.classList.contains('footer'));
+  return {slide: Number(slide.dataset.slide), footerOverlap: content.some(el => el.getBoundingClientRect().bottom > footer.top - 7), horizontalOverflow: content.some(el => el.scrollWidth > el.clientWidth + 1), imageFailures: Array.from(slide.querySelectorAll('img')).filter(img => !img.complete || img.naturalWidth === 0).length};
+});
+window.addEventListener('load', () => {
+  if (new URLSearchParams(window.location.search).has('check')) {
+    const report = document.createElement('script');
+    report.id = 'layout-check';
+    report.type = 'application/json';
+    report.textContent = JSON.stringify(window.presentationLayoutCheck());
+    document.body.appendChild(report);
+  }
+});
+</script>
+</body>
+</html>

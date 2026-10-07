@@ -1,0 +1,159 @@
+{
+  "task": "F4",
+  "slide_count": 12,
+  "claims": [
+    {
+      "claim": "36 MAE cells in both outline and HTML; h12 fallback markings",
+      "status": "PASS"
+    },
+    {
+      "claim": "YoY vs both Prophet; N/L LightGBM minimum among nine holdout strategies h1/3/6, validation caveat; Chronos zero-shot holdout scope; h12 one origin",
+      "status": "PASS"
+    },
+    {
+      "claim": "24 months,2190 MO,63 evaluated pilot MO; news93/197/89,26+26,7 temporal vectors,no historical regional/municipal events",
+      "status": "PASS"
+    },
+    {
+      "claim": "Real EW weak events/onset dates,k1 train/test positives and dates,k3 infeasible,classifier not trained",
+      "status": "PASS"
+    },
+    {
+      "claim": "Synthetic S3 TEST recall .428/.617,median successful lead1/2 months,180 events",
+      "status": "PASS"
+    },
+    {
+      "claim": "167 existing README/docs/configs/scripts/src/reports files unchanged",
+      "status": "PASS",
+      "aggregate_sha256": "f38fe201455c2a58e3ee9b2772ec1e3e3ef61008c44f0ab4e055b32e80c60d9d"
+    }
+  ],
+  "figures": [
+    {
+      "path": "../figures/rolling_forecast.png",
+      "data_status": "real",
+      "sha256": "0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2"
+    },
+    {
+      "path": "../figures/online_comparison.png",
+      "data_status": "synthetic",
+      "sha256": "e584d79d91af96c19606367e88227aec814bd3b5ac58f5f100dba188bf067e41"
+    },
+    {
+      "path": "../figures/real_warning_sufficiency.png",
+      "data_status": "not_evaluated",
+      "sha256": "ca2e5643eb6023ec28c412c201160d7d1d4bb9e9afb88adbebe3a74d08e32b5f"
+    },
+    {
+      "path": "../figures/synthetic_event_performance.png",
+      "data_status": "synthetic",
+      "sha256": "01fa62b6a346b5299794d866cac3c9b664cd53fa44c826af8dbdee5bc537b551"
+    }
+  ],
+  "relative_links_checked": 24,
+  "broken_links": 0,
+  "forbidden_terms_or_absolute_paths": 0,
+  "markdown_mermaid_offline_branch_terminal": true,
+  "git_diff_check": "PASS",
+  "new_text_whitespace_check": "PASS",
+  "NO_MODEL_FITS": true,
+  "NO_NEW_EXPERIMENTS": true,
+  "NO_COMMIT_PUSH": true,
+  "pdf_export": "Microsoft Edge headless,local HTML,offline",
+  "checks_pending": [],
+  "pdf": {
+    "status": "PASS",
+    "sha256": "3f9124fcee6363081058f4766c620e0d27ac3faf9d3206e871dab4f217ac6a69",
+    "bytes": 395557,
+    "pages": 12,
+    "page_size_pt": [
+      960,
+      540
+    ],
+    "aspect_ratio": "16:9",
+    "utf8_text": "PASS",
+    "all_slide_titles_present": true,
+    "all_mae_values_present_on_slide_5": true,
+    "outside_page_word_bboxes": 0,
+    "word_bboxes_checked": 924,
+    "visual_review": {
+      "pages_reviewed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "clipping": false,
+      "overlapping_content": false,
+      "missing_figures": false,
+      "method": "Poppler PNG rendering at 150 dpi; all 12 pages inspected"
+    }
+  },
+  "browser_layout": {
+    "slides_checked": 12,
+    "footer_overlaps": 0,
+    "horizontal_overflows": 0,
+    "image_load_failures": 0
+  },
+  "source_files": {
+    "README.md": "50ab3ec3dcf1db985d68669937112b594c73f851ed191f86976732f47d784ad8",
+    "reports/final/METHODOLOGY_REPORT.md": "eac6946257866a8a1acf2691ef96648cf3425a35346896725c9fef343c1a5efe",
+    "reports/final/RESULTS_SUMMARY.md": "fc0e9813e1d416a84a15a9d97818b9ea70fade9ef5e1097a1904ede6f0715860",
+    "reports/final/results_summary.json": "2ad46fc62bea4804dd281b8b8f040f92fc76929cdff5886ebd2e1c7482fa4359",
+    "reports/final/figure_manifest.csv": "e21ad21f705f59470c13affb2af9ed3b95a825e039cad91b1b87e4e9be13abea"
+  },
+  "checked_claim_scope": [
+    "Forecasting is real pilot holdout,not the full2190MO panel",
+    "National/Local LightGBM minimum limited to nine main strategies,h1/3/6; validation advantage not stable",
+    "Chronos zero-shot no strong baseline uplift on holdout; checkpoint after backtest period and possible pretraining overlap",
+    "Real detection signals diagnostic only; no independent real ground truth",
+    "News coverage insufficient to estimate predictive contribution; corpus versions not independent events",
+    "Real early warning not trained; temporal positives/onset dates insufficient; data-sufficiency result",
+    "Synthetic detection and early warning evaluate controlled mechanism,not real economic-shock prediction quality",
+    "Offline detection excluded from early-warning features"
+  ],
+  "commands_completed": [
+    {
+      "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/final/presentation/export_pdf.ps1",
+      "exit_code": 0
+    },
+    {
+      "command": "pdfinfo --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -box -f 1 -l 12 presentation.pdf",
+      "exit_code": 0
+    },
+    {
+      "command": "pdftotext --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -layout -enc UTF-8 presentation.pdf <temporary-text>",
+      "exit_code": 0
+    },
+    {
+      "command": "pdftotext --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -bbox-layout -enc UTF-8 presentation.pdf <temporary-bbox>",
+      "exit_code": 0
+    },
+    {
+      "command": "pdftoppm --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -png -r 150 -cropbox -f 1 -l 12 presentation.pdf <temporary-previews>",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "temporary_artifacts": "Removed after checks; source PNG files preserved",
+  "git_status_note": "Existing .gitignore excludes reports; six local presentation files were not staged. Existing .vscode/ was untouched.",
+  "files_created": [
+    "presentation.md",
+    "presentation.html",
+    "presentation.pdf",
+    "export_pdf.ps1",
+    "README.md",
+    "verification.json"
+  ]
+}
