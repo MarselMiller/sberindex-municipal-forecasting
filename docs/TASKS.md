@@ -26,6 +26,7 @@
 | E07a | Подготовка данных и слабой разметки | Выполнена: код, реальные таблицы, аудит, отчёт и один полный pytest | Source audit; отдельная news v3; зафиксированный конечный weak criterion; 1536 cases, причинные признаки, temporal availability, manual queue; без classifier fit |
 | E07b | Full-panel early warning feasibility; условные B0–B4 | Выполнен: полная разметка, признаки, аудит, отчёт и один полный pytest; условное обучение пропущено по gate | 2190 МО, 73 weak events/6 onset-дат/71 МО; k1 train14/test4 positives, train1/test2 onset-даты; k3 train/test0; оба gate отказали, все 24 календарных варианта отказали; 138 числовых признаков, 1247 passed, 213 защищённых файлов неизменны |
 | E07c | Controlled synthetic early-warning benchmark | Completed: код, unit tests, smoke/full, метрики, bootstrap, 3 графика, независимая сверка и один полный pytest; research phase closed | 600/200/300 ряда по24месяца;360/120/180событий;TRAIN fit/VALIDATION threshold/TEST;1367passed/1warning;160защищённыхфайлов и frozenYAML сохранены;результаты только synthetic |
+| E08a | Leading Financial Indicators: source / availability / vintage audit | Выполнен; полный vintage/availability ledger остаётся E08b | Ветка research/e08-leading-indicators; 10 series A2/B7/C1, шесть shortlist families / восемь representations; primary key rate+official FX; B только sensitivity, unsecured C и top10 исключены; metadata/схемы/ссылки/causal assumptions проверены; без fits, feature matrix, metrics, commit/push |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -45,6 +46,27 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08a — Leading Financial Indicators source/availability/vintage audit.
+Выполнен 2026-10-07 только в research/e08-leading-indicators, base 70c95d6.
+Main и результаты E01–E07/F1–F7, README/final reports/presentation заморожены.
+Проверено 10 series в 6 семействах: A=2 (key rate/USD-RUB), B=7, C=1 (unsecured monthly).
+Shortlist: 6 families / 8 series; USE для A, USE_WITH_CAVEAT только exploratory для B;
+top10 max deposit rate B и полный unsecured C — DO_NOT_USE в текущем shortlist.
+Созданы E08a report и два metadata catalog files. JSON/CSV parity, evidence IDs,
+обязательные поля, shortlist, относительные links/content scan проверены локально.
+Полное покрытие information set на всех origins и historical vintages не проверено;
+current bank XLSX/BBS parity и OFZ first-release timing остаются открытыми.
+Никаких feature matrices, correlations, forecasts/MAE, classifier/PR-AUC/F1,
+packages, model fits, новых outputs или commit/push. Main не изменён.
+Минимальные official HTTP format probes — только память; MOEX filter не подтверждён
+(17972 rows на однодатный запрос), current calendar query не доказал старый schedule.
+Действующий /reports/* скрывает новый report; .gitignore и index не менялись.
+Следующий конкретный шаг E08b: отдельно зафиксировать acquisition/as-of specification
+и проверить primary key-rate/FX loader, own-r availability, anchors/праздники/coverage.
+Для B нужен отдельный archive/sensitivity gate; обучение этим аудитом не разрешено.
+[E08a audit](../reports/results/E08a_leading_financial_indicators_audit.md).
+
+## F7: сохранённая предыдущая задача
 ID: FINALIZATION / F7 — data publication and reproducibility audit. Выполнена 2026-10-07.
 Base: main, e50e044; рабочая папка до F7 чиста.
 Проверяется только data/documentation layer. Research phase закрыта.

@@ -7,6 +7,52 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## E08a: новый отдельный аудит leading financial indicators
+
+E08 открыт пользователем отдельно от завершённой фазы E01–E07/F1–F7.
+Работа разрешена только в research/e08-leading-indicators. E08a выполнен
+2026-10-07: source/availability/vintage audit, без feature matrix и обучения.
+Исходный HEAD и локальный main: 70c95d6d4686a991aa225d7e0649dda0d8e9b0ff;
+рабочая папка перед аудитом чистая. Main и прежний Source of Truth не меняются.
+
+Каталог: 10 series, шесть обязательных семейств, A=2/B=7/C=1. A — ключевая ставка
+и официальный USD/RUB, при доверии официальному nonrevision archive и явном
+publication/effective cutoff; независимых historical SHA нет. Сохранять actual
+published_at отдельно от консервативной available_at upper bound. Historical
+daily samples/API проверены, полный availability ledger всех origins ещё нет.
+Current XLSX кредитов/средств ФЛ/retail rates и OFZ curve остаются B:
+история значений есть, timing/vintage/definition reconciliation неполны.
+Fixed lag не повышает B до A. Полный compatible unsecured monthly series — C,
+DO_NOT_USE; top10 maximum deposit rate — B, отложен вне shortlist.
+Shortlist содержит шесть семейств / восемь series representations: A primary,
+четыре B families только exploratory/sensitivity. Target correlation не считалась.
+
+E05c проверял annual inflation Dec/Dec и consumption growth forecasts, а не
+эти financial series. Key-rate decisions частично повторяют news v3:
+новый numeric уровень/импульс не означает независимый источник событий.
+Новые financial data не удлиняют 24 месяца цели и не снимают real-EW sufficiency gate.
+L=0 и неизвестные target vintages остаются прежними ограничениями; просмотренный
+holdout не становится blind test. National copies по 2190 МО не независимы во времени.
+
+News-код трактует month-end как 00:00 Europe/Moscow последнего дня месяца,
+тогда как E05c использует date-only convention. E08b рекомендуется явно сохранить
+этот midnight cutoff; переход к end-of-day — отдельное решение. Date-only release
+допускать со следующего calendar midnight; для FX effective-date midnight может
+служить conservative availability upper bound, не actual publication timestamp.
+Announcement и in-force policy rate различать, historical features строить на own r.
+
+Артефакты: reports/results/E08a_leading_financial_indicators_audit.md,
+data/metadata/leading_financial_sources.json и leading_financial_series.csv.
+Только source-free metadata/собственный анализ, без numeric observations/raw/target.
+JSON/CSV parity, схема/evidence/shortlist и content/link checks пройдены.
+Новый report скрыт прежним /reports/*; .gitignore и index не менялись.
+SOAP KeyRate/XML FX/CBR curve/XLSX format probes выполнены в памяти; MOEX
+однодатный запрос вернул 17972 rows; filter semantics НЕ подтверждены и не скрыты.
+Новые packages/configs/loader files/weights/pytest/model fits/metrics/commit/push нет.
+Следующий конкретный шаг E08b — спецификация и loader/as-of audit key rate+FX,
+с проверкой anchors/праздников/coverage на own origins. B отдельно, C не допускать;
+обучение и изменения метрик/выборки/разбиений требуют отдельного протокола.
+
 ## F7: публикация данных и data-layer воспроизводимость
 
 Base main e50e044. Research phase не возобновляется; Source of Truth,
