@@ -1,0 +1,61 @@
+# E06b offline correction of personal-name geography collisions; no E07 fitting.
+experiment: news_events_v2
+experiment_date: '2026-10-07'
+seed: 42
+period:
+  start: '2023-01-01'
+  end: '2024-12-31'
+data:
+  path: data/input/consumption_all_categories.csv
+  category: Все категории
+comparison:
+  source_dir: outputs/prophet_comparison_v1
+  first_origin: '2023-12'
+  last_origin: '2024-11'
+sources:
+  raw_dir: data/external/news_raw
+  corpus_path: data/external/news_raw/corpus.json
+  reviewed_cbr_pdf_dir: outputs/macro_data_audit_v1/raw/cbr
+  max_requests: 200
+  max_bytes: 52428800
+  max_file_bytes: 2097152
+  timeout: 20
+  download_by_default: false
+  news_source: lenta
+  archive_days: [15]
+  max_articles_per_archive_day: 3
+  max_cbr_articles: 40
+  entries:
+    - source: cbr
+      url: https://www.cbr.ru/dkp/cal_mp/
+      period: '2023-01-01..2024-12-31'
+      role: index
+      terms_note: Public official archive; redistribution terms require separate review.
+    - source: pravo
+      url: https://publication.pravo.gov.ru/
+      period: '2023-01-01..2024-12-31'
+      role: probe
+      terms_note: Official legal publication; reuse conditions not established by this run.
+    - source: mchs
+      url: https://mchs.gov.ru/deyatelnost/press-centr/operativnaya-informaciya
+      period: '2023-01-01..2024-12-31'
+      role: probe
+      terms_note: Public archive availability must be established; no source replacement.
+availability:
+  unverified_text: retrieval_only
+  historical_confirmation: explicit_reviewed_evidence_required
+  date_only_publication: end_of_day_Europe_Moscow
+  origin: E01_month_end_midnight_Europe_Moscow
+  window: '(O-window_days, O] using available_at'
+  history_start: '2023-01-01'
+  corpus_is_complete_archive: false
+deduplication:
+  method: exact_normalized_title_and_publication_day_across_sources
+  versions: keep_all_snapshots_use_first_available_document_version
+  near_duplicates: not_implemented_report_limit
+geography:
+  collision_policy: personal_name_aliases_require_qualified_territory
+  previous_output_preserved: outputs/news_events_v1
+output_dir: outputs/news_events_v2
+smoke_output_dir: outputs/news_events_smoke_v2
+report_path: reports/results/E06b_news_events.md

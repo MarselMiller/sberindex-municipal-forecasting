@@ -9,6 +9,8 @@ __pycache__/
 # Не публиковать автоматически, особенно справочник и географические файлы.
 data/input/*
 !data/input/.gitkeep
+# E06b: private source snapshots and per-document derived data.
+/data/external/news_raw/
 outputs/*
 !outputs/.gitkeep
 catboost_info/
