@@ -26,6 +26,12 @@
 | E07a | Подготовка данных и слабой разметки | Выполнена: код, реальные таблицы, аудит, отчёт и один полный pytest | Source audit; отдельная news v3; зафиксированный конечный weak criterion; 1536 cases, причинные признаки, temporal availability, manual queue; без classifier fit |
 | E07b | Full-panel early warning feasibility; условные B0–B4 | Выполнен: полная разметка, признаки, аудит, отчёт и один полный pytest; условное обучение пропущено по gate | 2190 МО, 73 weak events/6 onset-дат/71 МО; k1 train14/test4 positives, train1/test2 onset-даты; k3 train/test0; оба gate отказали, все 24 календарных варианта отказали; 138 числовых признаков, 1247 passed, 213 защищённых файлов неизменны |
 | E07c | Controlled synthetic early-warning benchmark | Completed: код, unit tests, smoke/full, метрики, bootstrap, 3 графика, независимая сверка и один полный pytest; research phase closed | 600/200/300 ряда по24месяца;360/120/180событий;TRAIN fit/VALIDATION threshold/TEST;1367passed/1warning;160защищённыхфайлов и frozenYAML сохранены;результаты только synthetic |
+| E08a | Leading Financial Indicators: source / availability / vintage audit | Выполнен; полный vintage/availability ledger остаётся E08b | Ветка research/e08-leading-indicators; 10 series A2/B7/C1, шесть shortlist families / восемь representations; primary key rate+official FX; B только sensitivity, unsecured C и top10 исключены; metadata/схемы/ссылки/causal assumptions проверены; без fits, feature matrix, metrics, commit/push |
+| E08b | Causal loading и origin-aware financial features | E08b complete; Ready for E08c feature layer | Только A key rate/official USD-RUB; 1016/990 observations, 36 решений/23 changes; 12 прежних origins × 10 features, missing 0; own-cutoff/effective/future mutation/determinism/holiday/national/June checks PASS, 65 synthetic tests; 240 independently checked cells; без моделей/метрик/EW training/commit/push |
+| E08c | Fixed forecasting ablation financial indicators | E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT | F0 E05d exact reproduction; 232 fits, 4249.700 s; 83 tests и independent 26860-cell audit PASS; LN/F3 paired improvement только h6, нужно >=2h; own-r/cases/params checks PASS; h12 descriptive fallback; без tuning/new family/SoT changes/commit/push |
+| E08d | REAL financial early-warning diagnostic | E08d real financial early-warning diagnostic complete; NO REAL PRECURSOR EVIDENCE | Только frozen E07b/E08b; 12 unique origins, k1 6 positive/0 negative, k3 4 positive/0 negative; unknown сохранены; 7 CSV/2 figures/manifest, independent1788numeric+976NA PASS; contrasts/permutation/Holm NONESTIMABLE; без synthetic data, fits и tuning |
+| E08 integration | Включить завершённые E08a–E08d в итоговые материалы | Выполнена; E08 PRE-MERGE CHECK PASS | Claims/results сохранены; 12 E08d links и 183 relative links tracked; четыре byte-identical metadata/PNG copies в index; исходные outputs неизменны |
+| E08 clean clone | Проверить E08 code/artifacts из нового GitHub clone перед merge | Выполнена: PASS — READY TO MERGE | Clone f20e547; новая .venv Python 3.12.10/pip check PASS; imports 5/5; 148 tests passed, 0 skipped/deselected/warnings; 42 tracked files, 183 links/8 anchors, 12-page PDF, claims/security PASS; clone clean, 298 files unchanged; без реальных fits/research reruns/commit/push |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -45,6 +51,185 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08 CLEAN-CLONE VERIFICATION, 2026-10-08, research/e08-leading-indicators.
+Новый GitHub clone ../sberindex-municipal-forecasting_e08_verify:
+HEAD f20e547649e5c6cdd40816da9dab6b5af133378e, initial/final status clean.
+Новая .venv Python 3.12.10, requirements README установлены, pip check exit 0.
+Пять imports из clone/src и 148 no-real-fit tests PASS; 0 skips/deselected/warnings.
+RecordingLearner fit только сохраняет X/y; real fit/network guard counters=0.
+42 requested tracked files, 183 relative links/8 anchors и PDF 12 pages PASS.
+Claims/CSV/security проверки PASS; 298 tracked files SHA unchanged.
+Предварительный old-interpreter stdlib scan исключён и полностью повторён
+через system Python; imports/tests старую .venv не использовали.
+Reports/figures/PDF/research results не менялись; full research не пересчитывался.
+PASS — READY TO MERGE. Следующий шаг — review результата и решение автора о merge.
+Proof: outputs/e08_clean_clone_checks/verification_summary.json.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08d portability: завершённая предыдущая задача
+ID: E08d portability перед merge, 2026-10-07; research/e08-leading-indicators.
+В отчёте изменены только URL: семь CSV и run manifest перенаправлены к прежним
+tracked copies; два reviewed metadata JSON и две byte-identical PNG включены
+в reports/results/e08d/. Original outputs/PNG/calculations/NA не изменены.
+Два точных правила .gitattributes сохраняют SHA новых JSON при checkout.
+Index содержит только четыре разрешённые копии; source/working/index SHA совпадают.
+12 E08d links и 183 relative links checked/tracked; outputs link targets=0.
+Preservation и git diff checks PASS; остальные итоговые тексты/PDF сохранены.
+E08 PRE-MERGE CHECK PASS. Следующий шаг — review полного diff и решение о merge.
+Proof: outputs/e08d_portability_checks/portability_check.json.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08: предыдущий pre-merge check до исправления ссылок
+ID: E08 последний pre-merge check, 2026-10-07; ветка research/e08-leading-indicators.
+README E08 paragraph заменён точным текстом пользователя; другие claims/results
+и сохранённые артефакты не изменены. Artifact availability PASS: E08a–d reports,
+origin features, metrics, E08d CSV, две E08d PNG и presentation PDF tracked.
+Строгий tracked-link check FAIL: десять E08d report links ведут к local-only files.
+Восемь targets имеют идентичные tracked alternatives в reports/results/e08d/;
+independent_validation.json и figures/figure_manifest.json tracked copies не имеют.
+NEEDS REVIEW. Следующий шаг — отдельная правка навигации этих десяти ссылок.
+Proof: outputs/e08_integration_checks/pre_merge_check.json.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08 FINAL INTEGRATION: завершённый предыдущий этап
+ID: E08 FINAL INTEGRATION, разрешена 2026-10-07 после завершения E08d.
+Ветка research/e08-leading-indicators; исходный HEAD 7edcba4, до интеграции папка чистая.
+Добавлены только пояснения из сохранённых E08a–E08d: короткий README,
+подразделы сводки и методологического отчёта, ограничения и примечание audit.
+Стиль — назвать источник при первом упоминании, затем естественный текст;
+старые synthetic benchmarks и их маркировка сохраняются в своих разделах.
+Сохранённые MAE F0/F3 и проценты FX-only F2 / combined F3 сверены отдельно.
+Неустойчивый h6 signal не объявляется доказанным predictive effect;
+E08d comparative effect non-estimable: k1 6/6/0, k3 4/4/0, нет negative dates.
+В презентации заменён один устаревший financial-next-step bullet и уточнена подпись;
+layout и 12 страниц сохранены; PDF экспортирован прежним pipeline, проверки PASS.
+Согласованность, 183 относительные ссылки, preservation и PDF — PASS. Все 10 новых
+ссылок ведут к tracked files; старые E08d output-ссылки проверены только локально.
+1783 защищённых файла и 284 прочих tracked contents сохранены; F1 Source of Truth,
+старые reports/metrics/configs/data/AI disclosure не пересобраны.
+Новый полный clean-clone не выполнялся, F5 не включал E08. READY TO MERGE.
+Следующий конкретный шаг — review итогового diff и решение автора о merge;
+merge/commit/push не выполнялись. Proofs: outputs/e08_integration_checks/.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08d: завершённая предыдущая задача
+ID: E08d — REAL early-warning diagnostic with leading financial indicators.
+Разрешена 2026-10-07, только research/e08-leading-indicators, base 394e3e5;
+рабочая папка перед началом чистая, main 70c95d6 не меняется.
+Код/config подготовлены; минимальная event-study таблица на двух реальных датах
+и полный расчёт выполнены с code0. Финальный расчёт: 1.760387 s, без обучения.
+Статистическая единица — unique forecast origin, не 73 events и не МО×origin.
+Входы: 52560 frozen label cases E07b, 73 weak events, 6 onset months,
+71 МО с events, 2190 МО панели; 12 origins × 10 real financial features E08b.
+Strict OR использует eligible_at_origin & at_risk и только fully-known labels.
+k1: eligible6/positive6/negative0/unknown6; k3: eligible4/positive4/negative0/unknown8.
+Dec2023…Mar2024 left-insufficient; поздние окна right-censored, не negative controls.
+Known positive witness не означает полноту event_count: observed registry counts
+и monitored known-positive counts сохранены раздельно; affected share /2190 descriptive.
+Primary P1 rate change3m/P2 FX change1m/P3 FX change3m/P4 FX vol3m фиксированы;
+signed values и descriptive abs раздельны. Negative summaries, mean/median
+differences, rank effects, все 8 raw/Holm p — NA/NONESTIMABLE; permutations0.
+18 реальных t−1/t−2/t−3 windows и 84 leave-one-onset-out строки сохранены.
+Все 12 leave-out действий удаляют окна; negative controls не появляются,
+sign/magnitude stability не оценена, ONE-EVENT-DRIVEN не утверждается.
+Итоговый уровень: NO REAL PRECURSOR EVIDENCE — контраст не установлен,
+это не доказательство отсутствия предвестников. E07 classifier gate не снят;
+E08c NO STABLE FORECASTING UPLIFT относится к отдельному forecasting вопросу.
+Результаты outputs/real_financial_early_warning_e08d_v1/, reports/results/e08d/;
+отчёт reports/results/E08d_real_financial_early_warning.md сформирован из saved CSV.
+REAL artifact/reversal/preservation check PASS: 7 таблиц, 120 financial values,
+2346 SHA-проверок; независимый stdlib checker PASS, 1.57713 s:
+1788 numeric + 976 NA cells, 0 mismatches, max_abs1.11e-16.
+Две real figures проверены визуально; manifest финализирован и mirrored;
+complete validation и git diff --check PASS, HEAD/main/index сохранены.
+Proofs: outputs/e08d_checks/{real_validation,independent_validation,
+completion_validation}.json. E08d real financial early-warning diagnostic complete.
+Существующий pytest не запускался: synthetic fixtures запрещены в E08d.
+Следующий конкретный шаг — отдельно согласовать, требуется ли расширение реальной
+истории с сопоставимыми known negative dates; новые sources/models не запускались.
+REAL DATA ONLY; NO SYNTHETIC DATA; NO CLASSIFIER FITS; NO THRESHOLD TUNING;
+NO COMMIT/PUSH. README/final reports/presentation/Source of Truth не меняются.
+
+## E08c: завершённая предыдущая задача
+ID: E08c — fixed forecasting ablation with leading financial indicators.
+Разрешена 2026-10-07, branch research/e08-leading-indicators, base cb4db21.
+E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT.
+Код/config подготовлены; 83 relevant synthetic tests passed, 42.06 s, code0.
+Smoke/f0/ablation команды code0; 232 successful fits (58 F0 + 174 financial),
+runtime стадий 4249.700 s, smoke 2 fits входят в 58 и не повторяются.
+F0 gate PASS до финансовых fits: exact predictions difference 0 руб.,
+max aggregate metric difference 4.547473508864641e-13.
+Метрики получены: 15176 predictions/8 arms, 1897 raw/1890 evaluable на arm,
+7 missing truths сохранены, failed=0; h12 SeasonalNaive fallback без fits.
+Independent isolated checker PASS: 10 tables, 26860 numeric cells, 0 mismatches,
+max difference 3.637978807091713e-12; 240 ledgers/6653936 rows и 1631 SHA checked.
+Financial own-r training rows 4990452 / forecast rows 11382, нарушений cutoff,
+origin/value/key/label/order/base features/fixed native params нет.
+F0 воспроизводит E05d; только LN primary/L0 secondary, F1 key5/F2FX5/F3all10.
+Протокол/target/pairs/cases/seed/native parameters прежние, новых sources нет.
+Success criterion зафиксирован до fits в новой YAML: paired improvement на
+validation+holdout минимум двух h1/3/6 и сохранение negative mean origin delta
+после удаления лучшей origin; h12 в criterion не используется.
+LN/F3 обе части улучшает только h6 (validation -1.67%, holdout -1.78%);
+на h1 validation +2.10%, на h3 validation +3.54% / holdout +3.90%.
+Требование >=2 horizons не выполнено; h1 holdout leave-best-out +9.557 руб.
+L0/F3 все validation horizons улучшает, все holdout horizons ухудшает;
+это sensitivity, primary не выбирается по лучшему score.
+Артефакты outputs/leading_financial_forecasting_e08c_v1/, reports/results/e08c/,
+reports/results/E08c_leading_financial_forecasting.md, outputs/e08c_checks/.
+Следующий конкретный шаг — отдельно разобрать ограниченный h6 сигнал и
+несогласованность origin deltas; новое обучение/источники — отдельная задача.
+NO TUNING; NO NEW MODEL FAMILY; NO SOURCE OF TRUTH CHANGES; NO COMMIT/PUSH.
+
+## E08b: сохранённая предыдущая задача
+ID: E08b — causal loading and origin-aware leading financial features.
+Выполнен 2026-10-07 только в research/e08-leading-indicators, base f6f0cef.
+Сначала feature smoke на 2 origins, затем полный аудит 12 origins, оба code 0.
+Загружены только A key rate/USD-RUB за 2021–2024: 1016/990 observations;
+36 решений (23 изменения), exact timing 20/date-only 16 (changes 9/14).
+Неизвестное время — next-day midnight; in-force дополнительно effective≤O.
+FX — conservative effective midnight, без next-business-day backfill.
+Матрица 12×10 на existing origins 2023-12…2024-11, все 120 значений доступны.
+Max effective/availability operands≤own origin; future mutation/removal 12/12,
+детерминизм cache/перестановки, national equality и June2024 boundary — PASS.
+65 релевантных synthetic tests passed (1.92 s); ожидаемые критерии не ослаблялись.
+Первый общий pytest дал 5 setup errors из-за отсутствующего parent basetemp;
+parent создан внутри ignored outputs, итоговый запуск code 0, без models.
+Независимо пересчитаны 120 matrix и 120 manual feature cells: mismatches 0,
+max_abs=3.47e-18. Anchors покрывают date-only emergency 2022, same-day 2023,
+weekend/month-end, June setting/effective switch и July2024 future-effective rate.
+Код/config/tests и project docs изменены; raw cache/numeric features/report
+остаются ignored, .gitignore/index не менялись. Main и E01–E07/F1–F7 заморожены.
+Sources/feature manifest: outputs/leading_financial_e08b_v1/run_manifest.json;
+матрица/anchors: reports/results/e08b/; [отчёт E08b](../reports/results/E08b_leading_financial_features.md).
+NO MODEL FITS; NO FORECASTING METRICS; NO EARLY-WARNING TRAINING; NO COMMIT/PUSH.
+Ready for E08c — готовность causal feature layer при official archive trust,
+а не предиктивный вывод. Следующий шаг: отдельно согласовать E08c forecasting
+ablation, сохраняя cases/own-r training availability и прежние ограничения цели.
+Real early-warning feasibility gate не меняется; B/C не подключать автоматически.
+
+## E08a: сохранённая предыдущая задача
+ID: E08a — Leading Financial Indicators source/availability/vintage audit.
+Выполнен 2026-10-07 только в research/e08-leading-indicators, base 70c95d6.
+Main и результаты E01–E07/F1–F7, README/final reports/presentation заморожены.
+Проверено 10 series в 6 семействах: A=2 (key rate/USD-RUB), B=7, C=1 (unsecured monthly).
+Shortlist: 6 families / 8 series; USE для A, USE_WITH_CAVEAT только exploratory для B;
+top10 max deposit rate B и полный unsecured C — DO_NOT_USE в текущем shortlist.
+Созданы E08a report и два metadata catalog files. JSON/CSV parity, evidence IDs,
+обязательные поля, shortlist, относительные links/content scan проверены локально.
+Полное покрытие information set на всех origins и historical vintages не проверено;
+current bank XLSX/BBS parity и OFZ first-release timing остаются открытыми.
+Никаких feature matrices, correlations, forecasts/MAE, classifier/PR-AUC/F1,
+packages, model fits, новых outputs или commit/push. Main не изменён.
+Минимальные official HTTP format probes — только память; MOEX filter не подтверждён
+(17972 rows на однодатный запрос), current calendar query не доказал старый schedule.
+Действующий /reports/* скрывает новый report; .gitignore и index не менялись.
+Следующий конкретный шаг E08b: отдельно зафиксировать acquisition/as-of specification
+и проверить primary key-rate/FX loader, own-r availability, anchors/праздники/coverage.
+Для B нужен отдельный archive/sensitivity gate; обучение этим аудитом не разрешено.
+[E08a audit](../reports/results/E08a_leading_financial_indicators_audit.md).
+
+## F7: сохранённая предыдущая задача
 ID: FINALIZATION / F7 — data publication and reproducibility audit. Выполнена 2026-10-07.
 Base: main, e50e044; рабочая папка до F7 чиста.
 Проверяется только data/documentation layer. Research phase закрыта.

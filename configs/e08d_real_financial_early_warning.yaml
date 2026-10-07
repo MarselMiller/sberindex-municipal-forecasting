@@ -1,0 +1,61 @@
+experiment: real_financial_early_warning_e08d_v1
+seed: 42
+branch: research/e08-leading-indicators
+financial_features: outputs/leading_financial_e08b_v1/financial_features_by_origin.csv
+financial_manifest: outputs/leading_financial_e08b_v1/run_manifest.json
+event_registry: outputs/early_warning_full_panel_v1/event_registry_weak.csv
+label_cases: outputs/early_warning_full_panel_v1/label_cases.csv.gz
+label_manifest: outputs/early_warning_full_panel_v1/manifest.json
+label_protocol: configs/early_warning_feasibility.yaml
+panel_config: configs/early_warning_full_panel.yaml
+preservation_record: outputs/e08d_checks/initial_preservation.json
+origin_convention: last_calendar_day_midnight_Europe_Moscow
+statistical_unit: unique_forecast_origin
+warning_horizons: [1, 3]
+label_rule: strict_OR_of_saved_eligible_at_risk_labels_no_label_rebuild
+known_positive: at_least_one_fully_known_positive_witness
+known_negative: nonempty_monitoring_cohort_with_every_label_fully_known_negative
+unknown: all_other_cases_never_zero
+counts_scope: observed_confirmed_full_E07b_registry_not_unobserved_population_events
+affected_share_denominator: all_2190_source_municipalities_descriptive_only
+primary_diagnostics:
+  P1: key_rate_change_3m
+  P2: usd_rub_change_1m
+  P3: usd_rub_change_3m
+  P4: usd_rub_vol_3m
+primary_statistic: signed_difference_in_means_volatility_intrinsic
+rank_effect: rank_biserial_wins_minus_losses_ties_zero
+absolute_changes: descriptive_only_no_additional_tests
+permutation:
+  unit: unique_dates
+  method: exhaustive_fixed_positive_count
+  two_sided: absolute_statistic_inclusive_tail
+  maximum_assignments: 4096
+  plus_one_correction: false
+  interpretation: descriptive_reference_exchangeability_not_verified
+multiple_testing:
+  method: Holm
+  planned_family_size: 8
+  unavailable_p_values: remain_NA_do_not_replace_with_one_or_reduce_family
+leave_one_event_out:
+  unit: unique_onset_month
+  rule: remove_all_originally_known_windows_containing_omitted_onset
+  remaining_labels: unchanged_never_relabel_positive_as_negative
+  unrepresented_onset: NOOP_not_independent_support
+  empty_class: NONESTIMABLE_not_zero
+lead_months: [1, 2, 3]
+distance_to_next_onset: retrospective_evaluation_only_not_model_feature
+interpretation:
+  allowed_levels: [NO REAL PRECURSOR EVIDENCE, WEAK / EXPLORATORY PRECURSOR EVIDENCE, CONSISTENT EXPLORATORY PRECURSOR PATTERN]
+  no_significance_threshold_success_gate: true
+  nonestimable_contrast: NO_REAL_PRECURSOR_EVIDENCE_MEANS_NOT_ESTABLISHED_NOT_PROOF_OF_ABSENCE
+real_data_only: true
+no_synthetic_data: true
+no_classifier_fits: true
+no_threshold_tuning: true
+no_network: true
+maximum_figures: 2
+output_dir: outputs/real_financial_early_warning_e08d_v1
+smoke_output_dir: outputs/real_financial_early_warning_e08d_smoke_v1
+audit_dir: reports/results/e08d
+report_path: reports/results/E08d_real_financial_early_warning.md

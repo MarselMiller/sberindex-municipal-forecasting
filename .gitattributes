@@ -7,3 +7,7 @@ data/schemas/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-a
 data/synthetic/e07c_demo/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 data/synthetic/e07c_demo/*.gz -text
 data/synthetic/e07c_demo/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# E08d: preserve byte-identical copies of historical audit metadata.
+reports/results/e08d/independent_validation.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+reports/results/e08d/figure_manifest.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

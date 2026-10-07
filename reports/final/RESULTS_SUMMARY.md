@@ -58,6 +58,16 @@ National/Local прогнозирует национальную медиану 
 
 Provenance forecasting: E01/E02/E03/E05d, сохранённые `predictions.csv.gz`, metrics и `strategy_keys.csv`; в каждой итоговой CSV-строке записаны путь, SHA256, исходное имя модели, фильтр и ключи.
 
+### Leading financial indicators
+
+Для прогнозирования муниципальных расходов SberIndex проверены ключевая ставка Банка России и официальный USD/RUB Банка России. Остальные ряды исключены из основного анализа из-за неопределённости historical vintages (B/C). E08b построил десять национальных признаков на 12 forecast origins; они используют только сведения, доступные на собственной дате выпуска. Проверки cutoff и явной временной утечки пройдены.
+
+Фиксированная ablation E08c с National/Local + LightGBM не показала **устойчивого forecasting uplift**. Ставка отдельно устойчивого улучшения не дала. Вариант только с FX (F2) уменьшил MAE macro на h=6 на 1.67% на validation и 2.11% на просмотренном holdout; все финансовые признаки вместе (F3) — на 1.67% и 1.78%. F3 улучшил обе части только на h=6, тогда как заранее требовалось минимум два горизонта из h=1/3/6. Validation h=6 содержит одну дату выпуска: ограниченный сигнал не доказывает устойчивого predictive effect. Финансовые варианты LightGBMDirect ухудшили holdout; tuning не проводился.
+
+E08d использовал weak-event labels и onset dates из E07 на уникальных календарных датах. Для k=1 известны 6 меток, все положительные; для k=3 — 4, также все положительные. Отрицательных дат сравнения нет, поэтому сравнительный early-warning effect и permutation tests **не оцениваются**. Перед шестью onset months общего направления ставки/FX не обнаружено. Дополнительный precursor effect на доступной истории оценить не удалось; отсутствие предвестников этим не доказано.
+
+Подробности: [E08a](../results/E08a_leading_financial_indicators_audit.md), [E08b](../results/E08b_leading_financial_features.md), [E08c](../results/E08c_leading_financial_forecasting.md), [E08d](../results/E08d_real_financial_early_warning.md), [методика](METHODOLOGY_REPORT.md#61-leading-financial-indicators). Полные outputs и raw cache остаются локальными.
+
 ## B. Structural change detection
 
 Основная synthetic truth — устойчивый положительный/отрицательный сдвиг уровня не менее трёх месяцев. Качество оценено на 360 основных test-событиях; параметры выбраны на synthetic validation при бюджете контрольных тревог. Проверяются изменения ошибки причинного SeasonalNaiveYoY. Сигнал такой ошибки сам по себе не доказывает экономический шок.

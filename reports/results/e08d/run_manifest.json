@@ -1,0 +1,145 @@
+{
+  "experiment": "real_financial_early_warning_e08d_v1",
+  "stage": "REAL_FULL_DIAGNOSTIC",
+  "status": "E08d real financial early-warning diagnostic complete.",
+  "seed": 42,
+  "config": "configs/e08d_real_financial_early_warning.yaml",
+  "statistical_unit": "unique_forecast_origin",
+  "onset_dates": [
+    "2024-05-31",
+    "2024-06-30",
+    "2024-07-31",
+    "2024-08-31",
+    "2024-09-30",
+    "2024-10-31"
+  ],
+  "eligibility_summary": [
+    {
+      "k": 1,
+      "n_origins": 12,
+      "n_eligible": 6,
+      "n_positive": 6,
+      "n_negative": 0,
+      "n_unknown": 6
+    },
+    {
+      "k": 3,
+      "n_origins": 12,
+      "n_eligible": 4,
+      "n_positive": 4,
+      "n_negative": 0,
+      "n_unknown": 8
+    }
+  ],
+  "primary_diagnostics": {
+    "P1": "key_rate_change_3m",
+    "P2": "usd_rub_change_1m",
+    "P3": "usd_rub_change_3m",
+    "P4": "usd_rub_vol_3m"
+  },
+  "planned_holm_family_size": 8,
+  "primary_conclusion": "NO REAL PRECURSOR EVIDENCE",
+  "conclusion_reason": "No known negative date controls; contrasts are not identified, absence of precursors is not established",
+  "real_data_only": true,
+  "no_synthetic_data": true,
+  "no_classifier_fits": true,
+  "no_threshold_tuning": true,
+  "no_network": true,
+  "no_commit_push": true,
+  "label_definition_changed": false,
+  "target_definition_changed": false,
+  "git_commit": "394e3e54ece9d3624232c903db644a2b5762a031",
+  "main_commit": "70c95d6d4686a991aa225d7e0649dda0d8e9b0ff",
+  "git_status": "M docs/PROJECT_CONTEXT.md\n M docs/TASKS.md\n?? configs/e08d_real_financial_early_warning.yaml\n?? scripts/check_real_financial_early_warning.py\n?? scripts/report_real_financial_early_warning.py\n?? scripts/run_real_financial_early_warning.py\n?? src/sberforecast/real_financial_early_warning.py",
+  "uncommitted_changes": true,
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "PyYAML": "6.0.3",
+    "matplotlib": "3.10.8"
+  },
+  "python_version": "3.12.10",
+  "code_sha256": {
+    "src/sberforecast/real_financial_early_warning.py": "41f370d9cc87d6b91b698a037a885228511458fc7ae978b5856eddcc6a7aabd9",
+    "scripts/run_real_financial_early_warning.py": "849e07574ae706f12fd1ec09b2d691ca4bba37b104eff501efa1a403e271868c",
+    "scripts/check_real_financial_early_warning.py": "cee6712544d620c22b6ad16839360a9964a2528d683ab3e4c22bd771efe0209d",
+    "scripts/report_real_financial_early_warning.py": "f5c2e5503eb3790ce39a207e78e6a7af9dee99dfd6d73e3c8663dabe76ccc84c",
+    "configs/e08d_real_financial_early_warning.yaml": "d98eda45e84a36ec65656de2edb0fffb6e48cc7ff4de43f6a2dd4a5417918b99"
+  },
+  "run_commands": [
+    ".venv/Scripts/python.exe scripts/run_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml",
+    ".venv/Scripts/python.exe scripts/check_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml",
+    ".\\.venv\\Scripts\\python.exe -I -B -X utf8 outputs/e08d_checks/check_independent.py",
+    ".venv/Scripts/python.exe scripts/run_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml --smoke",
+    ".venv/Scripts/python.exe scripts/check_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml --source-only",
+    ".venv/Scripts/python.exe -B -X utf8 scripts/report_real_financial_early_warning.py",
+    ".venv/Scripts/python.exe scripts/run_real_financial_early_warning.py --config configs/e08d_real_financial_early_warning.yaml --finalize"
+  ],
+  "runtime_seconds": 1.760387,
+  "preservation_record": "outputs/e08d_checks/initial_preservation.json",
+  "source_counts": {
+    "panel_municipalities": 2190,
+    "weak_events": 73,
+    "unique_onset_dates": 6,
+    "municipalities_with_events": 71,
+    "n_origins": 12
+  },
+  "source_sha256": {
+    "outputs/early_warning_full_panel_v1/event_registry_weak.csv": "920d6f64e5eec2cc4b873b275e9c0dfacc9f2cf424796db123d96eaa3d1f619c",
+    "outputs/early_warning_full_panel_v1/label_cases.csv.gz": "f4e0ea01e9e7989d4fd28c7c48ba988ea582faa3e33f3cc66dd792699475ded6",
+    "configs/early_warning_feasibility.yaml": "3027d57dce91fd87d83dbb7d5f1ef462019fd0e20853466d4ce51f58445a2c65",
+    "configs/early_warning_full_panel.yaml": "1fed3b0ae32855c70999263fb9950614c653de85641806684fbeec71cff54dc6",
+    "src/sberforecast/early_warning_labels.py": "5396bb7ee77c56c35453f8cb8be8d5902ea55d13e62c16242355112335456057",
+    "src/sberforecast/early_warning_full_panel_labels.py": "658e1ef7a5e4353a7767f170e6a2ca7f57d8663b8d5fecc0ce6a3855086adb55",
+    "outputs/leading_financial_e08b_v1/financial_features_by_origin.csv": "21463b5ecc93f72042a4b08d287357f55927c83b570d087bd5788ceb060e8c31",
+    "outputs/leading_financial_e08b_v1/cache/key_rate_2021_2024.xml": "6e8665f8d46b6cab81a1e5ff0e37f8b02cd4c5853cc7a2e146660733234d6ddd",
+    "outputs/leading_financial_e08b_v1/cache/usd_rub_2021_2024.xml": "ee25f557cfcae939f2b95f530cc3e6c2a7848ba819fd9fa87ebc3137c0316674",
+    "outputs/leading_financial_e08b_v1/cache/key_decisions/key_decisions.json": "773fea7ba25a99c9eeabc7d4d213d1d8384ac2269769ed1731a1fb79a73dbb75",
+    "outputs/leading_financial_e08b_v1/run_manifest.json": "f858ec2ddac4bc89ca8835c7b8bccbbc2219f90005bddf9d97b9c7360b008ab8",
+    "outputs/early_warning_full_panel_v1/manifest.json": "d3b6d9d4d4604c31bb7e3667511124873234a37ca5adf544e606fd15b34e4ac6"
+  },
+  "financial_rows_collapsed": 0,
+  "financial_source_cutoff_violations": 0,
+  "synthetic_inputs": 0,
+  "classifier_fits": 0,
+  "threshold_searches": 0,
+  "label_rebuilds": 0,
+  "artifact_sha256": {
+    "diagnostic_comparisons.csv": "b5395c483d66923a6cc7e3078f6276ca5128d4a267e7b1688224aa68ca909c3d",
+    "eligibility_summary.csv": "f8803e97fab956220ae566073f0fe4c342cf1572c313fbb4fc773bb32ba0b566",
+    "event_intensity.csv": "1a665a5ea1f904be83433442362c7c7047156da7bf69887440977ad953b0625d",
+    "event_window_table.csv": "357aa020badb134f5099276462613b90b73e709150f23ef7b8f0e7951cfcb03f",
+    "figures/e08d_event_centered_financial.png": "ea297afacd5a4caeaf8ddbde4fcd779260b7cbc802ba89dd6ec1fb70d87ee9ba",
+    "figures/e08d_financial_by_origin.png": "b552f40db8699e781642bcda0bc2277c97e925efee9c08e1f9e17938524c6810",
+    "figures/figure_manifest.json": "38c144156b5db00678baec1572039551a567aa68fbc3864cb4719a5f5557a1f4",
+    "leave_one_event_out.csv": "28be93f0cbb30d72d7d284c2d32b7d44d89bf4522a797df0b3635b2024551486",
+    "origin_event_study.csv": "3bfc1e2766e704bcafbc94b041089ddfb73201bee518458c1fe378bcc1f14fd2",
+    "permutation_results.csv": "e01c007858b61ea9df7b0fbbf663e3a4f46ded1a8a9ca95a2d3cf315c7d5c642",
+    "resolved_config.yaml": "4fba8fe81de1ae7f28593721956e27a3b99a36289e49063a50ed977ca0b0ee45"
+  },
+  "validation": {
+    "real_validation.json": {
+      "path": "outputs/e08d_checks/real_validation.json",
+      "sha256": "29417da111817da40dd762899ad512f3386c73e17d0498ed5075a15754365121",
+      "status": "PASS"
+    },
+    "independent_validation.json": {
+      "path": "outputs/e08d_checks/independent_validation.json",
+      "sha256": "7452046dc700fef9b1f9fecaf51d2c47631ae47789bb8a01511c955e0f281e7e",
+      "status": "PASS"
+    }
+  },
+  "report": {
+    "path": "reports/results/E08d_real_financial_early_warning.md",
+    "sha256": "8f068d88691e9b5863d4624acac281bc1090b30affd010c415c0c3ea792b034f"
+  },
+  "code_sha256_at_run": {
+    "src/sberforecast/real_financial_early_warning.py": "41f370d9cc87d6b91b698a037a885228511458fc7ae978b5856eddcc6a7aabd9",
+    "scripts/run_real_financial_early_warning.py": "849e07574ae706f12fd1ec09b2d691ca4bba37b104eff501efa1a403e271868c",
+    "scripts/check_real_financial_early_warning.py": "cee6712544d620c22b6ad16839360a9964a2528d683ab3e4c22bd771efe0209d",
+    "scripts/report_real_financial_early_warning.py": "f5c2e5503eb3790ce39a207e78e6a7af9dee99dfd6d73e3c8663dabe76ccc84c",
+    "configs/e08d_real_financial_early_warning.yaml": "d98eda45e84a36ec65656de2edb0fffb6e48cc7ff4de43f6a2dd4a5417918b99"
+  },
+  "git_status_at_completion": "M docs/PROJECT_CONTEXT.md\n M docs/TASKS.md\n?? configs/e08d_real_financial_early_warning.yaml\n?? scripts/check_real_financial_early_warning.py\n?? scripts/report_real_financial_early_warning.py\n?? scripts/run_real_financial_early_warning.py\n?? src/sberforecast/real_financial_early_warning.py",
+  "completed_at_utc": "2026-10-07T18:45:36.601404+00:00"
+}

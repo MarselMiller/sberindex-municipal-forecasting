@@ -1,0 +1,47 @@
+experiment: leading_financial_forecasting_e08c_v1
+seed: 42
+baseline_config: configs/national_local_lightgbm.yaml
+baseline_output: outputs/national_local_lightgbm_v1
+financial_output: outputs/leading_financial_e08b_v1
+financial_audit: reports/results/e08b/financial_features_by_origin.csv
+models:
+  LightGBMDirectNationalLocal: LN
+  LightGBMDirect: L0
+primary_model: LightGBMDirectNationalLocal
+variants:
+  F0: []
+  F1: [key_rate_level, key_rate_delta_last, key_rate_change_3m, key_rate_change_6m, months_since_rate_change]
+  F2: [usd_rub_last, usd_rub_change_1m, usd_rub_change_3m, usd_rub_vol_1m, usd_rub_vol_3m]
+  F3: [key_rate_level, key_rate_delta_last, key_rate_change_3m, key_rate_change_6m, months_since_rate_change, usd_rub_last, usd_rub_change_1m, usd_rub_change_3m, usd_rub_vol_1m, usd_rub_vol_3m]
+primary_horizons: [1, 3, 6]
+descriptive_horizons: [12]
+financial_origin_rule: own_historical_origin_for_training_and_current_origin_for_forecast
+origin_convention: last_calendar_day_midnight_Europe_Moscow
+baseline_reproduction:
+  absolute_tolerance_rub: 0.00000001
+  relative_tolerance: 0
+  required: [prediction_keys, truths, protocol_fields, statuses, fallback_semantics, training_keys, training_targets, base_features, fixed_parameters, predictions, aggregate_metrics]
+  failure_action: stop_before_any_financial_variant_fit
+success_criterion:
+  declared_before_results: true
+  candidate: F3
+  paired_improvement: negative_macro_MAE_delta_on_both_validation_and_holdout
+  minimum_qualifying_horizons: 2
+  eligible_horizons: [1, 3, 6]
+  numerical_epsilon_rub: 0.00000001
+  multi_origin_concentration_check: at_least_two_improved_and_negative_mean_delta_after_removing_best_origin
+  concentration_scope: each_qualifying_horizon_and_each_split_with_at_least_two_origins
+  single_origin_split: concentration_undetermined_report_limitation
+  overall_conclusion_model: LightGBMDirectNationalLocal
+  secondary_model: sensitivity_only_never_select_by_best_result
+no_tuning: true
+no_new_model_family: true
+no_source_research: true
+holdout_status: previously_inspected_not_independent
+smoke_origin: '2024-03'
+smoke_horizon: 1
+validation_record: outputs/e08c_checks/test_result.json
+preservation_record: outputs/e08c_checks/initial_preservation.json
+output_dir: outputs/leading_financial_forecasting_e08c_v1
+audit_dir: reports/results/e08c
+report_path: reports/results/E08c_leading_financial_forecasting.md
