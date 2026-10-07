@@ -4,8 +4,52 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F3 на 2026-10-07.
+E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F5 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
+
+## F5: clean-clone reproduction audit
+
+F5 выполнена 2026-10-07: PASS WITH LIMITATION. GitHub main, исходный HEAD и
+origin/main совпали на 6ada52638299415936742669b24d12b6792f64d7 (F4). Новый clone
+создан в соседней папке sberindex_python_mvp_repro, без копирования приватных
+данных, прежних venv или cache. Python 3.12.10 / pip 25.0.1; новая .venv,
+system/user site-packages выключены. README requirements + Ruptures установлены
+из PyPI без cache, около 3,5 минуты; pip check PASS. Optional learners не ставились.
+
+Полный pytest включает настоящие небольшие fit и поэтому не запускался.
+27 точных deselect-префиксов исключили 34 CatBoost/LightGBM/logistic/Ruptures-fit
+проверки: 1432 passed, 34 deselected, 1 прежнее Inf-warning, 276.25 с, exit 0.
+Это no-fit subset, не full-suite verification. Все fixtures и новые runtime
+cache находятся в новой .venv; outputs сохранил только .gitkeep.
+
+Четыре CLI --help работают из корня clone и его родителя; 13 импортов из
+clone/src и clone/.venv, 18 YAML, 37 README links / 28 targets и 11 PNG SHA PASS.
+Презентация совпала по SHA; pdftotext успешно извлёк текст PDF, без проверки
+визуального рендеринга. Chronos preflight exit 1
+из-за отсутствия приватного CSV; он не проверяет Chronos/torch dependencies.
+Raw data, исходные E01/E02 outputs и веса не копировались, модели не запускались.
+Data reproducibility и full experiment reproduction остаются NOT TESTED.
+
+Статическая проверка 231 tracked-файла не нашла рабочих секретов. В оперативных
+README/src/scripts/configs нет абсолютных машинных путей. 23 исторические строки
+в девяти reports/provenance-файлах сохранены; буквальная глобальная path-проверка
+остаётся FAIL. Код, методология, цифры, старые reports/outputs не переписывались.
+README и DATA_NOTICE уточняют доступность данных и область preflight; ссылки
+исправленных инструкций повторно сверены с clone. Новые документы ещё не published.
+Clone tracked-tree clean после install/tests/CLI; git diff --check PASS.
+Исходная .vscode/ не затронута; никаких model fits, новых experiments или commit/push.
+
+Полный протокол и ограничения: [REPRODUCTION_AUDIT.md](../reports/final/REPRODUCTION_AUDIT.md).
+Следующий шаг — отдельный финальный аудит состава публикации и согласованности
+материалов; полное воспроизведение требует разрешённого исходного комплекта.
+
+## F4: финальная презентация
+
+В проверенном commit 6ada526 опубликованы [12 слайдов](../reports/final/presentation/presentation.md),
+редактируемый HTML и PDF 16:9. В F4 использованы одна MAE-таблица и четыре
+существующих PNG; real/synthetic/diagnostic разделение и ограничения сохранены.
+При F5 файлы презентации прочитаны непосредственно из GitHub clone, SHA PDF и
+PNG совпали с tracked verification/manifest. F5 не пересобирал презентацию.
 
 ## F3: самостоятельный методологический отчёт
 Финальная редактура F3: 7382 → 6665 слов вне таблиц (−9.71%).

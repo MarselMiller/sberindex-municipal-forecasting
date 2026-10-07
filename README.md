@@ -224,11 +224,13 @@ py -3.12 -m venv .venv
 
 Основные зависимости — в [requirements.txt](requirements.txt). Дополнительные компоненты используют [requirements-prophet.txt](requirements-prophet.txt), [requirements-lightgbm.txt](requirements-lightgbm.txt) и [requirements-ruptures.txt](requirements-ruptures.txt). Ruptures включён в установку выше: он нужен обязательным offline-тестам. При отсутствии LightGBM его native-тест пропускается. Для чтения сохранённых результатов установка пакетов не требуется.
 
-**Chronos-2 — отдельное окружение** с [requirements-chronos.txt](requirements-chronos.txt); сохранённый состав — в [requirements-chronos-lock.txt](requirements-chronos-lock.txt). Для inference нужны локальные веса; preflight проверяет зависимости и сохранённые входы до загрузки весов.
+Тесты используют synthetic fixtures и не требуют исходных расходов. Полный pytest включает небольшие model fits; проверка без обучения требует отдельного выбора тестов.
+
+**Chronos-2 — отдельное окружение** с [requirements-chronos.txt](requirements-chronos.txt); сохранённый состав — в [requirements-chronos-lock.txt](requirements-chronos-lock.txt). Для inference нужны локальные веса; preflight сверяет входные данные, конфигурации и сохранённые результаты до загрузки весов, без проверки готовности Chronos/torch.
 
 ### Команды и конфигурации
 
-Справка по интерфейсам запусков и проверка готовности Chronos:
+Справка по интерфейсам запусков и preflight Chronos:
 
 ```powershell
 .\.venv\Scripts\python.exe run.py --help
@@ -237,11 +239,11 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe scripts/run_early_warning_synthetic.py --help
 ```
 
-Chronos preflight требует приватных данных и сохранённых результатов Prophet/CatBoost. Эти команды не запускают обучение.
+Chronos preflight требует `data/input/consumption_all_categories.csv` и исходных сохранённых каталогов `outputs/prophet_comparison_v1/` и `outputs/catboost_direct_v1/` с согласованными SHA256. Без них preflight завершится ошибкой отсутствующего файла. Эти команды не запускают обучение.
 
 Протоколы — в [configs/](configs/), запуск компонентов — в [scripts/](scripts/). Прогнозное сравнение: [prophet_comparison.yaml](configs/prophet_comparison.yaml), [national_local_lightgbm.yaml](configs/national_local_lightgbm.yaml). Предупреждения: [early_warning_full_panel.yaml](configs/early_warning_full_panel.yaml), [early_warning_synthetic.yaml](configs/early_warning_synthetic.yaml). Исходный CLI — [run.py](run.py).
 
-Команды выполненных опытов, seed, версии, Git revision и состояние рабочей копии сохранены в manifests. Воспроизведение предполагает наличие приватных входов и отдельные каталоги результатов. **Clean-clone check ещё впереди**; повтор полного расчёта и аудит публичного состава не подтверждены.
+Команды выполненных опытов, seed, версии, Git revision и состояние рабочей копии сохранены в manifests. Воспроизведение предполагает наличие приватных входов и отдельные каталоги результатов. Clean-clone audit проверяет установку, тесты и CLI отдельно от полного повторения экспериментов с приватными данными; последнее и аудит условий публикации требуют отдельной проверки.
 
 ## Структура репозитория и подробные результаты
 
@@ -263,6 +265,10 @@ reports/results/  — подробный experiment audit trail
 Атрибуция показателей — **СберИндекс**; исходные архивы предоставлены пользователем. Это приватный рабочий комплект владельца загрузок. Исходное описание и лицензионный документ сохранены в приватной рабочей копии; [DATA_NOTICE.md](DATA_NOTICE.md) указывает условия и необходимость отдельной проверки справочников и производных данных.
 
 Исходные данные, построчные производные таблицы и веса не следует автоматически включать в публичную копию. Их доступность и условия использования проверяются отдельно. `.gitignore` исключает приватные входы, outputs и локальные окружения; наличие итоговых сводок не означает разрешение на публикацию всего рабочего архива.
+
+Канал получения приватного комплекта в репозитории не опубликован: исходные архивы и условия доступа нужно запросить у владельца комплекта. Подготовленный CSV размещается в `data/input/consumption_all_categories.csv`: поля `date`, `territory_id`, `value`, уникальный ключ МО × месяц, конечные неотрицательные значения. Если есть поле `category`, выбирается «Все категории». Произвольный новый CSV не воспроизводит опубликованные результаты без совпадения исходных данных и протокола.
+
+Без приватных входов доступны чтение отчётов и презентации, CLI `--help` и тесты на synthetic fixtures. Повторение реальных экспериментов, Chronos preflight и пересборка финальной сводки требуют соответствующего исходного комплекта и сохранённых артефактов.
 
 ## Использование ИИ-инструментов
 

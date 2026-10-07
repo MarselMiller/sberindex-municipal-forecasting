@@ -1,0 +1,290 @@
+{
+  "task": "FINALIZATION / F5",
+  "date": "2026-10-07",
+  "verdict": "PASS WITH LIMITATION",
+  "cloned_commit": "6ada52638299415936742669b24d12b6792f64d7",
+  "remote": "https://github.com/MarselMiller/sberindex_python_mvp.git",
+  "branch": "main",
+  "remote_local_origin_main_equal": true,
+  "clone_path": "${PROJECT_PARENT}/sberindex_python_mvp_repro",
+  "clone_path_definition": "Sibling of the original checkout; PROJECT_PARENT is the parent directory named in the user task",
+  "clone_from_github": true,
+  "local_object_borrowing": false,
+  "private_data_copied": false,
+  "old_venvs_or_cache_used": false,
+  "environment": {
+    "python": "3.12.10",
+    "pip": "25.0.1",
+    "fresh_venv": true,
+    "system_site_packages": false,
+    "user_site_packages": false,
+    "requirements": [
+      "requirements.txt",
+      "requirements-ruptures.txt"
+    ],
+    "install_exit_code": 0,
+    "install_started_utc": "2026-10-07 11:52:48 UTC",
+    "install_finished_utc": "2026-10-07 11:56:12 UTC",
+    "install_elapsed_approx_seconds": 204,
+    "pip_check": "PASS",
+    "runtime_test_packages": 26,
+    "freeze": "environment_freeze.txt",
+    "optional_components_installed": [],
+    "install_notices": [
+      "New pip version available; pip was not upgraded"
+    ]
+  },
+  "pytest": {
+    "exit_code": 0,
+    "passed": 1432,
+    "deselected": 34,
+    "collected": 1466,
+    "warnings": 1,
+    "duration_seconds": 276.25,
+    "warning": "pandas RuntimeWarning: invalid value encountered in subtract; tests/test_direct_training.py::test_nonfinite_anchor_and_target_are_excluded",
+    "full_suite_run": false,
+    "selector_prefixes": 27,
+    "selector_file": "nofit_deselect.txt",
+    "selector_was_explicit_cli_arguments": true,
+    "private_data_required": false,
+    "research_outputs_created": false,
+    "temp_and_new_matplotlib_cache": "clone/.venv",
+    "actual_estimator_training_or_ruptures_fit": false
+  },
+  "cli": [
+    {
+      "command": ".venv/Scripts/python.exe run.py --help",
+      "exit_code": 0,
+      "error_kind": "",
+      "stdout_sha256": "1ef6ba3c06c969d31c136d335d14592e5317c84cbaead793f2074b9984dd0d87"
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/run_national_local_lightgbm.py --help",
+      "exit_code": 0,
+      "error_kind": "",
+      "stdout_sha256": "7caac9c8d790154837aeba851218d7dcf7fbba54d7671372ff102a88db869683"
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/run_chronos.py --help",
+      "exit_code": 0,
+      "error_kind": "",
+      "stdout_sha256": "cfb4c98ad10011276077fcb87a4d2f5902837397b2967883248056170c23b213"
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/run_early_warning_synthetic.py --help",
+      "exit_code": 0,
+      "error_kind": "",
+      "stdout_sha256": "6d9d5f39628c29e5c24da2ccbedc8b4a116578bd7dfb9376616129a77c897e06"
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/run_chronos.py --config configs/chronos_zero_shot.yaml --preflight-only",
+      "exit_code": 1,
+      "error_kind": "missing_private_input",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "other_cwd": {
+    "directory": "clone parent",
+    "help_interfaces_checked": 4,
+    "help_exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "help_stdout_identical_to_root": true,
+    "full_runs_not_tested": true
+  },
+  "imports": {
+    "count": 13,
+    "project_modules_from": "clone/src (explicit source path bootstrap)",
+    "libraries_from": "clone/.venv",
+    "old_or_global_packages_used": false
+  },
+  "configs": {
+    "tracked_yaml_count": 18,
+    "parsed": true
+  },
+  "links": {
+    "original_readme_occurrences": 37,
+    "unique_local_targets": 28,
+    "broken": 0,
+    "targets_tracked": true,
+    "corrected_readme_recheck": "PASS - targets checked against clean clone",
+    "readme_anchors_checked": 4,
+    "new_report_and_status_doc_links": {
+      "reports/final/REPRODUCTION_AUDIT.md": {
+        "occurrences": 7,
+        "unique_targets": 7,
+        "anchors": 0
+      },
+      "docs/PROJECT_CONTEXT.md": {
+        "occurrences": 4,
+        "unique_targets": 4,
+        "anchors": 0
+      },
+      "docs/TASKS.md": {
+        "occurrences": 3,
+        "unique_targets": 3,
+        "anchors": 0
+      }
+    }
+  },
+  "artifacts": {
+    "final_summary": true,
+    "methodology_report": true,
+    "final_png_count": 11,
+    "all_png_manifest_sha256_match": true,
+    "presentation_pdf_bytes": 395557,
+    "presentation_pdf_sha256": "3f9124fcee6363081058f4766c620e0d27ac3faf9d3206e871dab4f217ac6a69",
+    "presentation_sha_matches_tracked_f4_verification": true,
+    "pdf_header_eof_valid": true,
+    "pdf_text_lines": 240,
+    "pdf_stderr_lines": 0,
+    "pdf_text_extraction_tool": "MiKTeX/Poppler pdftotext; installer/maintenance/diagnose disabled, redirected fresh temporary directories",
+    "pdf_text_extraction_exit_code": 0,
+    "pdf_visual_rendering_checked_in_f5": false
+  },
+  "secrets_paths": {
+    "tracked_files": 231,
+    "text_files": 219,
+    "png_files": 11,
+    "pdf_files": 1,
+    "working_secret_candidates": 0,
+    "operational_absolute_paths": 0,
+    "global_no_absolute_paths": "FAIL - historical provenance",
+    "historical_absolute_path_lines": 23,
+    "historical_absolute_path_files": 9,
+    "historical_positions": [
+      {
+        "file": "reports/final/results_summary.json",
+        "lines": [
+          9337,
+          9390
+        ]
+      },
+      {
+        "file": "reports/results/E03_chronos_zero_shot.md",
+        "lines": [
+          33
+        ]
+      },
+      {
+        "file": "reports/results/E04a_online_detection.md",
+        "lines": [
+          5
+        ]
+      },
+      {
+        "file": "reports/results/E05b_trend_calendar.md",
+        "lines": [
+          280,
+          281,
+          288
+        ]
+      },
+      {
+        "file": "reports/results/E05c_macro_forecast.md",
+        "lines": [
+          527,
+          528
+        ]
+      },
+      {
+        "file": "reports/results/E05d_national_local_lightgbm.md",
+        "lines": [
+          758,
+          759
+        ]
+      },
+      {
+        "file": "reports/results/E06a_offline_detection.md",
+        "lines": [
+          414,
+          415,
+          416,
+          432
+        ]
+      },
+      {
+        "file": "reports/results/E07b_early_warning_full_panel.md",
+        "lines": [
+          180,
+          181,
+          182,
+          183,
+          184,
+          186
+        ]
+      },
+      {
+        "file": "reports/results/E07c_synthetic_early_warning.md",
+        "lines": [
+          317,
+          323
+        ]
+      }
+    ],
+    "additional_drive_root_mention": {
+      "file": "docs/TASKS.md",
+      "line": 69,
+      "in_cloned_commit": true
+    },
+    "synthetic_credential_url_refusal_test": {
+      "file": "tests/test_macro_cbr.py",
+      "line": 173,
+      "working_secret": false
+    },
+    "binary_raw_false_positives": 4,
+    "pdf_flate_streams_inspected": 21,
+    "scan_does_not_authenticate_credentials": true
+  },
+  "git": {
+    "clone_status_after_clone": "clean",
+    "clone_status_after_venv_install": "clean",
+    "clone_status_after_cli": "clean",
+    "clone_status_after_tests": "clean",
+    "clone_unexpected_tracked_modifications": 0,
+    "clone_experiment_output_files": [
+      "outputs/.gitkeep"
+    ],
+    "diff_check": "PASS - original and clone",
+    "protected_tracked_files": 197,
+    "protected_before_sha256": "bfd3c240afd742fd80ea9cfd2ce107d9342936ab89ac0591a372e0f0aadb183a",
+    "protected_recheck": "PASS",
+    "existing_vscode_untouched": true,
+    "protected_after_sha256": "bfd3c240afd742fd80ea9cfd2ce107d9342936ab89ac0591a372e0f0aadb183a",
+    "clone_protected_worktree_sha256": "775a7344c55a48d8a16e2b9c103fbe09db3aad20649accedc3af62d93773fe52",
+    "source_clone_content_comparison": "PASS - CRLF normalized for text; binary bytes unchanged",
+    "clone_final_status": "clean",
+    "read_only_clone_git_safe_directory": "per-command only; no global configuration change"
+  },
+  "changes": {
+    "modified": [
+      "README.md",
+      "DATA_NOTICE.md",
+      "docs/TASKS.md",
+      "docs/PROJECT_CONTEXT.md"
+    ],
+    "created": [
+      "reports/final/REPRODUCTION_AUDIT.md",
+      "reports/final/reproduction_audit/environment_freeze.txt",
+      "reports/final/reproduction_audit/nofit_deselect.txt",
+      "reports/final/reproduction_audit/verification.json"
+    ],
+    "models_metrics_configs_requirements_scripts_tests_unchanged": true,
+    "existing_reports_final_and_results_unchanged": true,
+    "fixes_are_local_uncommitted_not_in_remote_clone": true,
+    "readme_result_tables_and_image_paths_unchanged": true
+  },
+  "reproduction": {
+    "code": "PASS WITH LIMITATION",
+    "data": "NOT TESTED - private raw bundle absent",
+    "full_experiments": "NOT TESTED - private inputs/outputs/weights absent; no model runs",
+    "optional_learners": "NOT TESTED",
+    "full_pytest": "NOT TESTED - no new fit constraint"
+  },
+  "NO_NEW_MODEL_FITS": true,
+  "NO_NEW_EXPERIMENTS": true,
+  "NO_COMMIT_PUSH": true
+}

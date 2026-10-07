@@ -29,6 +29,8 @@
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
+| F4 | Финальная презентация | Выполнена; доступна в проверенном GitHub commit 6ada526 | 12 русских слайдов, Markdown outline, HTML source и PDF 16:9; одна MAE-таблица и четыре существующих PNG; SHA и доступность повторно проверены в F5 |
+| F5 | Clean-clone reproduction audit | Выполнен: PASS WITH LIMITATION | Новый GitHub clone 6ada526; Python 3.12.10/pip 25.0.1; fresh install + pip check; 1432 passed/34 deselected/1 warning без новых fit; CLI/imports/links/figures/PDF PASS; clone clean; private data/full experiments NOT TESTED; исторические provenance paths сохранены |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -37,10 +39,32 @@
 | N01 | Подготовить новости с датами доступности и территорией | E06b сохранён; E07a добавляет ограниченную v3 | 17 official decision cores под явным archive trust; 4 PDF объединены с релизами; исторических regional/municipal событий0; полная новостная интенсивность не установлена |
 | N02 | Проверить риск будущих шоков и вклад новостей | Feasibility E07a/E07b выполнен; predictive utility не оценена из-за недостатка дат/меток | Для продолжения нужны достаточные причинные train/test периоды; baseline, оценка предупреждений, время упреждения и сравнение без/с новостями |
 | I01 | Проверить объединённую модель и интерпретировать ошибки | Не начата | Проверен вклад компонентов, показаны успех, ложная тревога и пропуск при их наличии |
-| D01 | Подготовить русский отчёт и PDF-презентацию | F1 сводка, F2 README и F3 методологический отчёт готовы; PDF/презентация ещё не созданы | reports/final/RESULTS_SUMMARY.md и CSV/JSON — единый источник; METHODOLOGY_REPORT.md использует сохранённые числа и ограничения; следующий этап — презентация |
-| D02 | Проверить финальную воспроизводимость и публикацию | F1/F2/F3 локальные сверки выполнены; clean reproduction и аудит публикации не выполнены | SHA/ссылки/CSV↔JSON/figures проверены; CLI help/preflight относятся к F2; clean-clone — отдельный F5; приватные данные не публикуются автоматически |
+| D01 | Подготовить русский отчёт и PDF-презентацию | F1 сводка, F2 README, F3 методологический отчёт и F4 презентация готовы | reports/final/RESULTS_SUMMARY.md и CSV/JSON — единый источник; 12 слайдов и PDF доступны в GitHub clone; F5 не пересобирал результаты |
+| D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit выполнен с ограничениями; полное воспроизведение и аудит прав/состава публикации не подтверждены | Fresh clone/venv/no-fit tests/CLI/links/figures PASS; private data и full experiment reproduction NOT TESTED; исторические absolute provenance paths сохранены; финальный аудит публикации отдельно |
 
 ## Карточка текущей задачи
+ID: FINALIZATION / F5 — clean-clone reproduction audit. Выполнена 2026-10-07.
+Verdict: PASS WITH LIMITATION. Cloned commit 6ada52638299415936742669b24d12b6792f64d7.
+Новый отдельный sberindex_python_mvp_repro; tracked-tree clean до/после install,
+тестов и CLI. Python 3.12.10, pip 25.0.1, 26 runtime/test distributions;
+requirements.txt + requirements-ruptures.txt установлены без старых venv/cache,
+pip check PASS. Optional Prophet/LightGBM/Chronos не устанавливались.
+No-fit pytest: 1432 passed, 34 deselected, 1 warning, 276.25 с, exit 0;
+27 префиксов исключают настоящие estimator/Ruptures fit, полный pytest NOT TESTED.
+Четыре help работают также из parent CWD; 13 imports, 18 YAML, 37 README links
+и 11 PNG SHA проверены. PDF прочитан из clone, соответствует сохранённому SHA.
+Chronos preflight exit 1 из-за отсутствия приватного CSV; data/full reproduction
+NOT TESTED. Исходные данные, outputs и weights не копировались; новых fits нет.
+Статическая проверка 231 tracked-файла: рабочих секретов не найдено; operational
+paths переносимы. 23 исторические строки машинных путей в девяти report/JSON
+файлах сохранены; глобальное требование отсутствия абсолютных paths не выполнено.
+README/DATA_NOTICE уточнены и сверены с фактическим clone; code/config/models/tests,
+цифры и методология не менялись. [F5 audit](../reports/final/REPRODUCTION_AUDIT.md)
+содержит команды, границы проверки и remaining limitations.
+Git diff --check PASS; .vscode/ не затронута; commit/push отсутствуют.
+Следующий шаг: отдельный финальный аудит материалов и условий публикации.
+
+## F3: сохранённая предыдущая задача
 ID: FINALIZATION / F3 — единый методологический отчёт. Выполнена 2026-10-07.
 Финальный editorial pass выполнен: 7382 → 6665 слов вне таблиц (−9.71%).
 Отредактированы §§1–14 и вводный текст; §12 выделяет пять научных выводов.
