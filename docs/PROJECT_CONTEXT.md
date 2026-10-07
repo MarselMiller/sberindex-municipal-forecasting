@@ -7,6 +7,72 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## E08c: фиксированная forecasting ablation financial features
+
+Отдельно разрешена пользователем 2026-10-07, только research/e08-leading-indicators.
+Исходный HEAD cb4db21a48031761f930876b21119a69b4433b35; рабочая папка чистая,
+main 70c95d6d4686a991aa225d7e0649dda0d8e9b0ff. F1–F7 Source of Truth,
+README/final reports/presentation, прежние outputs/configs/модели не обновляются.
+Primary — E05d LN (LightGBMDirectNationalLocal), sensitivity — L0 (LightGBMDirect).
+Native LightGBM 4.6.0 adapter, L1/300 rounds/lr0.05/leaves31/seed42/jobs2/CPU,
+deterministic/force_col_wise, use_missing/zero_as_missing сохранены как E05d.
+F0 — исходный predict path, F1 — пять key-rate features E08b,
+F2 — пять FX, F3 — все десять. Новых financial features, sources B/C,
+learner families, seeds или tuning нет; N_hat остаётся исходным SeasonalNaiveYoY.
+
+До результатов зафиксирован criterion: F3 macro MAE ниже F0 и на validation,
+и на holdout минимум на двух совпадающих h из 1/3/6. Для qualifying h на каждом
+multi-origin split нужны >=2 улучшенные origins и отрицательная mean delta после
+удаления лучшей origin; epsilon1e-8 руб. Validation h6 имеет одну origin,
+концентрация UNDETERMINED; h12 только descriptive/fallback, в criterion не входит.
+Overall conclusion определяет только primary LN, L0 не заменяет её по лучшему score.
+Протокол/пары/выборка/target filters/validation target end June2024 не меняются.
+Training — вся доступная панель МО, оценка — прежние 64 pilot IDs по eligibility.
+
+Матрица E08b расширена тем же builder и offline cache на own-r Jan2023…Nov2024,
+23 dates из существующих training ranges + 12 evaluation origins, без нового split.
+На исходных 12 dates features/source cutoffs совпадают с frozen E08b.
+Training features присоединяются на own historical r, forecast — на O;
+source effective/availability<=own r<=O проверяются до создания learner.
+Нулевая h12 training sample сохраняет expense SeasonalNaive fallback, без fit.
+F0 gate сравнивает keys/target/protocol/status/predictions, 19 base features,
+training order/targets/signatures и native params с E05d; mismatch останавливает
+эксперимент до F1–F3. Partial/failed checkpoints не считаются завершёнными.
+E08c forecasting ablation complete. Код/config подготовлены; 83 relevant synthetic
+tests passed, 42.06 s, code0. Команды smoke/f0/ablation выполнены с code0;
+232 successful fits = 58 F0 + 174 financial, smoke 2 fits повторно не обучались.
+Runtime стадий 4249.700 s (70.83 min), таймер до итоговой агрегации/отчёта.
+F0 reproduction PASS до любых financial fits: прогнозы обеих семей совпали
+с E05d точно (0 руб.); max aggregate metric difference 4.547473508864641e-13.
+Независимый isolated checker PASS: 15176 predictions, 8 arms, 10 tables,
+26860 numeric cells без mismatches, max difference 3.637978807091713e-12;
+1631 artifact SHA, 240 training ledgers / 6653936 rows проверены.
+Financial own-r training rows 4990452, forecast rows 11382; source/value/origin,
+label/key/order/base-feature/native-parameter violations=0.
+Каждый arm: 1897 raw cases, 1890 evaluable; 7 missing truths сохранены,
+failed forecasts=0. h12: 8 no-fit tasks, прежний SeasonalNaive fallback,
+64 raw/63 evaluable cases, все MAE=4322.142857; только DESCRIPTIVE ONLY.
+
+Primary LN/F3 validation MAE deltas h1/3/6: +28.810/+99.792/-92.146 руб.;
+holdout: -7.923/+47.240/-33.745 руб. Обе части улучшаются только на h6,
+одного qualifying horizon недостаточно. h1 holdout: 4 improved/2 worsened,
+но leave-best-origin-out mean delta +9.557 руб.; concentration FAIL.
+h6 holdout: 4 improved/2 worsened, leave-best-out -6.913 руб.; PASS,
+validation h6 — одна origin, концентрация остаётся UNDETERMINED.
+F1 paired improving horizons отсутствуют, F2 только h6. L0/F3 улучшает
+validation всех h1/3/6, но ухудшает holdout всех трёх; primary не меняется.
+Исследовательский вывод по fixed criterion: NO STABLE FORECASTING UPLIFT.
+Это завершённый отрицательный результат, а не ошибка эксперимента.
+Артефакты: configs/e08c_leading_financial_forecasting.yaml,
+outputs/leading_financial_forecasting_e08c_v1/, reports/results/e08c/;
+отчёт reports/results/E08c_leading_financial_forecasting.md сформирован из saved CSV,
+proofs outputs/e08c_checks/independent_metrics.json и final_integrity.json.
+Следующий конкретный шаг — отдельно обсудить ограниченный h6 сигнал и
+несогласованность origin deltas; новое обучение/источники требуют отдельной задачи.
+National covariates не дают 2190 независимых observations; ограничения target
+vintages, L=0, 24 месяцев и уже просмотренного holdout сохраняются.
+NO TUNING; NO NEW MODEL FAMILY; NO SOURCE OF TRUTH CHANGES; NO COMMIT/PUSH.
+
 ## E08b: causal loader и признаки на собственной origin
 
 Выполнен 2026-10-07 в research/e08-leading-indicators, исходный HEAD

@@ -28,6 +28,7 @@
 | E07c | Controlled synthetic early-warning benchmark | Completed: код, unit tests, smoke/full, метрики, bootstrap, 3 графика, независимая сверка и один полный pytest; research phase closed | 600/200/300 ряда по24месяца;360/120/180событий;TRAIN fit/VALIDATION threshold/TEST;1367passed/1warning;160защищённыхфайлов и frozenYAML сохранены;результаты только synthetic |
 | E08a | Leading Financial Indicators: source / availability / vintage audit | Выполнен; полный vintage/availability ledger остаётся E08b | Ветка research/e08-leading-indicators; 10 series A2/B7/C1, шесть shortlist families / восемь representations; primary key rate+official FX; B только sensitivity, unsecured C и top10 исключены; metadata/схемы/ссылки/causal assumptions проверены; без fits, feature matrix, metrics, commit/push |
 | E08b | Causal loading и origin-aware financial features | E08b complete; Ready for E08c feature layer | Только A key rate/official USD-RUB; 1016/990 observations, 36 решений/23 changes; 12 прежних origins × 10 features, missing 0; own-cutoff/effective/future mutation/determinism/holiday/national/June checks PASS, 65 synthetic tests; 240 independently checked cells; без моделей/метрик/EW training/commit/push |
+| E08c | Fixed forecasting ablation financial indicators | E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT | F0 E05d exact reproduction; 232 fits, 4249.700 s; 83 tests и independent 26860-cell audit PASS; LN/F3 paired improvement только h6, нужно >=2h; own-r/cases/params checks PASS; h12 descriptive fallback; без tuning/new family/SoT changes/commit/push |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -47,6 +48,37 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08c — fixed forecasting ablation with leading financial indicators.
+Разрешена 2026-10-07, branch research/e08-leading-indicators, base cb4db21.
+E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT.
+Код/config подготовлены; 83 relevant synthetic tests passed, 42.06 s, code0.
+Smoke/f0/ablation команды code0; 232 successful fits (58 F0 + 174 financial),
+runtime стадий 4249.700 s, smoke 2 fits входят в 58 и не повторяются.
+F0 gate PASS до финансовых fits: exact predictions difference 0 руб.,
+max aggregate metric difference 4.547473508864641e-13.
+Метрики получены: 15176 predictions/8 arms, 1897 raw/1890 evaluable на arm,
+7 missing truths сохранены, failed=0; h12 SeasonalNaive fallback без fits.
+Independent isolated checker PASS: 10 tables, 26860 numeric cells, 0 mismatches,
+max difference 3.637978807091713e-12; 240 ledgers/6653936 rows и 1631 SHA checked.
+Financial own-r training rows 4990452 / forecast rows 11382, нарушений cutoff,
+origin/value/key/label/order/base features/fixed native params нет.
+F0 воспроизводит E05d; только LN primary/L0 secondary, F1 key5/F2FX5/F3all10.
+Протокол/target/pairs/cases/seed/native parameters прежние, новых sources нет.
+Success criterion зафиксирован до fits в новой YAML: paired improvement на
+validation+holdout минимум двух h1/3/6 и сохранение negative mean origin delta
+после удаления лучшей origin; h12 в criterion не используется.
+LN/F3 обе части улучшает только h6 (validation -1.67%, holdout -1.78%);
+на h1 validation +2.10%, на h3 validation +3.54% / holdout +3.90%.
+Требование >=2 horizons не выполнено; h1 holdout leave-best-out +9.557 руб.
+L0/F3 все validation horizons улучшает, все holdout horizons ухудшает;
+это sensitivity, primary не выбирается по лучшему score.
+Артефакты outputs/leading_financial_forecasting_e08c_v1/, reports/results/e08c/,
+reports/results/E08c_leading_financial_forecasting.md, outputs/e08c_checks/.
+Следующий конкретный шаг — отдельно разобрать ограниченный h6 сигнал и
+несогласованность origin deltas; новое обучение/источники — отдельная задача.
+NO TUNING; NO NEW MODEL FAMILY; NO SOURCE OF TRUTH CHANGES; NO COMMIT/PUSH.
+
+## E08b: сохранённая предыдущая задача
 ID: E08b — causal loading and origin-aware leading financial features.
 Выполнен 2026-10-07 только в research/e08-leading-indicators, base f6f0cef.
 Сначала feature smoke на 2 origins, затем полный аудит 12 origins, оба code 0.
