@@ -4,8 +4,62 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b и подготовки E07a на 2026-10-07.
+E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
+
+## F1: единый источник финальных результатов
+Research phase закрыта на HEAD be6d993 (E07c). FINALIZATION ONLY:
+без новых fits, tuning, источников, изменения holdout и исследовательских опытов.
+F1 выполнена: reports/final/RESULTS_SUMMARY.md, results_summary.json и три CSV
+метрик — общая основа будущих README/методологического отчёта/презентации.
+Подача по смыслу:Forecasting; Structural change detection; News/external;
+Early warning; Limitations/reproducibility. IDs используются как provenance.
+Каждая итоговая metric row имеет real/synthetic/diagnostic/not_evaluated;
+отсутствующая real classifier evaluation остаётся null, не нулём.
+
+Forecasting: 9 основных стратегий, одинаковые 1890 ключей / 63 МО из E01/E05d,
+validation и просмотренный holdout отдельно; полный fallback сохранён.
+YoY лучше обоих Prophet на holdout h=1/3/6. National/Local + LightGBM имеет
+минимальную MAE среди этих 9 стратегий на h=1/3/6 holdout, но уступает YoY
+на validation; окончательный победитель не установлен. Ранее сохранённые
+trend-ablation иногда лучше этих 9, поэтому общий минимум не заявляется.
+h=12: одна origin, 0 direct training pairs, 63 fallback на стратегию, validation нет.
+Chronos-2 не улучшил сильный baseline; checkpoint позже backtest и возможный
+pretraining overlap ограничивают интерпретацию. MAE macro/micro и pooledR²
+проверены из сохранённых прогнозов; это пилот, не полная прогнозная панель.
+
+Detection: synthetic quality отдельно от real diagnostic counts; online delay
+и offline localisation не объединяются. Реальные 104/97/14 online alarms
+и 81/79 offline candidates не являются true positives. Prefix stability —
+ретроспективное сопоставление удлиняющихся префиксов. Native PELT objective
+limitation E06a сохранено; partitions и исходные результаты не заменялись.
+News v3: 93 URL / 197 snapshots / 89 canonical groups, 17 decision cores, 20 historical URL
+к последней O, 768 keys / 26 values + 26 flags / 7 temporal vectors; national copies
+не создают независимых spatial news. 21 confirmed snapshot всего и 20 URL
+к последней O имеют разные знаменатели. Исторических regional/municipal событий 0;
+archive completeness не установлена; news predictive utility не оценена.
+Макро A реально использованы по собственным датам; B scenario-only,
+региональные monthly CPI/wages и deflation недоступны/не выполнены.
+Real warning: 2190 МО / 73 weak events / 6 onset dates / 71 МО; k=1 train 14 / test 4 positives
+и 1/2 onset dates, k=3 train/test 0; B0–B4 не обучались. Synthetic S3 демонстрирует
+использование наблюдаемых предвестников controlled generator, не способность
+предсказывать реальные экономические шоки и не эффект реальных новостей.
+
+F1 scripts/build_final_summary.py: source audit без записи в старые результаты и без model imports,
+один запуск exit 0, 72 forecasting / 10 detection / 68 warning rows. 94 targeted PASS;
+один full pytest: 1461 passed / 1 прежнее warning / 334.87 s; узкое исправление выбора
+TEST в одном графике проверено дополнительно 31 targeted test (без изменения
+expectations). Builder не повторялся; corrected plot построен только из saved
+metrics. 990 финальных сверок PASS; 9 групп / 11 PNG просмотрены, source SHA и figure
+selection сохранены. Original builder code SHA и final code SHA различены;
+full suite начат до plot correction, затронутые F1 правила проверены после неё.
+Единственное старое текстовое расхождение — «НЕ ЗАПУСКАЛОСЬ» в Prophet YAML;
+числа основных проверенных report tables совпадают с artifacts.
+AI disclosure draft подготовлен отдельно (ChatGPT/Codex; Claude не подтверждён).
+Reports игнорируются Git: .gitignore не менялся, никаких автоматических git add / commit / push.
+README/прежние reports/results/outputs не переписывались. Clean reproduction
+и состав публичной публикации остаются отдельными непроверенными задачами.
+Следующий шаг: F2 README из этой сводки; отчёт/PDF ещё не созданы.
 
 ## Цель
 Прогнозирование потребительских расходов на уровне муниципальных образований (МО)

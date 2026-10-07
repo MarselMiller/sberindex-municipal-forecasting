@@ -1,0 +1,5 @@
+k,scope,panel_municipalities,cases,municipalities,forecast_origin_dates,eligible_cases,fully_known,positives,negatives,censored_or_missing,right_censored,known_active_cases,unique_events,positive_event_onset_dates,positive_warning_origin_dates,municipalities_with_event,share_municipalities_with_event,positive_rate,registry_events,registry_event_onset_dates,registry_municipalities_with_event,registry_share_municipalities_with_event
+1,train,2190,2023,2023,1,2023,2023,14,2009,0,0,0,14,1,1,14,0.0063926940639269,0.0069204152249134,73,6,71,0.0324200913242009
+1,test,2190,3974,1999,2,3974,3974,4,3970,0,0,0,4,2,2,4,0.0018264840182648,0.0010065425264217,73,6,71,0.0324200913242009
+3,train,2190,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,,73,6,71,0.0324200913242009
+3,test,2190,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,,73,6,71,0.0324200913242009
