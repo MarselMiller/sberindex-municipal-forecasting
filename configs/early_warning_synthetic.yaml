@@ -1,0 +1,102 @@
+# E07c generator, models and evaluation fixed before TEST evaluation.
+experiment: early_warning_synthetic_v1
+experiment_date: '2026-10-07'
+seed: 42
+benchmark_type: synthetic_controlled_not_real_economic_shock_prediction
+cohorts:
+  train: {size: 600, seed: 420101}
+  validation: {size: 200, seed: 420201}
+  test: {size: 300, seed: 420301}
+generator:
+  months: 24
+  event_fraction: 0.6
+  unanticipated_fraction: 0.25
+  controls_false_precursor_fraction: 0.35
+  count_policy: round_fraction_times_cohort_size_without_metric_selection
+  onset_index_range: [16, 20]
+  precursor_lead_range: [1, 3]
+  level_range: [800.0, 1600.0]
+  trend_monthly_fraction_range: [-0.002, 0.003]
+  seasonality_amplitude_fraction_range: [0.08, 0.20]
+  shift_magnitude_fraction_range: [0.25, 0.50]
+  shift_duration: persistent_until_series_end
+  shift_direction: equiprobable_positive_negative
+  high_noise_fraction: 0.25
+  low_noise_fraction_range: [0.02, 0.05]
+  high_noise_fraction_range: [0.08, 0.12]
+  strong_precursor_fraction: 0.5
+  weak_precursor_strength_range: [0.35, 0.8]
+  strong_precursor_strength_range: [0.9, 1.7]
+  endogenous_channel_probability: 0.7
+  external_channel_probability: 0.8
+  anticipated_channel_policy: at_least_one_channel_with_stochastic_observations
+  endogenous_slope_fraction: 0.025
+  precursor_volatility_multiplier: 0.7
+  macro_ar_phi: 0.55
+  macro_noise_sigma: 0.6
+  macro_pulse_multiplier: 2.0
+  news_baseline_rate: 1.2
+  news_pulse_multiplier: 4.0
+  false_episode_policy: same_precursor_distribution_as_anticipated_events_no_shift
+  series_seed_policy: cohort_seed_times_100000_plus_series_index
+labels:
+  horizons: [1, 3]
+  min_history: 12
+  target: true_generator_onset_in_O_plus_1_through_O_plus_k
+  availability: complete_future_window_O_plus_k_no_weak_confirmation_required
+  active_exclusion: generator_onset_at_or_before_O_target_only_never_feature
+  right_censoring: unknown_not_negative
+features:
+  baseline_model: SeasonalNaiveYoY
+  yearly_growth_window: 3
+  yearly_growth_bounds: [0.5, 2.0]
+  rolling_window: 3
+  detector_warmup: 3
+  detector_relative_scale_floor: 0.03
+  detector_absolute_scale_floor: 1.0
+  cusum: {allowance: 0.5, threshold: 5.0}
+  ewma: {alpha: 0.3, threshold: 3.0}
+  bocpd: {hazard: 0.041666666666666664, threshold: 0.5, recent_run_max: 2}
+  metadata_in_feature_matrix: forbidden
+  offline_breakpoints: forbidden
+models:
+  names: [S0, S1, S2, S3]
+  backend: prefer_installed_sklearn_else_scipy_equivalent_L2_logistic
+  C: 1.0
+  max_iter: 2000
+  random_state: 42
+  class_weight: null
+  n_jobs: 1
+  imputation: train_only_median_existing_missing_flags
+  scaling: train_only_population_standard_deviation
+  feature_filter: train_only_all_missing_constant_exact_numeric_duplicates
+threshold:
+  objective: validation_row_f1
+  false_alerts_per_12_control_months_max: 1.0
+  candidates: observed_validation_probabilities_plus_0.5_1.0
+  tie_break: higher_threshold
+  fallback: 0.5
+  test_access: forbidden
+evaluation:
+  calibration_bins: 10
+  bootstrap_resamples: 500
+  bootstrap_seed: 420401
+  ci_level: 0.95
+  bootstrap_unit: whole_series_id_with_multiplicity
+  scenarios: [base_all, weak_precursor, strong_precursor, high_noise, controls_false_precursor]
+  event_matching: earliest_pre_onset_alert_one_event_once_repeats_recorded_separately
+  false_alert_unit: false_monthly_alert_per_12_monitored_at_risk_months
+  alert_precision: deduplicated_successes_divided_by_successes_plus_false_monthly_alerts
+  pr_auc_definition: average_precision_step_integral_ties_grouped
+  examples: {model: S3, primary_k: 3, selection: lexicographic_series_id_then_origin}
+runtime:
+  parallel_jobs: 1
+  max_parallel_jobs: 2
+  memory_stop_gib: 5.0
+  blas_threads: 1
+smoke:
+  sizes: {train: 40, validation: 16, test: 20}
+  seed_offset: 1000
+output_dir: outputs/early_warning_synthetic_v1
+smoke_output_dir: outputs/early_warning_synthetic_smoke_v1
+report_path: reports/results/E07c_synthetic_early_warning.md

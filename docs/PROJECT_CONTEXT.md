@@ -79,6 +79,69 @@ GitHub-репозиторий: код, README, конфигурации, тес�
 сводок потребуется отдельное место, например reports/results/ и reports/figures/.
 
 ## Последний согласованный шаг
+E07c completed — controlled synthetic early-warning benchmark выполнен. Реальные
+E07a/E07b feasibility результаты не заменяются синтетикой; данные/старые
+модули/config/outputs сохранены. Финальные checks пройдены;
+experimental research phase closed, разрешена только FINALIZATION:
+README, методологический отчёт, сводка, презентация, clean reproduction check.
+Новые модели/источники/tuning после E07c не предлагаются.
+
+## E07c: зафиксированный controlled synthetic protocol
+configs/early_warning_synthetic.yaml, SHA d7277fd317e64d543224ccb034f960edbe0a555203fbc8ddb10c90e97f6dde61,
+зафиксирован до TEST. Cohorts TRAIN600/VALIDATION200/TEST300 по24месяца;
+seeds420101/420201/420301, series_seed=cohortseed×100000+index, IDs disjoint.
+60%series с persistentlevelshift,25%events intentionally withoutprecursor,
+35%controls с ложными stochastic precursor episodes; round-half-up counts.
+Сезонность/слабыйtrend/разныйnoise/силаcue; onset months17…21, randomlead1…3.
+Истина — onset генератора в(O,O+k], k1/3; labelknownO+k по полномуfinite
+будущему окну, край unknown; oracle active exclusion onset≤O target-only.
+Это не меняет weak residual criterion/confirmationT+2 E07a/E07b; synthetic
+truth, искусственная наблюдаемость и oracle active filter явно ограничивают
+перенос выводов на реальные условия. Oracle/latent metadata не features.
+History + existing causalCUSUM/EWMA/BOCPD + stochastic external channels;
+SeasonalNaiveYoY h1 prefixes, первые3finiteerrors causalwarmup, фиксированная
+robustscale, detectorstateбезreset. Offlinebreakpoints запрещены. S0trainprior,
+S1history,S2+detector,S3+external; trainonlyfilter/median/std прежнегоE07b.
+Sklearn absent, SciPy1.17 available; L2logistic summedlogloss+||w||²/(2C),
+unpenalizedintercept; C1/maxiter2000/seed42/noclassweight, optimizerdiagnostics.
+Threshold maximizes validationF1 under≤1falsecontrolmonthlyalert/12monitored
+controlmonths; tiehigher, fallback.5; TEST не используется для fit/selection.
+Event warning строгодоonset, oneeventonesuccess, repeatsнеувеличиваютrecall;
+whole-seriesbootstrap500/seed420401,5fixedstressscenarios+anticipatedsplit.
+25%withoutcue дают75%cue-basedreference, не строгий потолок приchancewarnings.
+120целевыхtests и smoke40/16/20 PASS; full experiment exit0/37.363s/
+peak0.177GiB,CPU/BLAS/jobs1, denseestimate0.00746GiB. Наблюдений26400,
+feature rows14300/70numeric candidates, labelaudit28600; events360/120/180,
+unanticipated90/30/45, controlsfalseepisodes84/28/42. TESTknownat-risk
+2722rows/180positive(k1),2482/540(k3); classbalance6.613%/21.757%.
+S0validationbudget приводиткthreshold1/noalerts; AP.06613/.21757, eventrecall0,
+eventprecision/lead undefined. S1AP.12107/.32796,eventrecall.21667/.26667;
+S2AP.15540/.38974,eventrecall.16667/.4; S3AP.34054/.53794,
+eventrecall.42778/.61667,alertprecision.37379/.51628,medianlead1/2,
+FAR.56870/.50282 per12monitoredmonths. Detector effect mixed: ranking вырос,
+но k1recall упал при выбранномvalidationthreshold; externalgroup synthetic
+utility выросла на обоихk, без вывода о пользе реальныхnews/macro.
+S3 anticipated recall.54074/.74074, unanticipated.08889/.24444; предупреждения
+безcue возможныслучайно/поprior,75%не строгийматематическийпотолок.
+Stressfalsecontrol FAR1.119/1.6, бюджетvalidationне гарантиянаtestsubset.
+Whole-seriesbootstrap500 и48CI сохранены; S3eventrecall95%CI
+[.35399,.50276]/[.54611,.68927]. Фиксированные3examples/PNG:
+test_000002successfullead1,test_000000falsecontrol,test_000006missed.
+38034independentnumericcomparisons PASS, includingallprobabilities,
+TRAINstats,validationthresholds,scenarios/metrics/CI/examples; helper не
+используетпроектныеscoringAPIs. Одинfullpytest1367passed/1warning/299.69s,
+exit0; warning из прежнего nonfinite direct-trainingtest. 154code/test/config
+файла неизменны во времяpytest;160защищённыхпрежнихфайлов,HEADdf580ac и frozen
+YAMLSHA сохранены. Полный старыйartifacttree не пересканировался; исходные
+данные иoutputs E01–E07b не менялись. Всеnewartifacts/logs вoutputs/early_warning_synthetic_v1
+иoutputs/e07c_checks; reports/results/E07c_synthetic_early_warning.md получен
+изсохранённыхCSV/JSON/PNG. Команды/seed/versions/codeSHA/Gitdirty сохранены.
+Sklearnпо-прежнемуотсутствует; фактическииспользованSciPy, сеть/установок/
+commit/push нет. Clean reproduction внерабочейкопии ещё не проверена.
+E07c completed. Experimental research phase closed; только финализация,
+без новых ML-экспериментов, источников или tuning.
+
+## E07b: предыдущий завершённый шаг
 E07b завершён: расширение неизменного E07a на все2190МО, полная разметка,
 признаки, аудит, отчёт и один полный pytest. B0–B4 не обучались: фиксированный
 gate не пройден ни для k1, ни для k3. Старые E01–E07a артефакты сохранены,
