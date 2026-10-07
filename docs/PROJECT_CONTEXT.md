@@ -4,7 +4,8 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c, E05d, E06a и E06b на 2026-10-07. Источник каждого нового вывода указан ниже.
+E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b и подготовки E07a на 2026-10-07.
+Источник каждого нового вывода указан ниже.
 
 ## Цель
 Прогнозирование потребительских расходов на уровне муниципальных образований (МО)
@@ -78,6 +79,83 @@ GitHub-репозиторий: код, README, конфигурации, тес�
 сводок потребуется отдельное место, например reports/results/ и reports/figures/.
 
 ## Последний согласованный шаг
+E07a: подготовлены данные, слабая разметка и аудит временной возможности
+раннего предупреждения; classifier не обучается. Старые прогнозные модели,
+метрики и news v1/v2 сохранены; обычный forecasting search остаётся закрыт.
+Полноценная проверка E07b на этой истории не обеспечена: у k1 одна train-дата
+с одним positive и две test-даты без positive; у k3 нет временной train/test пары.
+Следующий шаг — человеческий просмотр очереди и отдельное решение о более
+длинной истории/проверенной доступности, без автоматического обучения.
+
+## E07a: устойчивые решения и фактическая подготовка
+Конфигурация configs/early_warning_feasibility.yaml зафиксирована до подсчёта
+weak events (SHA3027d57dce91fd87d83dbb7d5f1ef462019fd0e20853466d4ce51f58445a2c65).
+Результаты outputs/early_warning_feasibility_v1/ и
+reports/results/E07a_early_warning_feasibility.md; news policy отдельно
+configs/news_events_v3.yaml → outputs/news_events_v3/.
+Итоговые проверки пройдены: 1167 passed, 1 warning in 203.43s (0:03:23); exit=0, один полный прогон.
+763 проверки новых artifacts PASS; 292 используемых старых файлов и
+зафиксированный protocol SHA сохранены; code/test/config неизменны во время pytest.
+Полный аудит 9005 прежних файлов повторно не запускался.
+
+Допуск не определяется форматом. E06b использовал explicit archive trust для
+четырёх original official PDF без независимого исторического SHA; весь текущий
+HTML/index оставлял retrieval-only. E07a проверил16saved key-rate releases и
+добавил только недостающий20.12.2024. Два новых GET/157889bytes; 17решений
+2023–2024,9unchanged/8increase. Допускается только согласованная первая фраза
+решения по official dated original archive, заголовку, ставке/действию, точной
+publication footer, URL и datedmeeting row. Это допущение, не доказанный oldvintage.
+Поздний commentary не backdated; later article revision неотделимогоcore
+запрещает admission. Catalogue/footer update не article update. Lenta остаётся
+retrieval-only;46dateModified>datePublished,25равны. Неопределённая география
+остаётся unknown; национальность новых core обоснована официальным решением ЦБ.
+PDF/release/версии одного decision_date имеют один canonical event;
+4E05cPDF не независимая новая macro information. Effective date пуст при
+отсутствии прямого фрагмента; только15.08.2023 содержит её явно.
+
+Полный source audit объясняет180saved snapshots/93documents. V3сохраняет их
+и17core versions:197snapshots,93documents,89canonical groups,17decision events.
+К последней O20historical URL-documents:16release+4PDF, сгруппированных без
+удвоения события. Dec20после всехO не даёт исторического прироста. 768keys64МО×12O
+включая1471; news30d>0на8O/512cases,7temporal vectors против6v2.
+Regional/municipal historical=0; частичные counts не полная интенсивность;
+64national copies на одной O не независимые наблюдения.
+
+Weak target строго **сдвиг ошибки сохранённого causal SeasonalNaiveYoY h1**,
+не сдвиг уровня расходов и не истинный экономический шок. Сезонность прежнего
+baseline и causalYoY-growth сохранены. Перед onsetT четыре календарных errors
+T−4…T−1: center median, scale=max(1.4826MAD,.03median(abs(y_pred)),1рубль).
+Все триerrors T…T+2 должны иметь одну сторону ≥3scale; все7finite, nofill.
+Same-direction gap≤2/active unrecovered regime — continuation. Recovery два
+signed z<1.5 по frozenbaseline; oppositecandidate может быть возвратом ошибки,
+нужна независимая интерпретация. Метки не основаны на тревогах CUSUM/BOCPD или
+fullsample PELT/BinSeg. Три даты onset/confirmation/warning разделены.
+
+Warning horizon k1primary/k3extra, независимо от expense H1/3/6/12.
+Положительная и отрицательная метки ждут полного окна O+1…O+k+2 и baseline;
+при delayed availability ждут все finite dependencies regime-history prefix.
+Right censoring/missingpast не становятся0. Active exclusion причинный наO;
+retrospective inside regime audit-only. Expense L0/vintages по-прежнему
+неподтверждённое допущение E01. 4weak events на3onset dates,1536cases.
+Cutoff2024-07/testOAug–Nov: k1train63(1pos/62neg),1O/1event date;
+at-risk test120(0pos/120neg),2O. Positive в общем test исключён как уже активный
+наO regime, явно сохранён в общей таблице; не удалён ради результата.
+k3train0/test-evaluable0. Нельзя оценить recall/упреждение/news increment;
+FP rate/specificity на negative test возможны описательно, пока не считались.
+Просмотренная история не новый blindtest; weak labels не independenttruth.
+
+Подготовлены расходы/динамика/saved errors,32prefix history values+flags/3phases,
+10A-only national annual macroforecast fields calendar yearO,52news values/flags.
+Источники/максимальная дата зависимости<=O сохранены. E04selected params replay
+не доказательство их исторического выбора; будущая calibration исключена.
+Offline breakpoints только diagnostic/manualreview, неfeatures/truth.
+Fullhistory news-column audit только descriptive; future selection TRAIN ONLY,
+отдельные train k1/k3 audit сохранены. В k1train все52news поля постоянны,
+3полностью пусты; вклад news не идентифицируется на одной национальной train-дате. 8 строк очереди, 7 уникальных случаев:
+candidates/controls/missing,
+pending_human_review; AI review не независимая человеческая разметка.
+
+## Предыдущий согласованный шаг E06b
 E06b выполнен как pipeline и ограниченный реальный news/events-корпус.
 Таблицы events и features фактически построены; полный pytest и независимая
 сверка прошли. E07 classifier не запускался. Обычный forecasting model search

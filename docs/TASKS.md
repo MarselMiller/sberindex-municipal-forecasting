@@ -7,7 +7,7 @@
 
 | ID | Задача | Статус | Критерий завершения |
 |---|---|---|---|
-| ENV01 | Проверить среду | Частично подтверждена | CPU/RAM/revision E03 сохранены; отдельная .venv-chronos; pytest E06b: 1064 passed; 33 пакета E06a неизменны; прежний pip check E06a успешен; точное расширение VS Code не проверено |
+| ENV01 | Проверить среду | Частично подтверждена | CPU/RAM/revision E03 сохранены; отдельная .venv-chronos; pytest E07a: 1167 passed; версии сохранены в manifest, установок нет; прежний pip check E06a успешен; точное расширение VS Code не проверено |
 | ENV02 | Разобрать один ряд и минимальный запуск | Объяснение автором не проверено | Отдельный исходный критерий объяснения цели, горизонта и MAE сохраняется |
 | GIT01 | Проверенный начальный Git-репозиторий | Git существует; аудит публикации не подтверждён | HEAD на начало E02a: ab3aa50; проверку всего состава публичной публикации не приписывать этому шагу |
 | E01 | Локальный пилот Prophet и диагностика сопоставимости | Выполнены; диагностика принята | Совпадают множества ключей шести моделей; переход 64→63 объяснён, метрики/покрытие сверены, ошибки/резервы проверены |
@@ -22,20 +22,87 @@
 | E05c | Проверить вклад доступных национальных макропрогнозов | Выполнен: код, тесты, smoke/full, независимая сверка и отчёт | 501 passed; 73 A строки проверены офлайн; K0/19→24→29 признаков, исторический join/исходные пары сохранены; 12/12 выпусков, 58/58 fit, 0 failed; три области MAE/R² и provenance; смешанный результат без смены протокола |
 | E05d | Финальные National/Local decomposition и LightGBM benchmark | Выполнен: код, pytest, smoke/full, метрики, независимые сверки и отчёт | 666 passed; 7 вариантов/12 выпусков/87 новых fit/0 failed; C0 и ориентиры без fit; 19 признаков, точные исходные/ratio пары, A/B, national MAE, 4 контраста/robustness; 2495226 lineage-строк/217 артефактов/2525 прежних файлов сверены; отчёт 12 таблиц PASS |
 | E06a | PELT + Binary Segmentation | Выполнен: код, pytest, smoke, synthetic, real/prefix, проверки и отчёт | 865 passed; прежние 1260 validation + 1260 test рядов E04a; оба penalty=4 в бюджете; 208 групп метрик/728 CI; 63 МО/160 полных кандидатов/1512 префиксов; отдельная online-справка, ограничение native PELT сохранено, 3975 прежних файлов неизменны |
-| E06b | News/events | Выполнен: код, pytest, сбор, реальные events/features, аудит и отчёт; историческое покрытие ограничено | 1064 passed; 93 документов / 93 canonical events / 768 keys / 26 features+flags; 4 historical PDF по archive-trust, regional historical=0; независимая сверка PASS; E07 не запускался |
-| E07 | Early warning | Запланирован; не начат | Протокол прогноза будущего события, baseline без/с новостями, упреждение вместе с FP/пропусками и независимая проверка; не подменять обнаружением уже начавшегося изменения |
+| E06b | News/events | Выполнен: код, pytest, сбор, реальные events/features, аудит и отчёт; историческое покрытие ограничено | 1064 passed; 93 документов / 93 canonical events / 768 keys / 26 features+flags; 4 historical PDF по archive-trust, regional historical=0; независимая сверка PASS; E07 classifier не запускался |
+| E07a | Подготовка данных и слабой разметки | Выполнена: код, реальные таблицы, аудит, отчёт и один полный pytest | Source audit; отдельная news v3; зафиксированный конечный weak criterion; 1536 cases, причинные признаки, temporal availability, manual queue; без classifier fit |
+| E07b | Early warning classifier | Не начат; полноценная оценка на этой истории невозможна | k1: одна train-дата/один positive, две test-даты без positive; k3: нет train/test; сначала человеческий аудит слабых меток и отдельное решение о более длинной истории |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
-| C01 | Определить шок и протокол разметки | Синтетический протокол выполнен в E04a; реальная разметка не готова | Устойчивый level≥3, окно 0…3, one-to-one, FP/повторы/исключения и generator truth зафиксированы; экономический шок не подтверждён |
+| C01 | Определить шок и протокол разметки | Синтетический E04a и weak E07a подготовлены; независимых реальных меток нет | E07a размечает трёхмесячный сдвиг сохранённой ошибки SeasonalNaiveYoY, не уровень расходов и не истинный экономический шок; human review pending |
 | C02 | Сравнить онлайн-детекторы и ретроспективную сегментацию отдельно | Онлайн E04a и offline E06a выполнены; реальная оценка без меток не выполнена | Раздельные таблицы/доступ к будущему; precision/recall/F1/FAR/miss/локализация+whole-series CI; real/prefix hindsight и native-library ограничения; общий победитель/early warning не объявлены |
-| N01 | Подготовить новости с датами доступности и территорией | Pipeline выполнен E06b; историческое покрытие частичное | Сохранены источники/снимки/временные поля/география/дедупликация/контроль утечки; 4 historical national PDF, полнота региональных исторических данных не подтверждена |
+| N01 | Подготовить новости с датами доступности и территорией | E06b сохранён; E07a добавляет ограниченную v3 | 17 official decision cores под явным archive trust; 4 PDF объединены с релизами; исторических regional/municipal событий0; полная новостная интенсивность не установлена |
 | N02 | Проверить риск будущих шоков и вклад новостей | Не начата | Есть baseline, оценка предупреждений, время упреждения и сравнение без/с новостями |
 | I01 | Проверить объединённую модель и интерпретировать ошибки | Не начата | Проверен вклад компонентов, показаны успех, ложная тревога и пропуск при их наличии |
 | D01 | Подготовить русский отчёт и PDF-презентацию | Не начата | Все выводы связаны с результатами запусков; отражены архитектура, метрики и ограничения |
 | D02 | Проверить финальную воспроизводимость и публикацию | Не начата | Из чистой копии воспроизводится согласованный сценарий; данные не раздаются без проверки условий |
 
 ## Карточка текущей задачи
+ID: E07a — подготовка и feasibility, без обучения классификатора.
+Новая конфигурация configs/early_warning_feasibility.yaml зафиксирована до
+подсчёта событий, SHA3027d57dce91fd87d83dbb7d5f1ef462019fd0e20853466d4ce51f58445a2c65.
+configs/news_events_v3.yaml задаёт отдельную политику admission;
+news_events_v1/v2 и старые отчёты сохранены.
+
+Source audit:180saved snapshots/93URL documents; два новых GET,
+157889bytes; 17/17 официальных решений ЦБ2023–2024 (9unchanged/8increase).
+Исторически допускается только первая фраза решения под явным доверием
+датированному оригинальному архиву, без независимого oldSHA. Формат HTML/PDF
+не критерий. Lenta retrieval-only;46updated>published и25updated==published
+статей разделены. Publication/event/article-update/catalogue-update/retrieval
+не смешиваются. Новые сетевые файлы изолированы от старого cache.
+Четыре PDF E05c объединены с теми же решениями, не независимые новые источники.
+20.12.2024 позже последнего O и не увеличивает исторические features.
+
+news v3:197snapshot/core versions,93documents,89canonical groups;
+17decision events,20historical URL-documents к последней O (16release+4PDF).
+768исходных ключей64МО×12O сохранены. 8O/512cases с news30d>0;
+7уникальных temporal news vectors против6v2. Regional/municipal historical=0;
+source_archive_complete=false. Ноль частичного корпуса не означает нет события;
+национальные копии64МО не независимы.
+
+Weak criterion: четыре непосредственно прошлых календарных residuals;
+median center; scale=max(1.4826MAD,.03median(abs(saved prediction)),1рубль);
+три будущих residuals одного signed направления ≥3scale от center.
+Все7месяцев finite, без fill. Сезонность — сохранённый causal h1SeasonalNaiveYoY
+с прежней поправкой YoY; цель — устойчивый сдвиг ошибки, не уровень расходов.
+Same-direction gap≤2 или unrecovered regime — continuation; recovery два
+signed z<1.5 месяца по frozen baseline. Opposite onset может означать возврат
+ошибки к прежнему baseline, а не истинное экономическое потрясение.
+Три даты onset T/confirmation T+2/warning O разделены. Метки known не раньше
+O+k+2; при delayed history также после зависимости regime prefix; right end
+censored, не0. Active risk filter использует только подтверждённый prefix state.
+
+4weak events на3onset dates;1536cases (k1/k3). Split cutoff2024-07,
+testO2024-08…11: k1train63(1pos/62neg) на1O/1event date,
+test-evaluable120(0pos/120neg) на2O; k3train0/test-evaluable0.
+Код classifier технически можно было бы подогнать на1positive, но надёжной
+валидации/оценки recall, пропусков, упреждения и news increment здесь нет.
+Доступна описательная проверка FP на negative test; она сейчас не выполнялась.
+
+Собраны expense/residual/online-prefix/macro/news candidates с provenance;
+online E04fixed params, без refit; macroA current calendar year forecasts,
+не месячные факты. Offline breakpoints только diagnostic, неfeatures/labels.
+Все52news колонки описаны, не выбраны автоматически; отдельный train-only audit.
+8 строк очереди (7 уникальных случаев) включают кандидаты/control/missing;
+pending_human_review, независимых человеческих меток0.
+outputs/early_warning_feasibility_v1/, outputs/news_events_v3/,
+outputs/early_warning_news_audit_v1/; отчёт
+reports/results/E07a_early_warning_feasibility.md.
+
+Целевые синтетические tests:103passed (labels34/features40/sources26/integration3).
+Один финальный полный pytest: 1167 passed, 1 warning in 203.43s (0:03:23); exit=0.
+763 проверки новых artifacts PASS; 292 старых файлов и protocol SHA неизменны.
+132 code/test/config файлов не изменились во время полного pytest.
+В train k1 все52news столбца постоянны (3полностью пусты); вклад news не идентифицируется.
+Проверка сохранности ограничена292используемыми старыми файлами, без повтора
+большого9005file audit. Первый integration guard обнаружил10savedE04placeholder
+строк без forecast metadata; сохранение1471иmissing покрыто regression.
+Начальная новая сборка сохранена отдельно *_initial_integration; окончательная
+повторена после исправления смешанных дат и label provenance, без смены критерия.
+Установок/обучения/commit/push/публикации нет. Следующий шаг — человеческая
+проверка очереди и решение по дополнительной временной истории, не auto E07b.
+
+## Предыдущая завершённая задача E06b
 ID: E06b — выполнен 2026-10-07 как воспроизводимый pipeline и ограниченный
 реальный корпус: event table и feature table действительно построены.
 configs/news_events_v2.yaml; scripts/build_news_events.py; шесть news_* модулей

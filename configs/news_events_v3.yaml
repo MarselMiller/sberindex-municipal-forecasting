@@ -1,0 +1,17 @@
+# E07a separate policy version; E06b v1/v2 remain frozen.
+experiment: news_events_v3
+seed: 42
+parent_config: configs/early_warning_feasibility.yaml
+parent_documents: outputs/news_events_v2/documents.csv.gz
+parent_samples: outputs/news_events_v2/forecast_cases.csv.gz
+admitted_core_records: outputs/early_warning_news_audit_v1/core_trusted_records.json
+decision_mapping: outputs/early_warning_news_audit_v1/document_summary.csv
+historical_policy: official_dated_original_key_rate_decision_core_archive_trust_no_independent_old_SHA
+scope: CBR_key_rate_decisions_2023_2024_including_unchanged
+versions: preserve_old_snapshots_first_available_version_locked
+canonical_id: cbr_key_rate_decision_YYYY_MM_DD_shared_by_release_PDF_translation
+unknown_geography: retained_unknown_except_explicit_official_national_decision_core
+history_start: '2023-01-01'
+corpus_is_complete_archive: false
+output_dir: outputs/news_events_v3
+build_command: python scripts/prepare_early_warning.py --config configs/early_warning_feasibility.yaml
