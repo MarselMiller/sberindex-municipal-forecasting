@@ -4,7 +4,7 @@
 
 ## 1. Проверяемая версия и изоляция
 
-- Репозиторий: [MarselMiller/sberindex_python_mvp](https://github.com/MarselMiller/sberindex_python_mvp).
+- Репозиторий: [MarselMiller/sberindex-municipal-forecasting](https://github.com/MarselMiller/sberindex-municipal-forecasting).
 - Ветка: `main`.
 - Cloned HEAD: `6ada52638299415936742669b24d12b6792f64d7` — `F4: add final presentation`.
 - Перед clone локальный HEAD, `origin/main` и фактический GitHub `refs/heads/main` совпали.

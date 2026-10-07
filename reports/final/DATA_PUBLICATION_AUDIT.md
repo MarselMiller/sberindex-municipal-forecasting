@@ -202,7 +202,7 @@ exit 0, также из parent CWD. Research **9 MISSING**, sources **5 MISSING*
 локальный Python 3.12, clone — системный launcher:
 
 ```powershell
-git clone --depth 1 --branch main https://github.com/MarselMiller/sberindex_python_mvp.git tmp/f7_clean_clone_e50e044
+git clone --depth 1 --branch main https://github.com/MarselMiller/sberindex-municipal-forecasting.git tmp/f7_clean_clone_e50e044
 # После явно перечисленного metadata-only overlay, из clone:
 py -3.12 -I -B -X utf8 scripts/check_data.py --profile public --json
 py -3.12 -I -B -X utf8 scripts/check_data.py --profile research --json
