@@ -7,6 +7,30 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## E08: clean-clone verification перед merge
+
+2026-10-08: отдельный GitHub clone в ../sberindex-municipal-forecasting_e08_verify,
+ветка research/e08-leading-indicators, HEAD f20e547649e5c6cdd40816da9dab6b5af133378e.
+До и после проверок дерево clone clean; SHA всех 298 tracked files сохранены.
+Создана новая .venv Python 3.12.10; установлены документированные requirements.txt
+и requirements-ruptures.txt с pip --isolated --no-cache-dir, pip check exit 0.
+Пять E08 modules импортированы из clone/src; 148 существующих E08 tests passed,
+0 failed/skipped/deselected/warnings. Real model fits и network calls в tests — 0;
+37 fit-вызовов относятся к RecordingLearner, который только сохраняет входы.
+Маленькие unit fixtures не являются новым исследовательским benchmark.
+42 требуемых artifacts/modules/configs/scripts/tests tracked; 183 relative links
+и 8 anchors PASS, E08d 12/12 targets portable, outputs hyperlinks отсутствуют.
+PDF читается установленными pdfinfo/pdftotext workers, exit 0: 12 страниц.
+Claims/сохранённые MAE и E08d 6/6/0, 4/4/0, non-estimable inference согласованы;
+secrets, private municipal source rows и absolute Windows runtime paths не найдены.
+Один предварительный stdlib inventory scan ошибочно использовал старый interpreter;
+его результат исключён, весь scan повторён system Python -I -B по новому clone.
+Imports/tests выполнялись только новой .venv. Reports/PNG/PDF/results не менялись,
+research runners, новые experiments/classifiers/fits/tuning не запускались.
+PASS — READY TO MERGE для code/artifact verification f20e547; полное повторение
+historical research не выполнялось. Proof: outputs/e08_clean_clone_checks/verification_summary.json.
+Следующий шаг — review результата и решение автора о merge; commit/push не выполнялись.
+
 ## E08d: переносимые ссылки перед merge
 
 2026-10-07, research/e08-leading-indicators; HEAD 7edcba4 и main не изменены.

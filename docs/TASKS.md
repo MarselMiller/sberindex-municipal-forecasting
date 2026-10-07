@@ -31,6 +31,7 @@
 | E08c | Fixed forecasting ablation financial indicators | E08c forecasting ablation complete; NO STABLE FORECASTING UPLIFT | F0 E05d exact reproduction; 232 fits, 4249.700 s; 83 tests и independent 26860-cell audit PASS; LN/F3 paired improvement только h6, нужно >=2h; own-r/cases/params checks PASS; h12 descriptive fallback; без tuning/new family/SoT changes/commit/push |
 | E08d | REAL financial early-warning diagnostic | E08d real financial early-warning diagnostic complete; NO REAL PRECURSOR EVIDENCE | Только frozen E07b/E08b; 12 unique origins, k1 6 positive/0 negative, k3 4 positive/0 negative; unknown сохранены; 7 CSV/2 figures/manifest, independent1788numeric+976NA PASS; contrasts/permutation/Holm NONESTIMABLE; без synthetic data, fits и tuning |
 | E08 integration | Включить завершённые E08a–E08d в итоговые материалы | Выполнена; E08 PRE-MERGE CHECK PASS | Claims/results сохранены; 12 E08d links и 183 relative links tracked; четыре byte-identical metadata/PNG copies в index; исходные outputs неизменны |
+| E08 clean clone | Проверить E08 code/artifacts из нового GitHub clone перед merge | Выполнена: PASS — READY TO MERGE | Clone f20e547; новая .venv Python 3.12.10/pip check PASS; imports 5/5; 148 tests passed, 0 skipped/deselected/warnings; 42 tracked files, 183 links/8 anchors, 12-page PDF, claims/security PASS; clone clean, 298 files unchanged; без реальных fits/research reruns/commit/push |
 | F1 | Final Results Summary | Выполнена: единая сводка, builder, тесты, проверка чисел и графиков | 72 forecasting / 10 detection / 68 early-warning записей; real/synthetic/diagnostic/not_evaluated; точные ключи и MAE/R²; один builder и один full pytest 1461 passed/1 прежнее warning; 990 финальных сверок; 9 групп/11 PNG; после исправления TEST-filter 31 targeted passed; новых fits/experiments нет |
 | F2 | Конкурсный README на русском | Выполнена: переписан из F1; редакторский проход завершён | 2664 слова / 2172 вне таблиц после сокращения; воспроизведение −38%; 4 результата, 9 моделей, отдельные online/offline и real/synthetic warning; 5 таблиц/4 PNG/AI disclosure/ссылки сохранены; 98 ячеек сверены; Mermaid syntax проверен; F1 artifacts неизменны; clean-clone не выполнялся |
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
@@ -50,6 +51,22 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: E08 CLEAN-CLONE VERIFICATION, 2026-10-08, research/e08-leading-indicators.
+Новый GitHub clone ../sberindex-municipal-forecasting_e08_verify:
+HEAD f20e547649e5c6cdd40816da9dab6b5af133378e, initial/final status clean.
+Новая .venv Python 3.12.10, requirements README установлены, pip check exit 0.
+Пять imports из clone/src и 148 no-real-fit tests PASS; 0 skips/deselected/warnings.
+RecordingLearner fit только сохраняет X/y; real fit/network guard counters=0.
+42 requested tracked files, 183 relative links/8 anchors и PDF 12 pages PASS.
+Claims/CSV/security проверки PASS; 298 tracked files SHA unchanged.
+Предварительный old-interpreter stdlib scan исключён и полностью повторён
+через system Python; imports/tests старую .venv не использовали.
+Reports/figures/PDF/research results не менялись; full research не пересчитывался.
+PASS — READY TO MERGE. Следующий шаг — review результата и решение автора о merge.
+Proof: outputs/e08_clean_clone_checks/verification_summary.json.
+NO NEW MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO COMMIT/PUSH.
+
+## E08d portability: завершённая предыдущая задача
 ID: E08d portability перед merge, 2026-10-07; research/e08-leading-indicators.
 В отчёте изменены только URL: семь CSV и run manifest перенаправлены к прежним
 tracked copies; два reviewed metadata JSON и две byte-identical PNG включены
