@@ -4,8 +4,35 @@
 Основа: предоставленные пользователем условия, архив sberindex_python_mvp.zip,
 README и сохранённый отчёт outputs/baseline_v1/experiment_report.md.
 Исходный паспорт дополнен фактически проверенными результатами E01, E02a, E02b, E03,
-E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F5 на 2026-10-07.
+E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F6 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
+
+## F6: финальный audit и cleanup публичного репозитория
+
+F6 выполнена 2026-10-07: PASS WITH LIMITATION. Base commit
+3371a44a90596551a897e56d585c89f00926157d (F5); main/origin/main/GitHub main
+совпали до правок. README получил верхние ссылки на методологический отчёт и PDF.
+Пять report-ссылок на локальные/private artifacts заменены текстовыми provenance
+paths и публичными targets; AI-ссылка сводки ведёт на disclosure README.
+README презентации исправляет устаревший local/untracked статус. Таблицы,
+формулы, научные claims, PNG, PDF, числовые CSV/JSON и research code сохранены.
+
+135 файловых links + 4 README anchors в четырёх основных документах проверены
+против tracked-дерева; дополнительно проверена сводка. 11 PNG, PDF, 35 figure
+source SHA и 21 table source SHA совпадают. AI disclosure ChatGPT/Codex согласован.
+Security scan 235 tracked-файлов не нашёл рабочих секретов. 23 абсолютные строки
+в девяти immutable provenance-файлах оставлены: они не runtime dependencies,
+переписывание нарушит frozen hashes. Упоминание корня диска в docs убрано.
+Глобальная no-absolute-path проверка остаётся FAIL с явным исключением.
+
+.gitignore дополнен IDE/build/dist/temp; приватные данные/локальные reports
+по-прежнему исключены, для нового FINAL_AUDIT.md разрешено точечное исключение.
+F4 source SHA — исторический снимок 6ada526, не хеши текущих редакций docs.
+F5 code reproduction сохраняет PASS WITH LIMITATION; data/full experiments
+NOT TESTED, права на данные NOT VERIFIED. Новых pytest/fits/experiments/builder,
+PDF export, commit/push нет. [FINAL_AUDIT.md](../reports/final/FINAL_AUDIT.md)
+фиксирует проверки и исключения. Следующий шаг — финальный commit проверенного
+документационного diff; публикация приватного комплекта не разрешается этим audit.
 
 ## F5: clean-clone reproduction audit
 

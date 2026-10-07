@@ -31,6 +31,7 @@
 | F3 | Самостоятельный методологический отчёт | Выполнена: Markdown, table provenance, проверки и финальная редактура | 6665 слов вне таблиц после редакторского сокращения на 9.71%; 15 предметных разделов и приложения A–F; 12 таблиц/9 существующих PNG; 167 числовых/null ячеек сверены; 78 relative links; README и 44 прежних reports побайтово сохранены; 106 F1 source hashes проверены; новых fits/experiments нет; PDF и clean-clone не выполнялись |
 | F4 | Финальная презентация | Выполнена; доступна в проверенном GitHub commit 6ada526 | 12 русских слайдов, Markdown outline, HTML source и PDF 16:9; одна MAE-таблица и четыре существующих PNG; SHA и доступность повторно проверены в F5 |
 | F5 | Clean-clone reproduction audit | Выполнен: PASS WITH LIMITATION | Новый GitHub clone 6ada526; Python 3.12.10/pip 25.0.1; fresh install + pip check; 1432 passed/34 deselected/1 warning без новых fit; CLI/imports/links/figures/PDF PASS; clone clean; private data/full experiments NOT TESTED; исторические provenance paths сохранены |
+| F6 | Финальный audit и cleanup публичного репозитория | Выполнен: PASS WITH LIMITATION | Base3371a44 синхронизирован с GitHub; навигация и шесть private/ignored links исправлены; claims/AI/135 file links+4anchors/11PNG/PDF/manifests/security PASS; 23 historical paths сохранены с SHA-обоснованием; .vscode/build/temp ignored; docs-only, без pytest/fits/experiments/commit/push |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -40,9 +41,25 @@
 | N02 | Проверить риск будущих шоков и вклад новостей | Feasibility E07a/E07b выполнен; predictive utility не оценена из-за недостатка дат/меток | Для продолжения нужны достаточные причинные train/test периоды; baseline, оценка предупреждений, время упреждения и сравнение без/с новостями |
 | I01 | Проверить объединённую модель и интерпретировать ошибки | Не начата | Проверен вклад компонентов, показаны успех, ложная тревога и пропуск при их наличии |
 | D01 | Подготовить русский отчёт и PDF-презентацию | F1 сводка, F2 README, F3 методологический отчёт и F4 презентация готовы | reports/final/RESULTS_SUMMARY.md и CSV/JSON — единый источник; 12 слайдов и PDF доступны в GitHub clone; F5 не пересобирал результаты |
-| D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit выполнен с ограничениями; полное воспроизведение и аудит прав/состава публикации не подтверждены | Fresh clone/venv/no-fit tests/CLI/links/figures PASS; private data и full experiment reproduction NOT TESTED; исторические absolute provenance paths сохранены; финальный аудит публикации отдельно |
+| D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: FINALIZATION / F6 — финальный audit и cleanup. Выполнена 2026-10-07.
+Verdict: PASS WITH LIMITATION. Base3371a44 синхронизирован с origin/main и GitHub.
+README верхняя навигация ведёт к отчёту/PDF/сводке/ограничениям; report5 private
+hyperlinks сняты, summaryAIlink исправлен; presentationREADME tracked-статус верен.
+Claims и disclosure согласованы; 135 file links/4 anchors, 11 PNG/PDF SHA,
+35 figure source SHA/21 table source SHA проверены; таблицы/формулы сохранены.
+Security235tracked: рабочих секретов нет; 23 строки C historical provenance
+в9файлах оставлены побайтово, runtime A и current instruction B после cleanup0.
+.gitignore исключает .vscode/build/dist/temp; только FINAL_AUDIT.md разрешён
+как новый report. Data/full reproduction NOT TESTED, права NOT VERIFIED.
+[F6 audit](../reports/final/FINAL_AUDIT.md) содержит перечень и обоснование.
+Git diff --check PASS; research/models/metrics/configs/tests/outputs не менялись;
+pytest/fits/experiments/PDF export/commit/push отсутствуют.
+Следующий шаг: финальный commit проверенных файлов; приватные данные не добавлять.
+
+## F5: сохранённая предыдущая задача
 ID: FINALIZATION / F5 — clean-clone reproduction audit. Выполнена 2026-10-07.
 Verdict: PASS WITH LIMITATION. Cloned commit 6ada52638299415936742669b24d12b6792f64d7.
 Новый отдельный sberindex_python_mvp_repro; tracked-tree clean до/после install,
@@ -90,7 +107,7 @@ Table manifest содержит 21 source-запись для 12 таблиц, �
 78 вхождений relative links / 50 уникальных targets существуют; 9 PNG
 совпадают с figure manifest. Markdown parse/render подтверждает таблицы,
 images и fences; отдельный LaTeX/PDF/browser renderer не запускался.
-Forbidden competition/jury/score/русские эквиваленты и C:\ links отсутствуют.
+Forbidden competition/jury/score/русские эквиваленты и абсолютные машинные ссылки отсутствуют.
 Реальный classifier не обучался; synthetic механизм не перенесён на real
 quality; h12 direct fallback и просмотренный holdout явно сохранены.
 README, 31 прежний final-файл и 13 results-отчётов побайтово неизменны;

@@ -3,6 +3,11 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+.vscode/
+/build/
+/dist/
+/temp/
+/tmp/
 .ipynb_checkpoints/
 *.egg-info/
 # Данные и модельные результаты предоставлены пользователю приватно.
@@ -25,4 +30,8 @@ catboost_info/
 
 # Временно не публикуем до проверки сохранённых выводов и содержимого
 /notebooks/
-/reports/
+/reports/*
+!/reports/final/
+/reports/final/*
+# F6: проверенный итоговый audit; остальные локальные reports остаются приватными.
+!/reports/final/FINAL_AUDIT.md

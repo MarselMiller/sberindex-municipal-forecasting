@@ -6,7 +6,7 @@
 
 [Результаты](#результаты) · [Архитектура](#архитектура) · [Воспроизведение](#воспроизведение) · [Ограничения](#ограничения)
 
-[Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Ограничения](reports/final/limitations.md) · [Терминология](reports/final/terminology.md)
+[Методологический отчёт](reports/final/METHODOLOGY_REPORT.md) · [Презентация PDF](reports/final/presentation/presentation.pdf) · [Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Ограничения](reports/final/limitations.md) · [Терминология](reports/final/terminology.md)
 
 ## Результаты
 
