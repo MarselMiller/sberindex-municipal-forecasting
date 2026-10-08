@@ -7,6 +7,27 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## National/Local Persistence: завершённая методологическая ablation
+
+2026-10-08, research/national-local-persistence, исходный HEAD 606a710.
+Проверяется представление ряда без learned local model: прежний national
+SeasonalNaiveYoY forecast × последний конечный causal ratio на собственном месяце.
+Выборка/keys/splits/eligibility/пропуски E05d сохранены; h12 только descriptive,
+Persistence не требует training pairs, learned references сохраняют SeasonalNaive fallback.
+Reproduction gate PASS: saved-prediction rescoring, 217 artifacts / 411 source SHA;
+1897 raw / 1890 finite cases, 0 новых fits. Smoke 189 cases / 3 deterministic checks;
+full 30 checks, 189.357 s. Целевые synthetic tests: 67 PASS; independent audit: 433 PASS.
+Категория D на h1/3/6: нет устойчивого преимущества по split/origins.
+На holdout закрывается 68.32/69.24/76.26% Direct→NL observed MAE gap;
+это описательная доля, не causal contribution. Learned добавляет качество на
+holdout, но на validation h3/6 хуже Persistence; SNY лучше Persistence на всём validation.
+Отчёт: reports/results/national_local_persistence.md; public CSV содержат только
+агрегаты, построчные predictions/provenance остаются в ignored отдельном output_dir.
+README/F1–F8/E08/HTML/PDF/старые outputs не изменены. Holdout просмотрен, L=0 —
+допущение, 24 месяца истории и число МО не создают независимые временные наблюдения.
+Следующий шаг — review результата; NO TUNING, NO FEATURE SEARCH,
+NO NEW MODEL FAMILY, NO SOURCE OF TRUTH CHANGES, NO COMMIT/PUSH.
+
 ## F8: локальный HTML-отчёт в README
 
 2026-10-08: Pages-ссылка заменена блоком «Полноценный HTML-отчёт» с одной ссылкой

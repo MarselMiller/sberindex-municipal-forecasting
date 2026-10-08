@@ -41,3 +41,16 @@ catboost_info/
 !/reports/final/FINAL_AUDIT.md
 # F7: только проверенный отчёт о публикации данных.
 !/reports/final/DATA_PUBLICATION_AUDIT.md
+
+# Проверенные агрегаты методологической ablation National/Local Persistence.
+!/reports/results/
+/reports/results/*
+!/reports/results/national_local_persistence.md
+!/reports/results/national_local_persistence/
+/reports/results/national_local_persistence/*
+!/reports/results/national_local_persistence/metrics.csv
+!/reports/results/national_local_persistence/origin_deltas.csv
+!/reports/results/national_local_persistence/origin_stability.csv
+!/reports/results/national_local_persistence/municipality_win_rates.csv
+!/reports/results/national_local_persistence/gap_analysis.csv
+!/reports/results/national_local_persistence/run_manifest.json

@@ -40,6 +40,7 @@
 | F6 | Финальный audit и cleanup публичного репозитория | Выполнен: PASS WITH LIMITATION | Base3371a44 синхронизирован с GitHub; навигация и шесть private/ignored links исправлены; claims/AI/135 file links+4anchors/11PNG/PDF/manifests/security PASS; 23 historical paths сохранены с SHA-обоснованием; .vscode/build/temp ignored; docs-only, без pytest/fits/experiments/commit/push |
 | F7 | Data publication and reproducibility audit | Выполнен: PASS WITH LIMITATION | 90 решений/1877 inventory entries; 12 public artifacts (2.39 MB), SYNTHETIC byte-copy demo; primary terms/provenance; stdlib preflight public12PASS; новый GitHub base e50e044 + reviewed overlay; research9/sources5MISSING в clone; source rights/full experiments не подтверждены; старые local-only links сохранены; без fits/experiments/pytest/commit/push |
 | F8 | Interactive HTML project report и canonical glossary | Выполнен: third editorial и README local HTML link PASS; Ready for review | 27 языковых замен; audit details перенесены/сокращены; 75 terms / 7 групп / 22 first-use definitions; 6 таблиц / 246 cells и 1480 saved values неизменны; builder/links/integrity/53 Edge browser + 15 browser static checks PASS; без fits/experiments/tuning/result changes/commit/push |
+| NL Persistence | National/Local без learned local model | Выполнена: gate PASS; категория D; Ready for review | 1897 raw / 1890 finite прежних cases; 217 artifacts / 411 SHA; 67 synthetic tests и 433 independent checks PASS; 0 fits, 30 deterministic checks; validation/holdout/gap/origin/MO aggregates и manifest; F1–F8/E08/HTML/README сохранены; без tuning/feature search/commit/push |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -52,6 +53,22 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: National/Local Persistence baseline, 2026-10-08.
+Ветка research/national-local-persistence, исходный HEAD 606a710.
+Фиксированный causal last-ratio baseline выполнен на прежнем протоколе E05d.
+Gate PASS без reference refits; smoke/full выполнены, 0 fits/0 attempts,
+30 точных проверок детерминизма, full runtime 189.357 s, 1897 raw / 1890 finite keys.
+67 целевых synthetic tests и 433 independent checks PASS; категория D по frozen
+правилу h1/3/6. Отдельные validation/holdout таблицы, R²/coverage/fallback,
+absolute/relative deltas, origin stability и aggregate MO winrates сохранены.
+Public: reports/results/national_local_persistence.md и CSV/manifest рядом;
+private predictions/ratio provenance остаются в outputs/national_local_persistence_v1.
+Source of Truth и старые outputs сохранены; свежие LightGBM fits не выполнялись.
+Следующий шаг — review новой ablation; новый независимый период не проверялся.
+NO TUNING; NO FEATURE SEARCH; NO NEW MODEL FAMILY; NO SOURCE OF TRUTH CHANGES;
+NO COMMIT/PUSH.
+
+## F8: последняя правка README
 ID: F8 — README LOCAL HTML REPORT, 2026-10-08.
 Pages URL удалён; добавлен точный блок «Полноценный HTML-отчёт» перед навигацией.
 Ссылка на docs/index.html одна; для локального просмотра нужен весь репозиторий.
