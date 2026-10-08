@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "path": "reports/final/results_summary.json",
+      "sha256": "8fc3739c8e5b1a8931739326cd7d8576066ba9128cfa2ffb8cb4dcf85d3fe99a",
+      "hash_basis": "UTF-8 text normalized to LF, without BOM"
+    },
+    {
+      "path": "reports/final/early_warning_metrics.csv",
+      "sha256": "06e684bed7a7fa63c9b0bcf1bbfa13851846d72b8e2ea83b7e5ea59b53dc0a8a",
+      "hash_basis": "UTF-8 text normalized to LF, without BOM"
+    },
+    {
+      "path": "reports/results/e08d/eligibility_summary.csv",
+      "sha256": "75fb10cca89919e5137fc4ed8f58d606e557ed8cdb14810a7b40608c2247c986",
+      "hash_basis": "UTF-8 text normalized to LF, without BOM"
+    },
+    {
+      "path": "reports/results/e08d/run_manifest.json",
+      "sha256": "0df118b91f43eba3694ec274e5425ea2bc8842b0de24dcc4f7936ba60fa4372b",
+      "hash_basis": "UTF-8 text normalized to LF, without BOM"
+    },
+    {
+      "path": "reports/results/e08d/origin_event_study.csv",
+      "sha256": "81945b0cc06a806f9bb52a6c4ab55da92d37fe41b67bde09a621c073dd4a8bec",
+      "hash_basis": "UTF-8 text normalized to LF, without BOM"
+    }
+  ],
+  "real": {
+    "weak_events": 73,
+    "onset_months": 6,
+    "event_municipalities": 71,
+    "panel_municipalities": 2190,
+    "origin_count": 12,
+    "onset_dates": [
+      "2024-05-31",
+      "2024-06-30",
+      "2024-07-31",
+      "2024-08-31",
+      "2024-09-30",
+      "2024-10-31"
+    ],
+    "cohorts": [
+      {
+        "k": 1,
+        "origins": 12,
+        "eligible": 6,
+        "positive": 6,
+        "negative": 0,
+        "unknown": 6
+      },
+      {
+        "k": 3,
+        "origins": 12,
+        "eligible": 4,
+        "positive": 4,
+        "negative": 0,
+        "unknown": 8
+      }
+    ],
+    "origins": [
+      {
+        "forecast_origin": "2023-12-31",
+        "k1_label": "unknown",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-01-31",
+        "k1_label": "unknown",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-02-29",
+        "k1_label": "unknown",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-03-31",
+        "k1_label": "unknown",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-04-30",
+        "k1_label": "positive",
+        "k3_label": "positive"
+      },
+      {
+        "forecast_origin": "2024-05-31",
+        "k1_label": "positive",
+        "k3_label": "positive"
+      },
+      {
+        "forecast_origin": "2024-06-30",
+        "k1_label": "positive",
+        "k3_label": "positive"
+      },
+      {
+        "forecast_origin": "2024-07-31",
+        "k1_label": "positive",
+        "k3_label": "positive"
+      },
+      {
+        "forecast_origin": "2024-08-31",
+        "k1_label": "positive",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-09-30",
+        "k1_label": "positive",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-10-31",
+        "k1_label": "unknown",
+        "k3_label": "unknown"
+      },
+      {
+        "forecast_origin": "2024-11-30",
+        "k1_label": "unknown",
+        "k3_label": "unknown"
+      }
+    ],
+    "statistical_unit": "unique_forecast_origin",
+    "classifier_fits": 0,
+    "quality_metrics": {
+      "pr_auc": null,
+      "row_f1": null,
+      "event_recall": null,
+      "alert_precision": null,
+      "median_lead_time_months": null,
+      "mean_lead_time_months": null,
+      "false_alerts_per_12_monitored_months": null
+    },
+    "quality_status": "not_evaluated",
+    "financial_conclusion": "NO REAL PRECURSOR EVIDENCE",
+    "note": "Weak-event labels описывают сдвиги ошибки SeasonalNaiveYoY, а не независимо размеченные экономические шоки. В анализе financial indicators нет известных отрицательных origin dates: сравнительный precursor effect и permutation inference не оцениваются. Это не доказательство отсутствия предвестников."
+  },
+  "synthetic": {
+    "data_status": "synthetic",
+    "cohorts": [
+      {
+        "cohort": "test",
+        "series": 300,
+        "events": 180,
+        "anticipated_events": 135,
+        "unanticipated_events": 45,
+        "controls": 120,
+        "false_precursor_controls": 42,
+        "data_status": "synthetic"
+      },
+      {
+        "cohort": "train",
+        "series": 600,
+        "events": 360,
+        "anticipated_events": 270,
+        "unanticipated_events": 90,
+        "controls": 240,
+        "false_precursor_controls": 84,
+        "data_status": "synthetic"
+      },
+      {
+        "cohort": "validation",
+        "series": 200,
+        "events": 120,
+        "anticipated_events": 90,
+        "unanticipated_events": 30,
+        "controls": 80,
+        "false_precursor_controls": 28,
+        "data_status": "synthetic"
+      }
+    ],
+    "rows": [
+      {
+        "model": "S0",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "Constant risk",
+        "k": 1,
+        "cases": 2722,
+        "positives": 180,
+        "negatives": 2542,
+        "eligible_events": 180,
+        "warned_events": 0,
+        "pr_auc": 0.06612784717119764,
+        "row_f1": 0.0,
+        "event_recall": 0.0,
+        "alert_precision": null,
+        "median_lead_time_months": null,
+        "false_alerts_per_12_monitored_months": 0.0
+      },
+      {
+        "model": "S1",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "History only",
+        "k": 1,
+        "cases": 2722,
+        "positives": 180,
+        "negatives": 2542,
+        "eligible_events": 180,
+        "warned_events": 39,
+        "pr_auc": 0.12106631939275804,
+        "row_f1": 0.18705035971223022,
+        "event_recall": 0.21666666666666667,
+        "alert_precision": 0.16455696202531644,
+        "median_lead_time_months": 1.0,
+        "false_alerts_per_12_monitored_months": 0.8728875826598089
+      },
+      {
+        "model": "S2",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "History + detector state",
+        "k": 1,
+        "cases": 2722,
+        "positives": 180,
+        "negatives": 2542,
+        "eligible_events": 180,
+        "warned_events": 30,
+        "pr_auc": 0.15539451205050103,
+        "row_f1": 0.16304347826086957,
+        "event_recall": 0.16666666666666666,
+        "alert_precision": 0.1595744680851064,
+        "median_lead_time_months": 1.0,
+        "false_alerts_per_12_monitored_months": 0.6965466568699485
+      },
+      {
+        "model": "S3",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "History + detector state + external precursors",
+        "k": 1,
+        "cases": 2722,
+        "positives": 180,
+        "negatives": 2542,
+        "eligible_events": 180,
+        "warned_events": 77,
+        "pr_auc": 0.34053473513036475,
+        "row_f1": 0.39896373056994816,
+        "event_recall": 0.42777777777777776,
+        "alert_precision": 0.3737864077669903,
+        "median_lead_time_months": 1.0,
+        "false_alerts_per_12_monitored_months": 0.5686994856722998
+      },
+      {
+        "model": "S0",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "Constant risk",
+        "k": 3,
+        "cases": 2482,
+        "positives": 540,
+        "negatives": 1942,
+        "eligible_events": 180,
+        "warned_events": 0,
+        "pr_auc": 0.21756647864625303,
+        "row_f1": 0.0,
+        "event_recall": 0.0,
+        "alert_precision": null,
+        "median_lead_time_months": null,
+        "false_alerts_per_12_monitored_months": 0.0
+      },
+      {
+        "model": "S1",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "History only",
+        "k": 3,
+        "cases": 2482,
+        "positives": 540,
+        "negatives": 1942,
+        "eligible_events": 180,
+        "warned_events": 48,
+        "pr_auc": 0.32796341679720525,
+        "row_f1": 0.20107238605898123,
+        "event_recall": 0.26666666666666666,
+        "alert_precision": 0.2681564245810056,
+        "median_lead_time_months": 2.0,
+        "false_alerts_per_12_monitored_months": 0.6333601933924254
+      },
+      {
+        "model": "S2",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "History + detector state",
+        "k": 3,
+        "cases": 2482,
+        "positives": 540,
+        "negatives": 1942,
+        "eligible_events": 180,
+        "warned_events": 72,
+        "pr_auc": 0.3897346285252855,
+        "row_f1": 0.25100133511348466,
+        "event_recall": 0.4,
+        "alert_precision": 0.3850267379679144,
+        "median_lead_time_months": 2.0,
+        "false_alerts_per_12_monitored_months": 0.5560032232070911
+      },
+      {
+        "model": "S3",
+        "data_status": "synthetic",
+        "evaluation_status": "evaluated_on_independent_synthetic_TEST",
+        "label": "History + detector state + external precursors",
+        "k": 3,
+        "cases": 2482,
+        "positives": 540,
+        "negatives": 1942,
+        "eligible_events": 180,
+        "warned_events": 111,
+        "pr_auc": 0.5379402036095874,
+        "row_f1": 0.4500601684717208,
+        "event_recall": 0.6166666666666667,
+        "alert_precision": 0.5162790697674419,
+        "median_lead_time_months": 2.0,
+        "false_alerts_per_12_monitored_months": 0.5028203062046737
+      }
+    ],
+    "note": "Controlled synthetic TEST: сгенерированные предвестники, события без них и ложные precursor controls. Результат условен на генераторе и не подтверждает способность предупреждать экономические шоки по муниципальным расходам."
+  }
+}

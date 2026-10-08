@@ -7,6 +7,97 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## F8: третий editorial pass — русскоязычные пояснения
+
+2026-10-08: в docs/index.html выполнены 27 редакционных замен обычной прозы.
+Структура разделов, все 29 заголовков, 6 таблиц / 246 cells и подписи сохранены.
+Числа 360/2880 и 14/4 перенесены в два закрытых details; новые IDs не добавлены.
+Оговорки о повторном использовании TEST и реализации PELT убраны с landing page
+и остаются в неизменённом методологическом отчёте. Исследовательские выводы прежние:
+FX улучшает h=6 в обоих периодах, но критерий минимум двух горизонтов не выполнен.
+CSS, JS, builder, пять JSON, data bundle, canonical glossary, PNG и PDF неизменны.
+Все 75 терминов / 7 групп и 22 first-use definitions сохранены буквально.
+Data status, Native coverage, Active regime и At risk оставлены как полезные
+пояснения статуса результатов, coverage и допустимости прогнозных случаев.
+Builder --check, links/anchors, 1480 source-value checks, linguistic scan,
+independent meaning/integrity review и git diff --check PASS. 53 Edge browser
+checks и 15 browser static checks PASS: desktop1440/mobile390/320, keyboard,
+no-JS и два новых details; console errors, external requests и overflow — 0.
+13 из 26 свежих screenshots просмотрены вручную; proof: ignored
+outputs/f8_russian_prose_checks/. Другие браузеры, screen reader и опубликованный
+Pages не проверялись. Следующий шаг — review финальной редакции автором.
+NO MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO RESULT CHANGES; NO COMMIT/PUSH.
+Ниже сохранены результаты предыдущих редакционных проходов и исходной сборки.
+
+## F8: финальный editorial pass — содержательные названия
+
+2026-10-08: из пользовательских текстов landing page, README, итоговой сводки,
+методологии, ограничений и Markdown/HTML презентации удалены смысловые названия
+этапов E/F. Исторические filenames, href/src и provenance сохранены.
+Financial и synthetic variants имеют содержательные названия; исходные model/
+variant codes и числовые/null поля JSON сохранены, добавлены только display labels.
+F1 как метрика остаётся. S0–S3 допустимы рядом с полными названиями в технических
+таблицах и легендах неизменного PNG. Canonical glossary, 75 terms / 7 groups /
+22 first-use definitions, CSS и методологические выводы не переписывались.
+Build/--check, links/anchors и 1480 source-value checks PASS; 33 редакционных
+integrity checks PASS; 45 Edge landing checks на desktop1440/mobile390/320
+и 17 presentation layout checks PASS. PNG/PDF и saved metrics не изменены.
+PDF не пересобирался; проверены Markdown/HTML sources и сохранность прежнего PDF.
+Proof: ignored outputs/f8_internal_ids_checks/. Remote availability, другие
+браузеры, screen reader и публикация не проверялись. Следующий шаг — review
+финальных названий автором; NO MODEL FITS, NO NEW EXPERIMENTS, NO RESULT CHANGES,
+NO COMMIT/PUSH. Ниже сохранены результаты первого editorial pass и исходной сборки.
+
+## F8: редакционная правка HTML landing page
+
+2026-10-08, main, HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74.
+Заголовки и пояснения docs/index.html переписаны в нейтральном исследовательском
+стиле; layout, charts и controls сохранены. Canonical terminology.md остаётся
+единственным источником 75 терминов / 7 групп. First-use пояснения: 49 → 22;
+слова определений: 2486 → 1978; словарь без HTML anchors: 3032 → 2524
+(одинаковый подсчёт whitespace-separated words). Builder и JS используют новые
+формулировки; --check PASS после пересборки. Все 6 таблиц / 246 header+body cells,
+1480 сохранённых значений, source artifact links, PNG и исследовательские выводы
+сохранены. У FX улучшение h=6 наблюдалось и на validation, и на holdout;
+критерий устойчивого прироста минимум на двух горизонтах не выполнен.
+43 Edge browser checks и 11 независимых integrity checks PASS; desktop 1440,
+mobile 390/320, no-JS, keyboard и interactivity проверены; ошибок и overflow нет.
+Proof и 15 новых screenshots: ignored outputs/f8_editorial_checks/.
+README и другие ранее подготовленные изменения не переписывались.
+Публикация, remote HTTP availability, другие браузеры и screen reader не проверялись.
+Следующий шаг — просмотр автором новой редакции; NO MODEL FITS, NO NEW EXPERIMENTS,
+NO RESULT CHANGES, NO COMMIT/PUSH. Ниже сохранён контекст исходной сборки F8.
+
+## F8: интерактивный отчёт и единый глоссарий
+
+2026-10-08, main, исходный HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74;
+E08 включён в main, research phase закрыта. docs/index.html — статическая
+HTML/CSS/vanilla JS страница с локальными assets, без backend/CDN/data requests.
+Прогнозирование, detection и early warning представлены отдельно; ограничения
+holdout/h12, weak labels, архивной доступности и отрицательных дат сохранены.
+Единственный источник определений — reports/final/terminology.md: 75 терминов
+в семи тематических группах, стабильные ASCII IDs. HTML glossary и 49 first-use
+пояснений генерируются из него scripts/build_project_report.py; независимого
+словаря для HTML нет. README получил быстрый доступ к глоссарию и странице.
+Пять docs/data JSON и offline JS bundle используют только публичные сохранённые
+агрегаты и национальные E08b признаки; 1480 numeric/date-class cells совпали
+с источниками. Missing metrics остаются null. Text-source SHA нормализован к LF
+без UTF-8 BOM для переносимости; старые provenance hashes не переписываются.
+rolling_forecast.png внутри docs — byte-identical копия прежнего public figure;
+новых муниципальных построчных значений, источников или расчётов не добавлено.
+498 пропусков — внутри наблюдаемой истории, 2039 — во всей календарной панели;
+174/78/498 сверены с агрегатами сохранённого первичного аудита, без чтения raw rows.
+Методология/PDF/CSV вне Pages root доступны по GitHub URL текущего repository;
+локальные assets остаются внутри docs. docs/README_SITE.md описывает main /docs,
+настройки GitHub и публикация не выполнялись.
+Builder --check, links/anchors/canonical consistency/security/diff checks PASS;
+42 Edge browser checks PASS на desktop1440/mobile390/320, включая no-JS и keyboard;
+runtime exceptions/console errors/external requests — 0. Light/dark contrast
+28 pairs PASS, minimum 4.927:1. 294 защищённых tracked files и Git HEAD/index сохранены.
+Proof и скриншоты: ignored outputs/f8_checks/. Экранный диктор и опубликованный
+Pages не проверялись. Следующий шаг — visual review автором; NO MODEL FITS,
+NO NEW EXPERIMENTS, NO RESULT CHANGES, NO COMMIT/PUSH.
+
 ## E08: clean-clone verification перед merge
 
 2026-10-08: отдельный GitHub clone в ../sberindex-municipal-forecasting_e08_verify,

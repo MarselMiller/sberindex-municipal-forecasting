@@ -6,7 +6,9 @@
 
 [Результаты](#результаты) · [Архитектура](#архитектура) · [Воспроизведение](#воспроизведение) · [Ограничения](#ограничения)
 
-[Методологический отчёт](reports/final/METHODOLOGY_REPORT.md) · [Презентация PDF](reports/final/presentation/presentation.pdf) · [Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Ограничения](reports/final/limitations.md) · [Терминология](reports/final/terminology.md)
+[Методологический отчёт](reports/final/METHODOLOGY_REPORT.md) · [Презентация PDF](reports/final/presentation/presentation.pdf) · [Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Ограничения](reports/final/limitations.md) · [Глоссарий](reports/final/terminology.md)
+
+[Интерактивный HTML-отчёт](docs/index.html) · [Открытие и публикация сайта](docs/README_SITE.md)
 
 ## Результаты
 
@@ -81,7 +83,7 @@ Forecasting оценивает будущие расходы. Детекторы
 
 Разложение меняет масштаб признаков, обучающую цель и национальный прогноз, поэтому оценивается полная стратегия. Эффект нельзя приписать только библиотеке boosting или отдельному feature. Validation и промежуточные ablations приведены в сводке и подробных отчётах. Макропризнаки проверялись в отдельной ablation; устойчивый прирост качества не установлен.
 
-Дополнительно проверены ключевая ставка Банка России и официальный курс USD/RUB; для каждого forecast origin использовались только значения, доступные к моменту формирования прогноза. Фиксированное сравнение моделей не показало устойчивого улучшения: снижение MAE с FX наблюдалось только на h=6 и не было устойчивым по горизонтам. Для weak-event labels из E07 сравнительный early-warning эффект оценить не удалось, поскольку среди дат с известной меткой не было отрицательного класса ([подробности](reports/final/RESULTS_SUMMARY.md#leading-financial-indicators)).
+Дополнительно проверены ключевая ставка Банка России и официальный курс USD/RUB; для каждого forecast origin использовались только значения, доступные к моменту формирования прогноза. Фиксированное сравнение моделей не показало устойчивого улучшения: снижение MAE с FX наблюдалось только на h=6 и не было устойчивым по горизонтам. Для weak-event labels, построенных по устойчивым изменениям ошибки baseline, сравнительный early-warning эффект оценить не удалось, поскольку среди дат с известной меткой не было отрицательного класса ([подробности](reports/final/RESULTS_SUMMARY.md#leading-financial-indicators)).
 
 ![MAE macro на реальном pilot holdout; годовые direct-стратегии используют fallback](reports/final/figures/forecast_mae.png)
 
@@ -162,26 +164,28 @@ Weak event подтверждается по наблюдениям до `O+k+2`
 
 Независимые TRAIN / VALIDATION / TEST: **600 / 200 / 300 рядов по 24 месяца**, **360 / 120 / 180 событий**. Есть наблюдаемые предвестники, события без предвестников, шум и ложные предвестники у контрольных рядов. Истина задана генератором; этот протокол не подменяет реальные weak labels.
 
-S0 использует train prior, S1 — историю ряда, S2 добавляет состояния online-детекторов, **S3 добавляет synthetic macro/news channels**. Подготовка признаков обучается только на TRAIN, пороги выбираются на VALIDATION. TEST используется для оценки фиксированных моделей и порогов. Offline breakpoints в признаки не входят.
+Constant risk использует train prior, History only — историю ряда, History + detector state добавляет состояния online-детекторов, **History + detector state + external precursors добавляет synthetic macro/news channels**. Подготовка признаков обучается только на TRAIN, пороги выбираются на VALIDATION. TEST используется для оценки фиксированных моделей и порогов. Offline breakpoints в признаки не входят.
 
 **Основная TEST-оценка; k — окно предупреждения в месяцах.**
 
 | k | Модель | PR-AUC | Event recall | Alert precision | Median lead, мес. | False alerts/12 |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 | S0 | 0.066 | 0.000 | — | — | 0.000 |
-| 1 | S1 | 0.121 | 0.217 | 0.165 | 1 | 0.873 |
-| 1 | S2 | 0.155 | 0.167 | 0.160 | 1 | 0.697 |
-| 1 | **S3** | **0.341** | **0.428** | **0.374** | **1** | **0.569** |
-| 3 | S0 | 0.218 | 0.000 | — | — | 0.000 |
-| 3 | S1 | 0.328 | 0.267 | 0.268 | 2 | 0.633 |
-| 3 | S2 | 0.390 | 0.400 | 0.385 | 2 | 0.556 |
-| 3 | **S3** | **0.538** | **0.617** | **0.516** | **2** | **0.503** |
+| 1 | Constant risk | 0.066 | 0.000 | — | — | 0.000 |
+| 1 | History only | 0.121 | 0.217 | 0.165 | 1 | 0.873 |
+| 1 | History + detector state | 0.155 | 0.167 | 0.160 | 1 | 0.697 |
+| 1 | **History + detector state + external precursors** | **0.341** | **0.428** | **0.374** | **1** | **0.569** |
+| 3 | Constant risk | 0.218 | 0.000 | — | — | 0.000 |
+| 3 | History only | 0.328 | 0.267 | 0.268 | 2 | 0.633 |
+| 3 | History + detector state | 0.390 | 0.400 | 0.385 | 2 | 0.556 |
+| 3 | **History + detector state + external precursors** | **0.538** | **0.617** | **0.516** | **2** | **0.503** |
 
-PR-AUC здесь — average precision. Event recall считает предупреждённое событие один раз; alert precision учитывает ложные месячные тревоги после удаления повторов успешного предупреждения. False alerts/12 нормированы на известные месяцы, когда ряд ещё подвержен риску нового события. Median lead относится только к успешным предупреждениям. S0 не выдаёт alerts, поэтому его precision и lead time не определены.
+PR-AUC здесь — average precision. Event recall считает предупреждённое событие один раз; alert precision учитывает ложные месячные тревоги после удаления повторов успешного предупреждения. False alerts/12 нормированы на известные месяцы, когда ряд ещё подвержен риску нового события. Median lead относится только к успешным предупреждениям. Constant risk не выдаёт alerts, поэтому его precision и lead time не определены.
 
-**S3 показывает, что pipeline использует доступную на дату предупреждения информацию о предвестниках, когда они присутствуют.** Результат относится к генератору: внешние каналы синтетические, часть событий без предвестников. Вклад реальных новостей не измеряется. Ложные предвестники дают дополнительные тревоги; validation-бюджет не гарантирован для каждого TEST-поднабора.
+**History + detector state + external precursors показывает, что pipeline использует доступную на дату предупреждения информацию о предвестниках, когда они присутствуют.** Результат относится к генератору: внешние каналы синтетические, часть событий без предвестников. Вклад реальных новостей не измеряется. Ложные предвестники дают дополнительные тревоги; validation-бюджет не гарантирован для каждого TEST-поднабора.
 
-![S0–S3: event-level early-warning metrics, только synthetic TEST](reports/final/figures/synthetic_event_performance.png)
+Обозначения на сохранённом рисунке: Constant risk (S0), History only (S1), History + detector state (S2), History + detector state + external precursors (S3).
+
+![Сравнение четырёх early-warning стратегий: event-level metrics, только synthetic TEST](reports/final/figures/synthetic_event_performance.png)
 
 Row-level F1 и сценарные метрики доступны в [early_warning_metrics.csv](reports/final/early_warning_metrics.csv), bootstrap-интервалы — в [JSON сводки](reports/final/results_summary.json), определения и правила метрик — в [словаре терминов](reports/final/terminology.md). Перенос результатов на практику требует независимой проверки.
 
@@ -245,7 +249,7 @@ Chronos preflight требует `data/input/consumption_all_categories.csv` и 
 
 Протоколы — в [configs/](configs/), запуск компонентов — в [scripts/](scripts/). Прогнозное сравнение: [prophet_comparison.yaml](configs/prophet_comparison.yaml), [national_local_lightgbm.yaml](configs/national_local_lightgbm.yaml). Предупреждения: [early_warning_full_panel.yaml](configs/early_warning_full_panel.yaml), [early_warning_synthetic.yaml](configs/early_warning_synthetic.yaml). Исходный CLI — [run.py](run.py).
 
-Команды выполненных опытов, seed, версии, Git revision и состояние рабочей копии сохранены в manifests. F5 проверил установку, тесты и CLI; [F7](reports/final/DATA_PUBLICATION_AUDIT.md) отдельно проверяет data/documentation layer. Полное повторение исторических экспериментов требует исходного комплекта и сохранённых артефактов и остаётся непроверенным.
+Команды выполненных опытов, seed, версии, Git revision и состояние рабочей копии сохранены в manifests. Аудит воспроизведения проверил установку, тесты и CLI; [аудит публикации данных](reports/final/DATA_PUBLICATION_AUDIT.md) отдельно проверяет data/documentation layer. Полное повторение исторических экспериментов требует исходного комплекта и сохранённых артефактов и остаётся непроверенным.
 
 ## Структура репозитория и подробные результаты
 
@@ -258,7 +262,7 @@ reports/final/    — итоговая сводка, CSV/JSON, ограниче�
 reports/results/  — подробный experiment audit trail
 ```
 
-[reports/final/](reports/final/) — источник финальных чисел; [reports/results/](reports/results/) — подробный experiment audit trail E01–E08. Источники рисунков, SHA256 и правила выбора записаны в [figure_manifest.csv](reports/final/figure_manifest.csv).
+[reports/final/](reports/final/) — источник финальных чисел; [reports/results/](reports/results/) — подробные отчёты о выполненных экспериментах. Источники рисунков, SHA256 и правила выбора записаны в [figure_manifest.csv](reports/final/figure_manifest.csv).
 
 Для чтения без запуска: [итоговая сводка](reports/final/RESULTS_SUMMARY.md), [ограничения](reports/final/limitations.md) и [терминология](reports/final/terminology.md). Подробные таблицы содержат coverage и основания выводов.
 

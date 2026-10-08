@@ -1,7 +1,7 @@
 # План работ и критерии готовности
 
 Дата начала этого списка: 2026-10-05.
-Актуализация: 2026-10-07, по локальным артефактам и проверкам.
+Актуализация: 2026-10-08, по локальным артефактам и проверкам.
 Первоначальные задачи настройки E01/E02/E03 переименованы в ENV01/ENV02/GIT01,
 чтобы E01 и E02 обозначали согласованные исследовательские эксперименты.
 
@@ -39,6 +39,7 @@
 | F5 | Clean-clone reproduction audit | Выполнен: PASS WITH LIMITATION | Новый GitHub clone 6ada526; Python 3.12.10/pip 25.0.1; fresh install + pip check; 1432 passed/34 deselected/1 warning без новых fit; CLI/imports/links/figures/PDF PASS; clone clean; private data/full experiments NOT TESTED; исторические provenance paths сохранены |
 | F6 | Финальный audit и cleanup публичного репозитория | Выполнен: PASS WITH LIMITATION | Base3371a44 синхронизирован с GitHub; навигация и шесть private/ignored links исправлены; claims/AI/135 file links+4anchors/11PNG/PDF/manifests/security PASS; 23 historical paths сохранены с SHA-обоснованием; .vscode/build/temp ignored; docs-only, без pytest/fits/experiments/commit/push |
 | F7 | Data publication and reproducibility audit | Выполнен: PASS WITH LIMITATION | 90 решений/1877 inventory entries; 12 public artifacts (2.39 MB), SYNTHETIC byte-copy demo; primary terms/provenance; stdlib preflight public12PASS; новый GitHub base e50e044 + reviewed overlay; research9/sources5MISSING в clone; source rights/full experiments не подтверждены; старые local-only links сохранены; без fits/experiments/pytest/commit/push |
+| F8 | Interactive HTML project report и canonical glossary | Выполнен: third editorial PASS; Ready for review | 27 языковых замен; audit details перенесены/сокращены; 75 terms / 7 групп / 22 first-use definitions; 6 таблиц / 246 cells и 1480 saved values неизменны; builder/links/integrity/53 Edge browser + 15 browser static checks PASS; без fits/experiments/tuning/result changes/commit/push |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -51,6 +52,92 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: F8 — THIRD AND FINAL EDITORIAL PASS: RUSSIAN TECHNICAL PROSE, 2026-10-08.
+Ветка main, исходный HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74.
+В docs/index.html выполнены 27 языковых замен; новые эксперименты не проводились.
+360/2880 и 14/4 сохранены в двух закрытых details; TEST reuse/PELT caveats
+остаются в неизменённой методологии. Первые три вывода сохранены буквально,
+последние два изложены по-русски с прежним исследовательским смыслом.
+Все 29 headings, 6 таблиц / 246 cells, captions, href/src и 120 IDs сохранены.
+CSS/JS/builder/bundle/5 JSON/canonical glossary/PNG/PDF не изменены;
+75 terms / 7 groups / 22 first-use definitions и 1480 source values прежние.
+Data status, Native coverage, Active regime и At risk проверены и оставлены.
+Builder --check, links/anchors, linguistic/security/integrity/meaning checks
+и git diff --check PASS; 53 Edge browser и 15 browser static checks PASS.
+Проверены desktop1440/mobile390/320, keyboard, no-JS и новые details;
+console errors, external requests и page overflow — 0. Вручную просмотрены
+13 из 26 свежих screenshots; proof: ignored outputs/f8_russian_prose_checks/.
+Git HEAD/index сохранены; другие прежние незакоммиченные изменения не затронуты.
+Следующий шаг — review финального русского текста автором. Другие браузеры,
+screen reader и опубликованный Pages не проверялись.
+NO MODEL FITS; NO NEW EXPERIMENTS; NO TUNING; NO RESULT CHANGES; NO COMMIT/PUSH.
+
+## F8: второй editorial pass
+ID: F8 — SECOND AND FINAL EDITORIAL PASS: USER-FACING INTERNAL IDs, 2026-10-08.
+Ветка main, исходный HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74.
+Из HTML/JS/builder/generated notes, README, docs/README_SITE.md, RESULTS_SUMMARY,
+METHODOLOGY_REPORT, limitations и Markdown/HTML presentation удалены stage IDs
+в содержательном тексте и labels. Financial/synthetic варианты названы словами.
+Filename/URL/provenance codes сохранены; S0–S3 в технических таблицах и figure
+legends всегда расшифрованы полными названиями. F1 сохранён только как метрика.
+Canonical glossary и CSS неизменны: 75 terms / 7 groups / 22 first-use definitions.
+Build и --check PASS; 1480 saved values/date classes и все numeric/missing table
+cells совпадают. Links/hrefs/srcs/anchors сохранены и проверены; 33 editorial
+integrity checks, 45 Edge landing browser checks и 17 presentation fit checks PASS.
+Desktop1440/mobile390/320, controls, keyboard, no-JS, local assets и console проверены.
+Все saved datasets/source code fields, PNG/PDF и research results сохранены;
+PDF не пересобирался. Proof и screenshots: ignored outputs/f8_internal_ids_checks/.
+Git HEAD/index сохранены; новые эксперименты, fits, install/network и commit/push отсутствуют.
+Следующий шаг — review финальных user-facing названий автором. Опубликованный Pages,
+remote HTTP availability, другие браузеры и screen reader не проверялись.
+NO MODEL FITS; NO NEW EXPERIMENTS; NO RESULT CHANGES; NO COMMIT/PUSH.
+
+## F8: первый editorial pass
+ID: F8 — EDITORIAL REWRITE HTML LANDING PAGE, 2026-10-08.
+Ветка main, исходный HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74.
+Переписаны тексты docs/index.html, определения reports/final/terminology.md,
+текстовые literals builder/JS и соответствующие generated JSON/bundle;
+CSS изменён только для представления выводов обычными абзацами.
+75 terms / 7 groups / стабильные anchors сохранены; 49 → 22 first-use пояснений.
+Слова определений: 2486 → 1978; словарь без HTML anchors: 3032 → 2524.
+Build и --check PASS. Все 6 таблиц / 246 cells, 1480 source values/date classes,
+4 numerical datasets, source artifact URLs, PNG и methodological claims сохранены.
+Linguistic scan PASS: удалены риторические заголовки, slogans и «тревог*»;
+совпадения «цена» внутри «сценарии» проверены вручную и допустимы.
+43 Edge browser checks и 11 независимых integrity checks PASS; desktop1440,
+mobile390/320, controls, search, deep links, keyboard, theme и no-JS проверены.
+Runtime exceptions / console errors / external requests / page overflow — 0.
+15 новых screenshots и proof: ignored outputs/f8_editorial_checks/.
+README и прежние несвязанные изменения сохранены; Git HEAD/index не менялись.
+Следующий шаг — review новой редакции автором; опубликованный Pages, другие
+браузеры и screen reader не проверялись. NO MODEL FITS; NO NEW EXPERIMENTS;
+NO RESULT CHANGES; NO COMMIT/PUSH.
+
+## F8: исходная сборка интерактивного отчёта
+ID: F8 — INTERACTIVE HTML PROJECT REPORT / LANDING PAGE, 2026-10-08.
+Ветка main, исходный HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74; E08 уже merged.
+Созданы docs/index.html, docs/assets/project-report.css, project-report.js,
+project-report-data.js, копия прежнего rolling_forecast.png и пять docs/data JSON.
+scripts/build_project_report.py читает только сохранённые публичные агрегаты
+и reports/final/terminology.md; --check PASS. Новых метрик и прогнозов нет.
+Canonical glossary расширен до 75 терминов / 7 групп; 49 первых пояснений
+сгенерированы из него. README содержит быстрые ссылки на словарь и HTML.
+1480 сохранённых numeric/date-class cells сверены с источниками; null сохранены.
+120 уникальных IDs, 57 anchors, 4 site assets, 14 GitHub source targets и
+55 Markdown file links проверены; новые public files без secrets/absolute paths/raw rows.
+42 browser checks PASS: 1440/390/320 px, четыре горизонта/два периода,
+детекторы, финансовые SVG, k1/k3, поиск/group/reset/deep links, keyboard и no-JS.
+Runtime exceptions / console errors / external requests — 0; 28 contrast pairs
+для light/dark PASS, minimum 4.927:1. Скриншоты остаются локально в ignored outputs.
+294 защищённых tracked files, исходные research results/PNG/PDF и Git HEAD/index сохранены.
+498 пропусков относятся только к внутренней истории; 2039 — ко всей календарной сетке.
+docs/README_SITE.md описывает Pages main /docs; настройки и публикация не выполнялись.
+Proof: outputs/f8_checks/{static_check.json,frontend_browser_check.json,contrast_check.json}.
+Следующий шаг — визуальный review автором, затем отдельные commit/push и включение Pages.
+Полный аудит экранным диктором и работа уже опубликованного Pages не проверялись.
+NO MODEL FITS; NO NEW EXPERIMENTS; NO RESULT CHANGES; NO COMMIT/PUSH.
+
+## E08 clean clone: завершённая предыдущая задача
 ID: E08 CLEAN-CLONE VERIFICATION, 2026-10-08, research/e08-leading-indicators.
 Новый GitHub clone ../sberindex-municipal-forecasting_e08_verify:
 HEAD f20e547649e5c6cdd40816da9dab6b5af133378e, initial/final status clean.
