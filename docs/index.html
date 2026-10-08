@@ -113,6 +113,16 @@
         <p>Поскольку holdout использовался и в последующих экспериментах, поздние сравнения интерпретируются как исследовательские, а не как новая независимая проверка.</p>
       </div>
       <details class="method-details"><summary>Дополнительные метрики и стратегия прогнозирования</summary><p><a href="#global-model">Global model</a>, <a href="#recursive-forecasting">recursive forecasting</a> и <a href="#r-squared">R²</a> описаны в глоссарии. Native coverage и метрики полной стратегии с fallback сохранены отдельно в <a href="https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/forecasting_metrics.csv">исходной таблице</a>.</p></details>
+      <!-- forecasting-ablation:begin -->
+<div id="forecasting-ablation">
+<h3>Роль разложения National/Local</h3>
+<p>National/Local Persistence: Прежний национальный прогноз SeasonalNaiveYoY умножается на последнее конечное отношение расходов МО к национальной медиане, доступное на дату выпуска. Локальная модель не обучается.</p>
+<p>Доля наблюдаемого разрыва MAE между LightGBMDirect и National/Local + LightGBM на holdout, которую закрывает National/Local Persistence:</p>
+<div class="interpretation" aria-label="Доля наблюдаемого разрыва MAE"><p><strong data-ablation-horizon="1">68%</strong>h = 1 месяц</p><p><strong data-ablation-horizon="3">69%</strong>h = 3 месяца</p><p><strong data-ablation-horizon="6">76%</strong>h = 6 месяцев</p></div>
+<p class="caution">Преимущество относительно SeasonalNaiveYoY и дополнительный выигрыш обучаемой локальной модели не полностью устойчивы на validation и между датами выпуска. Доли описывают разрыв между двумя конкретными стратегиями. Holdout уже просмотрен; это анализ представления ряда, а не новая независимая проверка. На validation h = 6 доступна одна дата выпуска; h = 12 — только описательный результат.</p>
+<p class="source-note">Отдельная методологическая ablation; девять основных стратегий сохранены. <a href="../reports/results/national_local_persistence.md">Протокол и выводы</a> / <a href="../reports/results/national_local_persistence/gap_analysis.csv">Доли разрыва MAE</a>.</p>
+</div>
+<!-- forecasting-ablation:end -->
       <figure class="forecast-example"><img src="assets/figures/rolling_forecast.png" width="1517" height="692" loading="lazy" alt="Одномесячные прогнозы SeasonalNaiveYoY и последующие факты для МО 21."><figcaption>Одномесячные прогнозы SeasonalNaiveYoY и факты для МО 21 — первого числового ID оцениваемой выборки. Пример показывает ошибки отдельных месяцев и не заменяет MAE по панели. Использован ранее опубликованный рисунок.</figcaption></figure>
     </div></section>
 

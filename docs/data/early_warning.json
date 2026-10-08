@@ -3,7 +3,7 @@
   "sources": [
     {
       "path": "reports/final/results_summary.json",
-      "sha256": "8fc3739c8e5b1a8931739326cd7d8576066ba9128cfa2ffb8cb4dcf85d3fe99a",
+      "sha256": "423b6ac435ce56273c641951ffec7f211604d11f547ab50ddef24d9042efe965",
       "hash_basis": "UTF-8 text normalized to LF, without BOM"
     },
     {

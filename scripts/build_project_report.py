@@ -81,8 +81,37 @@ def normalized(value: str) -> str:
     return " ".join(value.split())
 
 
+def persistence_gap_rows(ablation: dict) -> list[dict]:
+    if (ablation.get("schema_version") != 1
+            or ablation.get("id") != "national_local_persistence"
+            or ablation.get("data_status") != "real"
+            or ablation.get("included_in_main_benchmark") is not False
+            or ablation.get("primary_horizons") != [1, 3, 6]
+            or ablation.get("descriptive_horizons") != [12]):
+        raise ValueError("Persistence ablation must remain separate from the nine-strategy benchmark")
+    rows = []
+    for horizon in ablation["primary_horizons"]:
+        matches = [row for row in ablation["gap_analysis"]
+                   if row["split"] == "holdout" and row["horizon"] == horizon
+                   and row["from_model"] == "LightGBMDirect"
+                   and row["to_model"] == "NationalLocalPersistence"]
+        if len(matches) != 1:
+            raise ValueError(f"Persistence ablation requires exactly one holdout gap share for h={horizon}")
+        row = matches[0]
+        if (row["share_status"] != "estimable_descriptive"
+                or row["metric_status"] != "complete"
+                or row["descriptive_only"] is not False
+                or number(row["observed_share_of_mae_gap"]) is None):
+            raise ValueError(f"Persistence holdout gap share is not estimable for h={horizon}")
+        rows.append(row)
+    return rows
+
+
 def forecasting_data() -> dict:
     path = "reports/final/forecasting_metrics.csv"
+    summary_path = "reports/final/results_summary.json"
+    ablation = read_json(summary_path)["forecasting_ablation"]
+    persistence_gap_rows(ablation)
     source = read_csv(path)
     expected = {(m, split, h) for m in MODEL_ORDER for split in ["holdout", "validation"] for h in [1, 3, 6, 12]}
     actual = {(r["model"], r["split"], int(r["horizon"])) for r in source}
@@ -103,11 +132,12 @@ def forecasting_data() -> dict:
                 row["note"] += " Все значения — SeasonalNaive fallback, а не обученная годовая direct-модель."
         rows.append(row)
     return {
-        "schema_version": 1, "sources": sources(path),
+        "schema_version": 1, "sources": sources(path, summary_path),
         "models": [{"id": model, "label": model} for model in MODEL_ORDER],
         "horizons": [1, 3, 6, 12], "splits": ["holdout", "validation"], "default_split": "holdout", "metric": "mae_macro", "unit": "nominal_RUB",
         "note": "Общая benchmark-выборка муниципальных расходов СберИндекса: категория «Все категории», оценка средних безналичных расходов жителей. Просмотренный holdout июля–декабря 2024, 63 оцениваемых МО.",
         "rows": rows,
+        "ablation": ablation,
     }
 
 
@@ -303,6 +333,34 @@ def table(caption: str, headings: list[str], rows: list[list[str]]) -> str:
     return f'<table class="metrics-table"><caption>{html.escape(caption)}</caption><thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table>'
 
 
+def render_forecasting_ablation(ablation: dict) -> str:
+    definition = html.escape(ablation["definition"])
+    shares = []
+    for row in persistence_gap_rows(ablation):
+        horizon = row["horizon"]
+        share = formatted(number(row["observed_share_of_mae_gap"]) * 100, 0)
+        unit = "месяц" if horizon == 1 else "месяца" if horizon == 3 else "месяцев"
+        shares.append(f'<p><strong data-ablation-horizon="{horizon}">{share}%</strong>h = {horizon} {unit}</p>')
+    return (
+        '<div id="forecasting-ablation">\n'
+        '<h3>Роль разложения National/Local</h3>\n'
+        '<p>National/Local Persistence: ' + definition + ' Локальная модель не обучается.</p>\n'
+        '<p>Доля наблюдаемого разрыва MAE между LightGBMDirect и National/Local + LightGBM '
+        'на holdout, которую закрывает National/Local Persistence:</p>\n'
+        '<div class="interpretation" aria-label="Доля наблюдаемого разрыва MAE">'
+        + "".join(shares) + '</div>\n'
+        '<p class="caution">Преимущество относительно SeasonalNaiveYoY и дополнительный '
+        'выигрыш обучаемой локальной модели не полностью устойчивы на validation и между '
+        'датами выпуска. Доли описывают разрыв между двумя конкретными стратегиями. '
+        'Holdout уже просмотрен; это анализ представления ряда, а не новая независимая проверка. '
+        'На validation h = 6 доступна одна дата выпуска; h = 12 — только описательный результат.</p>\n'
+        '<p class="source-note">Отдельная методологическая ablation; девять основных стратегий '
+        'сохранены. <a href="../reports/results/national_local_persistence.md">Протокол и выводы</a> '
+        '/ <a href="../reports/results/national_local_persistence/gap_analysis.csv">Доли разрыва MAE</a>.</p>\n'
+        '</div>'
+    )
+
+
 def render_fragments(data: dict) -> dict[str, str]:
     fragments = {}
     lookup = {(r["model"], r["split"], r["horizon"]): r for r in data["forecasting"]["rows"]}
@@ -320,6 +378,7 @@ def render_fragments(data: dict) -> dict[str, str]:
             rows.append(values)
         forecast_tables.append(table(label + ": MAE macro, руб.", ["Стратегия", "h = 1", "h = 3", "h = 6", "h = 12"], rows))
     fragments["forecasting-table"] = "\n".join(forecast_tables)
+    fragments["forecasting-ablation"] = render_forecasting_ablation(data["forecasting"]["ablation"])
     fragments["detection-table"] = table(
         "Synthetic TEST: качество обнаружения уже начавшегося сдвига",
         ["Метод", "Режим", "Precision", "Recall", "F1", "Miss rate", "Delay, мес.", "Localisation error, мес.", "FP / 12 мес."],
@@ -407,7 +466,7 @@ def main() -> None:
         if args.check:
             if not path.is_file() or path.read_text(encoding="utf-8") != text:
                 failures.append(path.relative_to(ROOT).as_posix())
-        else:
+        elif not path.is_file() or path.read_text(encoding="utf-8") != text:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding="utf-8", newline="\n")
     if args.check and not args.data_only:

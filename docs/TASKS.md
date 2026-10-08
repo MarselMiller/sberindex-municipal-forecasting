@@ -41,6 +41,7 @@
 | F7 | Data publication and reproducibility audit | Выполнен: PASS WITH LIMITATION | 90 решений/1877 inventory entries; 12 public artifacts (2.39 MB), SYNTHETIC byte-copy demo; primary terms/provenance; stdlib preflight public12PASS; новый GitHub base e50e044 + reviewed overlay; research9/sources5MISSING в clone; source rights/full experiments не подтверждены; старые local-only links сохранены; без fits/experiments/pytest/commit/push |
 | F8 | Interactive HTML project report и canonical glossary | Выполнен: third editorial и README local HTML link PASS; Ready for review | 27 языковых замен; audit details перенесены/сокращены; 75 terms / 7 групп / 22 first-use definitions; 6 таблиц / 246 cells и 1480 saved values неизменны; builder/links/integrity/53 Edge browser + 15 browser static checks PASS; без fits/experiments/tuning/result changes/commit/push |
 | NL Persistence | National/Local без learned local model | Выполнена: gate PASS; категория D; Ready for review | 1897 raw / 1890 finite прежних cases; 217 artifacts / 411 SHA; 67 synthetic tests и 433 independent checks PASS; 0 fits, 30 deterministic checks; validation/holdout/gap/origin/MO aggregates и manifest; F1–F8/E08/HTML/README сохранены; без tuning/feature search/commit/push |
+| NL integration | Включить Persistence ablation в итоговые материалы | Выполнена; Ready for review | Отдельные 35 metric / 28 gap rows в SoT, основной benchmark 9 стратегий сохранён; 221+6 synthetic tests, 193 independent, 59 browser и 16 HTML checks PASS; historical command-path exceptions сохранены; README/PDF/figures/research results неизменны; без fits/tuning/feature search/commit/push |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -53,6 +54,27 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: National/Local Persistence final integration, 2026-10-08.
+Ветка research/national-local-persistence, исходный research commit 19f3722.
+Интеграция завершена: RESULTS_SUMMARY, METHODOLOGY_REPORT, limitations,
+отдельный forecasting_ablation в results_summary.json и generated HTML/data/bundle.
+Узкая команда сборки: python scripts/build_final_summary.py --forecasting-ablation-only;
+HTML: python scripts/build_project_report.py; оба режима --check PASS.
+35 metric / 28 gap rows взяты из tracked aggregates; прежние значения SoT,
+72 строки девяти основных стратегий и минимум NL+LightGBM h1/3/6 сохранены.
+Реально выполнен целевой pytest девяти модулей: 221 PASS; затем шесть новых
+synthetic tests выбора/защиты HTML ablation: 6 PASS. Системный Temp недоступен,
+поэтому успешный повтор использовал ignored workspace basetemp без pytest cache.
+Independent audit: 193 группы PASS с прежними historical exceptions;
+browser desktop/mobile390/320/no-JS: 59 PASS, HTML/links/block: 16 PASS.
+Git diff --check PASS; новый блок не содержит absolute paths/secrets/raw rows.
+Два прежних абсолютных executable paths JSON сохранены как recorded provenance;
+глобальный no-absolute-path FAIL с документированным исключением не скрывается.
+README, canonical terminology, presentation, figures и старые research artifacts
+не изменены; модели/эксперименты не запускались. Следующий шаг — review автором.
+NO NEW MODEL FITS; NO TUNING; NO FEATURE SEARCH; NO COMMIT/PUSH.
+
+## Завершённая задача: National/Local Persistence baseline
 ID: National/Local Persistence baseline, 2026-10-08.
 Ветка research/national-local-persistence, исходный HEAD 606a710.
 Фиксированный causal last-ratio baseline выполнен на прежнем протоколе E05d.

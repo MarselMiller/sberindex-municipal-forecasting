@@ -7,6 +7,33 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## National/Local Persistence: интеграция в итоговые материалы
+
+2026-10-08, research/national-local-persistence, исходный research commit 19f3722.
+Завершённая ablation включена в RESULTS_SUMMARY и METHODOLOGY_REPORT; ограничение
+просмотренного holdout дополнено в limitations. В results_summary.json добавлен
+отдельный forecasting_ablation: 35 сохранённых metric rows, 28 gap rows,
+интерпретация D, ограничения и семь tracked источников с SHA. Все прежние поля
+и числа JSON сохранены. forecasting_metrics.csv остаётся фиксированным benchmark
+девяти основных стратегий: Persistence не добавлен в его 72 строки.
+Узкий режим scripts/build_final_summary.py --forecasting-ablation-only обновляет
+только этот JSON-объект; legacy полная сборка итоговых материалов не запускалась.
+scripts/build_project_report.py пересобрал HTML, forecasting JSON и offline bundle;
+в early_warning JSON изменился только SHA источника финальной сводки.
+Внутри forecasting добавлены определение Persistence и 68/69/76% observed gap
+Direct→NL+LightGBM с caveat validation/SNY. Основные таблицы/глоссарий сохранены.
+221 целевой synthetic test и 6 дополнительных tests HTML-сборщика PASS;
+193 группы независимых сверок, 59 browser checks и 16 HTML/block checks PASS.
+Первый pytest имел ошибки доступа к системной временной папке; успешный повтор
+использовал уникальную временную папку в ignored outputs и отключённый cache.
+Глобальная проверка отсутствия абсолютных путей сохраняет историческое исключение:
+два прежних executable paths в command metadata JSON неизменны, как предписано
+FINAL_AUDIT; новых абсолютных путей, secrets и private row data нет.
+README, presentation, figures, конфигурации, код моделей и research results
+не изменены. Новые fits/experiments/tuning/feature search не выполнялись.
+Следующий шаг — review интеграции автором. Новый независимый период, другие
+браузеры и опубликованный сайт не проверялись; commit/push не выполнялись.
+
 ## National/Local Persistence: завершённая методологическая ablation
 
 2026-10-08, research/national-local-persistence, исходный HEAD 606a710.
