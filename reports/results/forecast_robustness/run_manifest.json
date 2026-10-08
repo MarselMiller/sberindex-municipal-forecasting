@@ -1,0 +1,371 @@
+{
+  "experiment": "forecast_robustness_v1",
+  "mode": "full",
+  "created_at_utc": "2026-10-08T22:17:02.340760+00:00",
+  "git_commit": "c1b61230c13ac5ca760d9657c55a24377571231a",
+  "git_branch": "research/forecast-robustness",
+  "git_dirty": true,
+  "command": [
+    ".venv/Scripts/python.exe",
+    "scripts/run_forecast_robustness.py"
+  ],
+  "config": {
+    "experiment": "forecast_robustness_v1",
+    "branch": "research/forecast-robustness",
+    "seed": 42,
+    "bootstrap_iterations": 10000,
+    "smoke_iterations": 200,
+    "primary_horizons": [
+      1,
+      3,
+      6
+    ],
+    "descriptive_horizons": [
+      12
+    ],
+    "splits": [
+      "validation",
+      "holdout"
+    ],
+    "delta_convention": "baseline_mae_minus_candidate_mae",
+    "primary_bootstrap": "forecast_origin_cluster",
+    "secondary_bootstrap": "municipality_cluster_sensitivity_only",
+    "confidence_percentiles": [
+      2.5,
+      97.5
+    ],
+    "minimum_primary_origins": 4,
+    "ties_absolute_tolerance": 1e-08,
+    "metric_reproduction_absolute_tolerance": 1e-08,
+    "interpretation": {
+      "A": "positive_delta_and_municipality_majority_and_origin_majority_and_origin_ci_lower_above_zero",
+      "B": "positive_delta_and_municipality_majority_but_not_A",
+      "C": "positive_delta_and_municipality_win_rate_at_most_half",
+      "D": "nonpositive_aggregate_delta",
+      "across_split_rule": "D_if_any_primary_split_delta_nonpositive_else_same_category_or_B",
+      "concentration": "descriptive_only_no_category_threshold"
+    },
+    "concentration_top_counts": [
+      5,
+      10
+    ],
+    "concentration_top_fraction": 0.2,
+    "winsorized_sensitivity_quantiles": [
+      0.05,
+      0.95
+    ],
+    "two_way_bootstrap": "not_estimated_optional",
+    "diebold_mariano": "not_estimated_few_temporal_origins",
+    "holdout_status": "previously_inspected_post_hoc_not_blind",
+    "availability_assumption": "month_end_plus_0_months_unverified_vintages",
+    "output_dir": "outputs/forecast_robustness_v1",
+    "smoke_output_dir": "outputs/forecast_robustness_smoke_v1",
+    "gate_output_dir": "outputs/forecast_robustness_gate_v1",
+    "public_dir": "reports/results/forecast_robustness",
+    "report_path": "reports/results/forecast_robustness.md",
+    "private_municipality_artifact": "reports/results/forecast_robustness/municipality_deltas.csv"
+  },
+  "config_sha256": "5ee84b49b3857f4585c21a550d13c0ce3503d3a3e2f799f8527580ac22169624",
+  "code_sha256": {
+    "src/sberforecast/forecast_robustness.py": "49d3e7ec142439a8ef095d7b7d91af98b37a7e3365ba30019b0872f0da7bde8b",
+    "scripts/run_forecast_robustness.py": "9e12bcfe45bce709d0f1e0ee77fd3b46226c72a5df713b631c2ae11cdf1b1644",
+    "tests/test_forecast_robustness.py": "114b192d5ecf8dd5d915276ae785aeed4f1c3b69eb8da18b7ac6f8f5182fb9b4"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "PyYAML": "6.0.3",
+    "pytest": "9.0.2"
+  },
+  "comparability_gate": {
+    "status": "PASS",
+    "tolerance_absolute": 1e-08,
+    "maximum_metric_difference": 9.094947017729282e-13,
+    "pairs": [
+      {
+        "pair": "A",
+        "baseline": "SeasonalNaiveYoY",
+        "candidate": "National/Local + LightGBM",
+        "primary": true,
+        "raw_baseline_rows": 1897,
+        "raw_candidate_rows": 1897,
+        "comparable_rows": 1890,
+        "n_municipalities": 63,
+        "baseline_nonfinite_truth": 7,
+        "candidate_nonfinite_truth": 7,
+        "pairwise_coverage_baseline": 1.0,
+        "pairwise_coverage_candidate": 1.0,
+        "gate_status": "PASS"
+      },
+      {
+        "pair": "B",
+        "baseline": "ProphetAuto",
+        "candidate": "SeasonalNaiveYoY",
+        "primary": true,
+        "raw_baseline_rows": 1897,
+        "raw_candidate_rows": 1897,
+        "comparable_rows": 1890,
+        "n_municipalities": 63,
+        "baseline_nonfinite_truth": 7,
+        "candidate_nonfinite_truth": 7,
+        "pairwise_coverage_baseline": 1.0,
+        "pairwise_coverage_candidate": 1.0,
+        "gate_status": "PASS"
+      },
+      {
+        "pair": "C",
+        "baseline": "ProphetYearly",
+        "candidate": "SeasonalNaiveYoY",
+        "primary": true,
+        "raw_baseline_rows": 1897,
+        "raw_candidate_rows": 1897,
+        "comparable_rows": 1890,
+        "n_municipalities": 63,
+        "baseline_nonfinite_truth": 7,
+        "candidate_nonfinite_truth": 7,
+        "pairwise_coverage_baseline": 1.0,
+        "pairwise_coverage_candidate": 1.0,
+        "gate_status": "PASS"
+      },
+      {
+        "pair": "D",
+        "baseline": "ProphetAuto",
+        "candidate": "National/Local + LightGBM",
+        "primary": true,
+        "raw_baseline_rows": 1897,
+        "raw_candidate_rows": 1897,
+        "comparable_rows": 1890,
+        "n_municipalities": 63,
+        "baseline_nonfinite_truth": 7,
+        "candidate_nonfinite_truth": 7,
+        "pairwise_coverage_baseline": 1.0,
+        "pairwise_coverage_candidate": 1.0,
+        "gate_status": "PASS"
+      },
+      {
+        "pair": "E",
+        "baseline": "ProphetYearly",
+        "candidate": "National/Local + LightGBM",
+        "primary": true,
+        "raw_baseline_rows": 1897,
+        "raw_candidate_rows": 1897,
+        "comparable_rows": 1890,
+        "n_municipalities": 63,
+        "baseline_nonfinite_truth": 7,
+        "candidate_nonfinite_truth": 7,
+        "pairwise_coverage_baseline": 1.0,
+        "pairwise_coverage_candidate": 1.0,
+        "gate_status": "PASS"
+      },
+      {
+        "pair": "F",
+        "baseline": "LightGBMDirect",
+        "candidate": "National/Local + LightGBM",
+        "primary": false,
+        "raw_baseline_rows": 1897,
+        "raw_candidate_rows": 1897,
+        "comparable_rows": 1890,
+        "n_municipalities": 63,
+        "baseline_nonfinite_truth": 7,
+        "candidate_nonfinite_truth": 7,
+        "pairwise_coverage_baseline": 1.0,
+        "pairwise_coverage_candidate": 1.0,
+        "gate_status": "PASS"
+      }
+    ],
+    "source_sha256": {
+      "reports/final/forecasting_metrics.csv": "ecb91aada02b7b87d1da019c8969eb17f6535077c9095f3a09531c209f02a1cd",
+      "reports/final/results_summary.json": "01dc6ecea1911f20c483d9539218bb57afc72e415defc34fe2102cdef1a9e2df",
+      "outputs/prophet_comparison_v1/predictions.csv.gz": "f0a6c25ab103aa81f451d52c3402e979b6655b888860339187f0d4c304214285",
+      "outputs/prophet_comparison_v1/metrics.csv": "72840af275dfe9be7ca4583a39dd052e3c14d8cf715d2f52d5c63873a4c9db0f",
+      "outputs/national_local_lightgbm_v1/predictions.csv.gz": "a10a5011cd093cf0e0bca87f0aa7cd440957bb587e64b16b2a1c649c808c4b84",
+      "outputs/national_local_lightgbm_v1/metrics_strategy.csv": "cc739e807292c1b2d31bd1f251565767230285030d4e187150aaeb3e63fa4833",
+      "reports/results/E01_prophet_comparison.md": "ef977ba859ff87d1ae0e5afe771004cb7efeea53b56ccd065367bb708a32049b",
+      "outputs/prophet_comparison_v1/run_manifest.json": "454ecefbca9a196a9d6a5b1fb7d2a2a37621463c202ae0a1f0ab91cacae74162",
+      "reports/results/E05d_national_local_lightgbm.md": "6d2d35e2143b196b182153f6276d8a0c307ea4dd3534f52352810ddba664a860",
+      "outputs/national_local_lightgbm_v1/run_manifest.json": "d26b283b36b0858a93853eaf5be077f9ae19ee2af7ed1c25f10232d5faff92da",
+      "reports/results/national_local_persistence.md": "f978fa03c9ebfcb0cc5f9e57a1f0bb083c680f81d1f16be58212287d370df4fc",
+      "reports/final/RESULTS_SUMMARY.md": "ce1626775e22296ee222a4d3290bee7e0739bb158830da9013f42b754efa6fda",
+      "reports/final/METHODOLOGY_REPORT.md": "f5fcff6d83a1efc214b095d4d9f1a245042d30b1456ce2849a5cfe09e8af8991",
+      "outputs/national_local_lightgbm_v1/strategy_keys.csv": "fb5b99ff5db3efa79f6c54d7462d106e2adb219cc98e9826a425eb9efe454c15"
+    },
+    "verification": "saved_prediction_rescoring_no_fits",
+    "availability": "saved cutoff and calendar verified; L=0 and historical vintages remain assumptions"
+  },
+  "interpretation_across_splits": [
+    {
+      "pair": "A",
+      "horizon": 1,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "A",
+      "horizon": 3,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "A",
+      "horizon": 6,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "B",
+      "horizon": 1,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "B",
+      "horizon": 3,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "B",
+      "horizon": 6,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "C",
+      "horizon": 1,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "C",
+      "horizon": 3,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "C",
+      "horizon": 6,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "D",
+      "horizon": 1,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "D",
+      "horizon": 3,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "D",
+      "horizon": 6,
+      "category": "D",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "E",
+      "horizon": 1,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "E",
+      "horizon": 3,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "E",
+      "horizon": 6,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "F",
+      "horizon": 1,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "F",
+      "horizon": 3,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    },
+    {
+      "pair": "F",
+      "horizon": 6,
+      "category": "B",
+      "reason": "Fixed validation/holdout direction check; no horizon selection"
+    }
+  ],
+  "n_model_fits": 0,
+  "new_predictions": 0,
+  "no_tuning": true,
+  "no_feature_search": true,
+  "no_primary_subset_selection": true,
+  "full_runtime_seconds": 5.71054909999998,
+  "seed": 42,
+  "bootstrap_iterations": 10000,
+  "delta_convention": "MAE baseline − MAE candidate; positive = candidate better",
+  "bootstrap_positive_share_is_p_value": false,
+  "primary_bootstrap_note": "4–6 origins: descriptive empirical sensitivity only; adjacent origin dependence remains.",
+  "public_data_policy": "No target/prediction rows or original municipality IDs. Per-MO deltas are local-only ignored audit.",
+  "artifact_sha256": {
+    "applicability_checks.csv": "ea5aa59828cb6807b5a6578e4f819189a17c2e54d1dad628e4e76784c640baaa",
+    "bootstrap_municipality.csv": "daf2352c21007d63267f3218e92072cf79655d21de8a7d71833c1c8439bdd1bc",
+    "bootstrap_origin.csv": "0ba8164ec638dda2e064c4f2a35c258d0d79787c56f250d4601f757284948d1a",
+    "concentration.csv": "4fa2f42062318fcbc22a1d1376e3b86086ec1e1c52193a0939b844ce44a2078b",
+    "municipality_summary.csv": "7944699c3142dce22d315a48b7deb5c1b716ef67626f2a38e6c18d56bea9e74f",
+    "origin_deltas.csv": "bb7b0190c0fcd3bfa9c3d7764ad21068f11674814fedd473a1c6c9432459bd0d",
+    "origin_summary.csv": "9031fdd4438a8da2c1402e818e0c5e954e84a2c5fe60df55fce5b10a61faa2db",
+    "pairwise_metrics.csv": "c5efbdb077fd68d81d323673d06bda0e376aaa9a17db0ccd6044797541071f31"
+  },
+  "code_available_in_tracked_repository": {
+    "src/sberforecast/forecast_robustness.py": false,
+    "scripts/run_forecast_robustness.py": false,
+    "tests/test_forecast_robustness.py": false
+  },
+  "post_run_report_review": {
+    "reason": "Report-only formatting and explicit data-derived headline answers",
+    "analysis_results_changed": false,
+    "new_bootstrap_runs": 0,
+    "new_model_fits": 0,
+    "executed_analysis_source_snapshot": "outputs/forecast_robustness_v1/executed_analysis_source.py",
+    "executed_analysis_source_sha256": "49d3e7ec142439a8ef095d7b7d91af98b37a7e3365ba30019b0872f0da7bde8b",
+    "current_report_code_sha256": "b5278415e33313cf8fc53c13902b0fd7bb6e5d695b1df6cb19623728eabe5737",
+    "current_tests_sha256": "053d4970d877f96e22eaeb52d4a8e0c620331bc3e55ea803d50020fb89d501d1",
+    "report_sha256": "2d4f7a660d805cbb143a5bc28b3902876048e2f528b25883742e2747cf71dfbb",
+    "command": [
+      ".venv/Scripts/python.exe",
+      "-X",
+      "utf8",
+      "outputs/forecast_robustness_checks/rebuild_report_only.py"
+    ],
+    "additional_report_test_result": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.393"
+    }
+  },
+  "test_result": {
+    "tests": "51",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "24.882"
+  },
+  "independent_verification": {
+    "status": "PASS",
+    "check_groups": 1894,
+    "pair_split_horizon_groups": 42,
+    "fixed_seed_bootstrap_replay": true,
+    "proof_path": "outputs/forecast_robustness_checks/independent_verification.json",
+    "proof_sha256": "696bac9eee285972e72550609fca9178e0bdd0402142e0d057492f31a6c23d54"
+  }
+}

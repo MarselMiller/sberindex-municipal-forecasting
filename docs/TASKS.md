@@ -1,12 +1,13 @@
 # План работ и критерии готовности
 
 Дата начала этого списка: 2026-10-05.
-Актуализация: 2026-10-08, по локальным артефактам и проверкам.
+Актуализация: 2026-10-09, по локальным артефактам и проверкам.
 Первоначальные задачи настройки E01/E02/E03 переименованы в ENV01/ENV02/GIT01,
 чтобы E01 и E02 обозначали согласованные исследовательские эксперименты.
 
 | ID | Задача | Статус | Критерий завершения |
 |---|---|---|---|
+| Submission audit | Финальный содержательный и редакционный аудит номинации «Прогнозирование» | Аудит выполнен: PASS WITH LIMITATION; доступ проверяющего перед сдачей не подтверждён | SUBMISSION_READINESS.md; точечная редактура; PDF 12 страниц, архитектура и проверенный МО 21/warmup detection case; 143 no-fit tests; builders/manifest/JSON/YAML PASS; 65 HTML browser checks, 17 slide-layout и 9 PDF checks PASS; isolated runtime 70/71 PASS, приложения вне docs — FAIL; 12 GitHub/6 out-of-root links перечислены; метрики/источники/PNG сохранены; без fits, новых experiments/bootstrap, установки, внешних запросов, deploy, commit/push/merge |
 | ENV01 | Проверить среду | Частично подтверждена | CPU/RAM/revision E03 сохранены; отдельная .venv-chronos; один полный pytest F1: 1461 passed, 1 прежнее warning; дополнительная проверка исправленного figure cohort и сборщика: 31 passed; версии сохранены, установок нет; прежний pip check E06a успешен; точное расширение VS Code не проверено |
 | ENV02 | Разобрать один ряд и минимальный запуск | Объяснение автором не проверено | Отдельный исходный критерий объяснения цели, горизонта и MAE сохраняется |
 | GIT01 | Проверенный начальный Git-репозиторий | Git существует; аудит публикации не подтверждён | HEAD на начало E02a: ab3aa50; проверку всего состава публичной публикации не приписывать этому шагу |
@@ -42,6 +43,8 @@
 | F8 | Interactive HTML project report и canonical glossary | Выполнен: third editorial и README local HTML link PASS; Ready for review | 27 языковых замен; audit details перенесены/сокращены; 75 terms / 7 групп / 22 first-use definitions; 6 таблиц / 246 cells и 1480 saved values неизменны; builder/links/integrity/53 Edge browser + 15 browser static checks PASS; без fits/experiments/tuning/result changes/commit/push |
 | NL Persistence | National/Local без learned local model | Выполнена: gate PASS; категория D; Ready for review | 1897 raw / 1890 finite прежних cases; 217 artifacts / 411 SHA; 67 synthetic tests и 433 independent checks PASS; 0 fits, 30 deterministic checks; validation/holdout/gap/origin/MO aggregates и manifest; F1–F8/E08/HTML/README сохранены; без tuning/feature search/commit/push |
 | NL integration | Включить Persistence ablation в итоговые материалы | Выполнена; Ready for review | Отдельные 35 metric / 28 gap rows в SoT, основной benchmark 9 стратегий сохранён; 221+6 synthetic tests, 193 independent, 59 browser и 16 HTML checks PASS; historical command-path exceptions сохранены; README/PDF/figures/research results неизменны; без fits/tuning/feature search/commit/push |
+| Forecast robustness | Проверить устойчивость сохранённых forecasting results | Выполнена; Ready for review | Gate1890keys/63МО/max9.09e-13; шесть fixedpairs/42groups; primary origin bootstrap10000/seed42, secondary MO sensitivity; 51+1 tests и1894independent checks PASS; 0fits; final materials сохранены; per-MO audit ignored |
+| Robustness integration | Включить анализ устойчивости в финальные материалы | Выполнена: PASS; Ready for review | Base eb02b0f/clean; отдельный SoT-блок и generated summary/HTML; девять стратегий/72 прежние строки и Persistence неизменны; 92 synthetic tests, 1141 independent и 65 browser checks PASS; оба builder --check PASS; README/PDF/PNG/research сохранены; 0 новых fits/bootstrap/experiments; без commit/push/merge |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -54,6 +57,30 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: Forecasting Robustness and Uncertainty Analysis, 2026-10-09.
+Ветка research/forecast-robustness; исходный HEAD c1b6123, работа только локальная.
+Подготовлены YAML, модуль, runner, synthetic tests и отдельный research report.
+Реально выполнены python scripts/run_forecast_robustness.py --gate-only,
+--smoke и full: gate PASS, минимальный smoke200draws PASS, full42groups PASS.
+Full runtime5.711s, seed42, primary/secondary bootstrap10000, model fits0.
+Targeted pytest двух модулей: 51PASS; дополнительный renderer test1PASS;
+independent verification1894PASS. Первый тест выявил duplicate-field merge,
+код исправлен; smoke/full выполнены после успешного повторного теста.
+После full статистика не пересчитывалась: только report-only rebuild из CSV
+и отдельная независимая проверка fixed resampling; execution snapshot сохранён.
+NL vs SNY: holdout aggregate+majorityMO, но h3/h6 CI пересекает0; validation
+отрицателен на всех primary h, общая категория D. ProphetYearly сравнения
+сохраняют положительное направление/majorityMO; ProphetAuto validationh3/h6
+сильнее SNY/NL. Устойчивый универсальный forecasting winner не установлен.
+Public: reports/results/forecast_robustness.md, восемь сводных CSV и manifest.
+municipality_deltas.csv в requested folder — local-only ignored, копия также
+в outputs/forecast_robustness_v1; исходные ID и per-MO derivatives не публикуются.
+Git diff --check PASS; README/final/PDF/HTML/data/старые artifacts сохранены.
+Следующий шаг — review результатов; final Source of Truth до review не менять.
+NO NEW MODEL FITS; NO TUNING; NO FEATURE SEARCH; NO PRIMARY SUBSET SELECTION;
+NO FINAL MATERIAL CHANGES; NO COMMIT/PUSH.
+
+## Завершённая задача: National/Local Persistence final integration
 ID: National/Local Persistence final integration, 2026-10-08.
 Ветка research/national-local-persistence, исходный research commit 19f3722.
 Интеграция завершена: RESULTS_SUMMARY, METHODOLOGY_REPORT, limitations,

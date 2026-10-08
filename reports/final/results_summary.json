@@ -10734,5 +10734,413 @@
         "hash_basis": "UTF-8 text normalized to LF, without BOM"
       }
     ]
+  },
+  "forecasting_robustness": {
+    "schema_version": 1,
+    "id": "forecasting_robustness",
+    "data_status": "real",
+    "role": "saved_forecast_sensitivity_analysis",
+    "included_in_main_benchmark": false,
+    "primary_horizons": [
+      1,
+      3,
+      6
+    ],
+    "descriptive_horizons": [
+      12
+    ],
+    "metric": "mae_macro",
+    "unit": "nominal_RUB",
+    "delta_convention": "MAE baseline − MAE candidate; positive = candidate better",
+    "comparable_cases": "Одинаковые ключи МО × forecast origin × target month × horizon; совпадают конечные y_true и split, проверены статусы и cutoff; fallback не исключён.",
+    "primary_pair": {
+      "research_pair_id": "A",
+      "baseline": "SeasonalNaiveYoY",
+      "candidate": "National/Local + LightGBM",
+      "records": [
+        {
+          "split": "validation",
+          "horizon": 1,
+          "n_comparable_rows": 378,
+          "n_municipalities": 63,
+          "mae_baseline": 1354.8970070056657,
+          "mae_candidate": 1370.546135555395,
+          "delta_mae": -15.649128549729285,
+          "municipality_wins": 31,
+          "municipality_win_rate": 0.49206349206349204,
+          "origin_wins": 3,
+          "n_origins": 6,
+          "origin_bootstrap": {
+            "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+            "lower": -198.78554248637755,
+            "upper": 141.568104100304,
+            "includes_zero": true,
+            "role": "descriptive_temporal_sensitivity",
+            "confidence_level": 0.95
+          }
+        },
+        {
+          "split": "validation",
+          "horizon": 3,
+          "n_comparable_rows": 252,
+          "n_municipalities": 63,
+          "mae_baseline": 2468.2179245714597,
+          "mae_candidate": 2819.738403482627,
+          "delta_mae": -351.52047891116734,
+          "municipality_wins": 26,
+          "municipality_win_rate": 0.4126984126984127,
+          "origin_wins": 1,
+          "n_origins": 4,
+          "origin_bootstrap": {
+            "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+            "lower": -838.3812648943511,
+            "upper": 388.59386477423243,
+            "includes_zero": true,
+            "role": "descriptive_temporal_sensitivity",
+            "confidence_level": 0.95
+          }
+        },
+        {
+          "split": "validation",
+          "horizon": 6,
+          "n_comparable_rows": 63,
+          "n_municipalities": 63,
+          "mae_baseline": 4777.158730158731,
+          "mae_candidate": 5525.335389138803,
+          "delta_mae": -748.1766589800719,
+          "municipality_wins": 23,
+          "municipality_win_rate": 0.36507936507936506,
+          "origin_wins": 0,
+          "n_origins": 1,
+          "origin_bootstrap": {
+            "status": "NOT_ESTIMABLE_ONE_ORIGIN",
+            "lower": null,
+            "upper": null,
+            "includes_zero": null,
+            "role": "descriptive_temporal_sensitivity",
+            "confidence_level": 0.95
+          }
+        },
+        {
+          "split": "holdout",
+          "horizon": 1,
+          "n_comparable_rows": 378,
+          "n_municipalities": 63,
+          "mae_baseline": 920.6969324322156,
+          "mae_candidate": 799.5500633458918,
+          "delta_mae": 121.14686908632412,
+          "municipality_wins": 35,
+          "municipality_win_rate": 0.5555555555555556,
+          "origin_wins": 5,
+          "n_origins": 6,
+          "origin_bootstrap": {
+            "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+            "lower": 39.30855805293919,
+            "upper": 188.9650466158052,
+            "includes_zero": false,
+            "role": "descriptive_temporal_sensitivity",
+            "confidence_level": 0.95
+          }
+        },
+        {
+          "split": "holdout",
+          "horizon": 3,
+          "n_comparable_rows": 378,
+          "n_municipalities": 63,
+          "mae_baseline": 1240.4023074934842,
+          "mae_candidate": 1212.7261260029177,
+          "delta_mae": 27.676181490566908,
+          "municipality_wins": 33,
+          "municipality_win_rate": 0.5238095238095238,
+          "origin_wins": 4,
+          "n_origins": 6,
+          "origin_bootstrap": {
+            "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+            "lower": -184.12980687997037,
+            "upper": 218.3561820806682,
+            "includes_zero": true,
+            "role": "descriptive_temporal_sensitivity",
+            "confidence_level": 0.95
+          }
+        },
+        {
+          "split": "holdout",
+          "horizon": 6,
+          "n_comparable_rows": 378,
+          "n_municipalities": 63,
+          "mae_baseline": 1906.0109480578103,
+          "mae_candidate": 1897.2193717003956,
+          "delta_mae": 8.791576357414757,
+          "municipality_wins": 36,
+          "municipality_win_rate": 0.5714285714285714,
+          "origin_wins": 3,
+          "n_origins": 6,
+          "origin_bootstrap": {
+            "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+            "lower": -480.4451058535862,
+            "upper": 467.32927847331723,
+            "includes_zero": true,
+            "role": "descriptive_temporal_sensitivity",
+            "confidence_level": 0.95
+          }
+        }
+      ]
+    },
+    "prophet_comparisons": [
+      {
+        "baseline": "ProphetAuto",
+        "candidate": "SeasonalNaiveYoY",
+        "records": [
+          {
+            "split": "validation",
+            "horizon": 1,
+            "delta_mae": 375.4442029243759,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -288.97308271874215,
+              "upper": 1102.0228256836997,
+              "includes_zero": true,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "validation",
+            "horizon": 3,
+            "delta_mae": -1031.3752685325644,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -1897.7320660039836,
+              "upper": -299.9437606575302,
+              "includes_zero": false,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "validation",
+            "horizon": 6,
+            "delta_mae": -2795.8966657317574,
+            "origin_bootstrap": {
+              "status": "NOT_ESTIMABLE_ONE_ORIGIN",
+              "lower": null,
+              "upper": null,
+              "includes_zero": null,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "holdout",
+            "horizon": 1,
+            "delta_mae": 947.8580715586415,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": 263.94020575464356,
+              "upper": 1894.1153845179842,
+              "includes_zero": false,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "holdout",
+            "horizon": 3,
+            "delta_mae": 800.9088437633297,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": 322.0679862525808,
+              "upper": 1560.1544825329615,
+              "includes_zero": false,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "holdout",
+            "horizon": 6,
+            "delta_mae": 259.77039058965886,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -270.26969229785215,
+              "upper": 960.6883310901783,
+              "includes_zero": true,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          }
+        ]
+      },
+      {
+        "baseline": "ProphetYearly",
+        "candidate": "SeasonalNaiveYoY",
+        "records": [
+          {
+            "split": "validation",
+            "horizon": 1,
+            "delta_mae": 1381.7797797078954,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -330.8410302789856,
+              "upper": 4267.676053764277,
+              "includes_zero": true,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "validation",
+            "horizon": 3,
+            "delta_mae": 740.7959185189131,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -1136.8015195928442,
+              "upper": 3412.0533854058112,
+              "includes_zero": true,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "validation",
+            "horizon": 6,
+            "delta_mae": 3585.3270324456344,
+            "origin_bootstrap": {
+              "status": "NOT_ESTIMABLE_ONE_ORIGIN",
+              "lower": null,
+              "upper": null,
+              "includes_zero": null,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "holdout",
+            "horizon": 1,
+            "delta_mae": 761.6127572297638,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": 54.283706606927936,
+              "upper": 1659.1212549293314,
+              "includes_zero": false,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "holdout",
+            "horizon": 3,
+            "delta_mae": 439.22004108159217,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -113.76308136078818,
+              "upper": 1099.382140471152,
+              "includes_zero": true,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          },
+          {
+            "split": "holdout",
+            "horizon": 6,
+            "delta_mae": 31.6344456308345,
+            "origin_bootstrap": {
+              "status": "DESCRIPTIVE_EMPIRICAL_SENSITIVITY",
+              "lower": -466.4659486376745,
+              "upper": 621.0526487384325,
+              "includes_zero": true,
+              "role": "descriptive_temporal_sensitivity",
+              "confidence_level": 0.95
+            }
+          }
+        ]
+      }
+    ],
+    "prophet_conclusion": "На holdout SeasonalNaiveYoY имеет меньшую MAE, чем оба проверенных Prophet на h=1/3/6. На validation ProphetAuto лучше на h=3/6, а ProphetYearly хуже на всех трёх горизонтах. Временная неопределённость остаётся большой.",
+    "methods": {
+      "primary_bootstrap": "forecast_origin_cluster",
+      "secondary_bootstrap": "municipality_cluster_sensitivity_only",
+      "saved_iterations": 10000,
+      "saved_seed": 42,
+      "minimum_primary_origins": 4,
+      "bootstrap_positive_share_is_p_value": false,
+      "diebold_mariano": "NOT_ESTIMATED",
+      "new_bootstrap_runs_during_integration": 0
+    },
+    "interpretation": {
+      "stable_advantage_across_splits": false,
+      "conclusion": "National/Local + LightGBM показывает минимальную holdout MAE среди девяти основных стратегий на h=1/3/6, но устойчивое преимущество над SeasonalNaiveYoY между периодами оценки не подтверждено: на validation ошибка больше на всех трёх горизонтах.",
+      "concentration": "Положительное улучшение не ограничивается несколькими МО, но при h=3/6 положительные и отрицательные вклады почти компенсируются. Отсутствие влияния выбросов не установлено."
+    },
+    "limitations": [
+      "При 4–6 forecast origins интервалы описывают чувствительность к повторной выборке наблюдаемых дат; независимость соседних дат не установлена.",
+      "При одной origin первичный интервал не оценивается; h=12 исключён из вывода об устойчивости.",
+      "Общие национальные шоки связывают МО; bootstrap по МО служит дополнительной пространственной проверкой и не заменяет временную оценку.",
+      "Прогнозы соседних origins используют пересекающуюся историю, а целевые месяцы разных горизонтов могут совпадать; bootstrap не устраняет эту зависимость.",
+      "Holdout уже просмотрен; анализ не является новым слепым тестом и не подтверждает качество на будущих периодах. Доля положительных bootstrap draws не является p-value.",
+      "История цели содержит 24 месяца; release_lag_months=0 и неизвестные historical vintages остаются допущениями исходного backtest."
+    ],
+    "verification": {
+      "status": "PASS",
+      "comparable_cases_per_pair": 1890,
+      "evaluable_municipalities": 63,
+      "tolerance_absolute": 1e-08,
+      "maximum_metric_difference": 9.094947017729282e-13,
+      "saved_model_fits": 0,
+      "holdout_previously_inspected": true,
+      "new_experiments_during_integration": false
+    },
+    "sources": [
+      {
+        "path": "reports/results/forecast_robustness.md",
+        "sha256": "7127ee7696cec4fbcde7838cc27be73f9060dff3c6711c7343a3105c1f1ee736",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/pairwise_metrics.csv",
+        "sha256": "6ac922d3005d1ac01bcae8bcd5fc377df2902746c35c467a006824249337abc3",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/municipality_summary.csv",
+        "sha256": "e673b7033eea518c64e298fc8e83ddefc1ca8e4f71cdb1dafd8422c3ebef2f95",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/origin_deltas.csv",
+        "sha256": "0a1973f5e71522959d620e877654746470052332e578177918b6a05e6b4bdc30",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/origin_summary.csv",
+        "sha256": "bcab56b922c85e52c249926fdeba0daf5fb6f6fc637f96384169219ea92f757d",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/bootstrap_origin.csv",
+        "sha256": "831a68968105fcc0a40c5df3518359de5f6257c30126552d7effd4dcb18f4144",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/bootstrap_municipality.csv",
+        "sha256": "45da6b4b2edcdaa37df0a4081d086268af131ee5542167793a67c6e418b1be1f",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/concentration.csv",
+        "sha256": "23106b35f975397e211e7bc67e819ea4f3edb2bc7d3d20ecea35dc536dc98a35",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/applicability_checks.csv",
+        "sha256": "2cb4b4d89cdbeb1af5bbdf57da5533b24cdaae72cf9413e7380b782498897163",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      },
+      {
+        "path": "reports/results/forecast_robustness/run_manifest.json",
+        "sha256": "e21defcec2be546800df1ae6c07a4bd19c2b7cc2b9ff9bd1d18b78af204cae28",
+        "hash_basis": "UTF-8 text normalized to LF, without BOM"
+      }
+    ]
   }
 }

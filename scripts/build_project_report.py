@@ -110,8 +110,11 @@ def persistence_gap_rows(ablation: dict) -> list[dict]:
 def forecasting_data() -> dict:
     path = "reports/final/forecasting_metrics.csv"
     summary_path = "reports/final/results_summary.json"
-    ablation = read_json(summary_path)["forecasting_ablation"]
+    summary = read_json(summary_path)
+    ablation = summary["forecasting_ablation"]
+    robustness = summary["forecasting_robustness"]
     persistence_gap_rows(ablation)
+    robustness_holdout_rows(robustness)
     source = read_csv(path)
     expected = {(m, split, h) for m in MODEL_ORDER for split in ["holdout", "validation"] for h in [1, 3, 6, 12]}
     actual = {(r["model"], r["split"], int(r["horizon"])) for r in source}
@@ -138,6 +141,7 @@ def forecasting_data() -> dict:
         "note": "Общая benchmark-выборка муниципальных расходов СберИндекса: категория «Все категории», оценка средних безналичных расходов жителей. Просмотренный holdout июля–декабря 2024, 63 оцениваемых МО.",
         "rows": rows,
         "ablation": ablation,
+        "robustness": robustness,
     }
 
 
@@ -361,6 +365,51 @@ def render_forecasting_ablation(ablation: dict) -> str:
     )
 
 
+def robustness_holdout_rows(block: dict) -> list[dict]:
+    pair = block["primary_pair"]
+    if (block.get("schema_version") != 1 or block.get("id") != "forecasting_robustness"
+            or block.get("included_in_main_benchmark") is not False
+            or block.get("primary_horizons") != [1, 3, 6] or block.get("descriptive_horizons") != [12]
+            or pair["baseline"] != "SeasonalNaiveYoY" or pair["candidate"] != "National/Local + LightGBM"
+            or block.get("delta_convention") != "MAE baseline − MAE candidate; positive = candidate better"):
+        raise ValueError("Robustness must preserve comparison sign, strategies and inference scope")
+    keys = [(r["split"], r["horizon"]) for r in pair["records"]]
+    if len(keys) != 6 or set(keys) != {(s, h) for s in ("validation", "holdout") for h in (1, 3, 6)}:
+        raise ValueError("Robustness requires separate validation and holdout on h1/h3/h6")
+    return sorted((r for r in pair["records"] if r["split"] == "holdout"), key=lambda r: r["horizon"])
+
+
+def render_forecasting_robustness(block: dict) -> str:
+    rows = []
+    for row in robustness_holdout_rows(block):
+        ci = row["origin_bootstrap"]
+        if ci["status"] != "DESCRIPTIVE_EMPIRICAL_SENSITIVITY":
+            raise ValueError("Holdout robustness requires saved descriptive origin intervals")
+        label = "Интервал включает ноль" if ci["includes_zero"] else "Интервал выше нуля"
+        rows.append([f'h = {row["horizon"]}', formatted(row["delta_mae"], 2),
+                     formatted(row["municipality_win_rate"] * 100, 2) + "%",
+                     f'{row["origin_wins"]}/{row["n_origins"]}',
+                     f'[{formatted(ci["lower"], 2)}; {formatted(ci["upper"], 2)}]', label])
+    return (
+        '<div id="forecasting-robustness">\n<h3>Устойчивость сравнения</h3>\n'
+        '<p>National/Local + LightGBM и SeasonalNaiveYoY сравниваются на одинаковых наблюдениях '
+        'у 63 оцениваемых МО. ΔMAE = MAE SeasonalNaiveYoY − MAE National/Local + LightGBM; '
+        'положительное значение означает меньшую ошибку National/Local + LightGBM.</p>\n'
+        '<div class="table-scroll" tabindex="0" role="region" aria-label="Устойчивость сравнения прогнозов">'
+        + table('Holdout: разница MAE и чувствительность к датам выпуска',
+                ['Горизонт', 'ΔMAE, руб.', 'Доля МО с меньшей MAE', 'Выигрыши по origins',
+                 'Описательный 95% origin-интервал, руб.', 'Неопределённость оценки'], rows)
+        + '</div>\n<p class="caution">На validation преимущество не воспроизводится; из-за малого '
+        'числа forecast origins интервалы следует рассматривать как описательную оценку неопределённости. '
+        'На holdout h = 3 / 6 интервалы включают ноль. Устойчивое преимущество между периодами оценки '
+        'не подтверждено. Holdout уже просмотрен; это анализ сохранённых прогнозов.</p>\n'
+        '<p class="source-note"><a href="../reports/results/forecast_robustness.md">Протокол и результаты</a> '
+        '/ <a href="../reports/results/forecast_robustness/pairwise_metrics.csv">Парные метрики</a> '
+        '/ <a href="../reports/results/forecast_robustness/bootstrap_origin.csv">Интервалы по датам</a>.</p>\n'
+        '</div>'
+    )
+
+
 def render_fragments(data: dict) -> dict[str, str]:
     fragments = {}
     lookup = {(r["model"], r["split"], r["horizon"]): r for r in data["forecasting"]["rows"]}
@@ -379,6 +428,7 @@ def render_fragments(data: dict) -> dict[str, str]:
         forecast_tables.append(table(label + ": MAE macro, руб.", ["Стратегия", "h = 1", "h = 3", "h = 6", "h = 12"], rows))
     fragments["forecasting-table"] = "\n".join(forecast_tables)
     fragments["forecasting-ablation"] = render_forecasting_ablation(data["forecasting"]["ablation"])
+    fragments["forecasting-robustness"] = render_forecasting_robustness(data["forecasting"]["robustness"])
     fragments["detection-table"] = table(
         "Synthetic TEST: качество обнаружения уже начавшегося сдвига",
         ["Метод", "Режим", "Precision", "Recall", "F1", "Miss rate", "Delay, мес.", "Localisation error, мес.", "FP / 12 мес."],
@@ -417,7 +467,52 @@ def render_fragments(data: dict) -> dict[str, str]:
     return fragments
 
 
+def render_editorial_text(content: str) -> str:
+    """Apply the reviewed public wording through the existing HTML build pipeline."""
+    replacements = [
+        ('Цель — месячное значение категории «Все категории»: средние безналичные расходы жителей МО в номинальных рублях.',
+         'Мы прогнозируем средние безналичные расходы жителей каждого муниципального образования за месяц. Используется категория «Все категории», значения измеряются в номинальных рублях.'),
+        ('Единица наблюдения — МО × месяц. Показатель не является совокупным муниципальным оборотом.',
+         'Данные содержат отдельное значение для каждого муниципалитета и месяца.'),
+        ('дополнительно внешние предвестники генератора.',
+         'дополнительно искусственные внешние признаки приближающегося изменения.'),
+        ('Модель с внешними предвестниками проверяет механизм при наблюдаемых предвестниках генератора. Результат относится к synthetic benchmark и не оценивает предупреждение экономических шоков или пользу реальных новостей.',
+         'На синтетических данных внешние признаки приближающегося изменения улучшили раннее предупреждение относительно вариантов без этих признаков. Часть искусственных изменений не имела предвестников. Это показывает возможности подхода при существующих предвестниках, но не подтверждает способность предупреждать реальные экономические изменения или пользу реальных новостей.'),
+    ]
+    for old, new in replacements:
+        if old in content:
+            content = content.replace(old, new)
+    forecast_old = 'Одномесячные прогнозы SeasonalNaiveYoY и факты для МО 21 — первого числового ID оцениваемой выборки. Пример показывает ошибки отдельных месяцев и не заменяет MAE по панели. Использован ранее опубликованный рисунок.'
+    forecast_new = ('Сохранённые одномесячные прогнозы SeasonalNaiveYoY и факты для МО 21, первого числового ID оцениваемой выборки. '
+                    'Ось показывает целевой месяц 2024 года; прогноз выпущен в конце предыдущего месяца. '
+                    'В январе прогноз ниже факта, в июле–декабре — выше факта. Ошибка «факт минус прогноз» '
+                    'в этих шести месяцах отрицательна. Использован существующий рисунок; пример не заменяет MAE по панели.')
+    content = content.replace(forecast_old, forecast_new)
+    if 'id="real-detection-example"' not in content:
+        pattern = r'(<figure\b[^>]*class="forecast-example"[^>]*>.*?</figure>)'
+        case = ('\n      <details class="method-details" id="real-detection-example"><summary>Реальный пример диагностики: МО 21</summary>'
+                '<p>Для того же ряда PELT и Binary Segmentation выделили март 2024 как ретроспективную границу '
+                'при анализе наблюдений до декабря. Граница находится в периоде настройки масштаба (warmup), '
+                'до начала мониторинга, и не входит в число оцениваемых monitoring-границ. '
+                'Это не предупреждение, полученное в марте. Диагностический сигнал указывает на изменение '
+                'поведения ряда, но причина изменения независимо не подтверждена.</p>'
+                '<p>Выбор МО задан минимальным числовым ID; новых данных и рисунков не добавлено. '
+                '<a href="../reports/results/E06a_offline_detection.md">Сохранённый протокол и таблицы сегментации</a>.</p></details>')
+        content, count = re.subn(pattern, lambda m: m[1] + case, content, count=1, flags=re.S)
+        if count != 1:
+            raise ValueError('Editorial build requires the existing real forecast example')
+    if 'id="detector-selection-note"' not in content:
+        note = ('<p id="detector-selection-note">Параметры детекторов, включая пороги срабатывания, выбирались '
+                'на отдельной синтетической выборке с ограничением частоты ложных сигналов — сообщений '
+                'об изменении, которого по известной разметке не было. Ограничение проверялось отдельно '
+                'на рядах без изменений и с одиночными выбросами.</p>\n      ')
+        content = content.replace('<div class="chart-toolbar enhanced-control"><label class="select-label">Показатель',
+                                  note + '<div class="chart-toolbar enhanced-control"><label class="select-label">Показатель', 1)
+    return content
+
+
 def render_index(content: str, data: dict) -> str:
+    content = render_editorial_text(content)
     for marker, fragment in render_fragments(data).items():
         begin = "<!-- " + marker + ":begin -->"
         end = "<!-- " + marker + ":end -->"

@@ -1,159 +1,432 @@
 {
-  "task": "F4",
+  "task": "Final submission readiness audit",
+  "date": "2026-10-09",
+  "base_commit": "e0f5ad5",
+  "branch": "research/forecast-robustness",
+  "status": "PASS",
   "slide_count": 12,
-  "claims": [
-    {
-      "claim": "36 MAE cells in both outline and HTML; h12 fallback markings",
-      "status": "PASS"
-    },
-    {
-      "claim": "YoY vs both Prophet; N/L LightGBM minimum among nine holdout strategies h1/3/6, validation caveat; Chronos zero-shot holdout scope; h12 one origin",
-      "status": "PASS"
-    },
-    {
-      "claim": "24 months,2190 MO,63 evaluated pilot MO; news93/197/89,26+26,7 temporal vectors,no historical regional/municipal events",
-      "status": "PASS"
-    },
-    {
-      "claim": "Real EW weak events/onset dates,k1 train/test positives and dates,k3 infeasible,classifier not trained",
-      "status": "PASS"
-    },
-    {
-      "claim": "Synthetic S3 TEST recall .428/.617,median successful lead1/2 months,180 events",
-      "status": "PASS"
-    },
-    {
-      "claim": "167 existing README/docs/configs/scripts/src/reports files unchanged",
-      "status": "PASS",
-      "aggregate_sha256": "f38fe201455c2a58e3ee9b2772ec1e3e3ef61008c44f0ab4e055b32e80c60d9d"
-    }
-  ],
-  "figures": [
-    {
-      "path": "../figures/rolling_forecast.png",
-      "data_status": "real",
-      "sha256": "0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2"
-    },
-    {
-      "path": "../figures/online_comparison.png",
-      "data_status": "synthetic",
-      "sha256": "e584d79d91af96c19606367e88227aec814bd3b5ac58f5f100dba188bf067e41"
-    },
-    {
-      "path": "../figures/real_warning_sufficiency.png",
-      "data_status": "not_evaluated",
-      "sha256": "ca2e5643eb6023ec28c412c201160d7d1d4bb9e9afb88adbebe3a74d08e32b5f"
-    },
-    {
-      "path": "../figures/synthetic_event_performance.png",
-      "data_status": "synthetic",
-      "sha256": "01fa62b6a346b5299794d866cac3c9b664cd53fa44c826af8dbdee5bc537b551"
-    }
-  ],
-  "relative_links_checked": 24,
-  "broken_links": 0,
-  "forbidden_terms_or_absolute_paths": 0,
-  "markdown_mermaid_offline_branch_terminal": true,
-  "git_diff_check": "PASS",
-  "new_text_whitespace_check": "PASS",
-  "NO_MODEL_FITS": true,
-  "NO_NEW_EXPERIMENTS": true,
-  "NO_COMMIT_PUSH": true,
-  "pdf_export": "Microsoft Edge headless,local HTML,offline",
-  "checks_pending": [],
   "pdf": {
-    "status": "PASS",
-    "sha256": "3f9124fcee6363081058f4766c620e0d27ac3faf9d3206e871dab4f217ac6a69",
-    "bytes": 395557,
+    "path": "reports/final/presentation/presentation.pdf",
+    "sha256": "b00eb2fe7e579b0365bd7d077e7d5f7e5a9c35cfd328b1d19bd9224d49eafee9",
+    "bytes": 400930,
     "pages": 12,
-    "page_size_pt": [
+    "page_size_points": [
       960,
       540
     ],
-    "aspect_ratio": "16:9",
-    "utf8_text": "PASS",
-    "all_slide_titles_present": true,
-    "all_mae_values_present_on_slide_5": true,
-    "outside_page_word_bboxes": 0,
-    "word_bboxes_checked": 924,
-    "visual_review": {
-      "pages_reviewed": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12
-      ],
-      "clipping": false,
-      "overlapping_content": false,
-      "missing_figures": false,
-      "method": "Poppler PNG rendering at 150 dpi; all 12 pages inspected"
-    }
+    "encrypted": false,
+    "export": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/final/presentation/export_pdf.ps1",
+    "page_render": "Installed miktex-pdftoppm, installer/maintenance/diagnostics disabled; PNG at 100 dpi",
+    "visual_review_pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ]
   },
+  "checks": [
+    {
+      "name": "12 unencrypted 16:9 PDF pages",
+      "passed": true
+    },
+    {
+      "name": "all PDF words inside page bounds",
+      "passed": true,
+      "words": 1074,
+      "outside": []
+    },
+    {
+      "name": "all 12 PDF pages rendered",
+      "passed": true
+    },
+    {
+      "name": "architecture directly in PDF; real no-fit and separate synthetic explanation",
+      "passed": true
+    },
+    {
+      "name": "real example directly in PDF with error interpretation and warmup caveat",
+      "passed": true
+    },
+    {
+      "name": "robustness, Persistence and synthetic warning limits directly in PDF",
+      "passed": true
+    },
+    {
+      "name": "36 saved MAE cells for nine strategies extracted from PDF",
+      "passed": true
+    },
+    {
+      "name": "existing PDF MAE values unchanged from prior export",
+      "passed": true
+    },
+    {
+      "name": "all presentation HTML slide content fits above footer",
+      "passed": true,
+      "checks": 17
+    }
+  ],
   "browser_layout": {
-    "slides_checked": 12,
-    "footer_overlaps": 0,
-    "horizontal_overflows": 0,
-    "image_load_failures": 0
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "12 HTML slides",
+        "passed": true
+      },
+      {
+        "name": "slide 1 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 1,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 2 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 2,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 3 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 3,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 4 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 4,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 5 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 5,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 6 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 6,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 7 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 7,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 8 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 8,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 9 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 9,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 10 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 10,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 11 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 11,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "slide 12 fits and images load",
+        "passed": true,
+        "details": {
+          "slide": 12,
+          "footerOverlap": false,
+          "horizontalOverflow": false,
+          "imageFailures": 0
+        }
+      },
+      {
+        "name": "no Runtime exceptions",
+        "passed": true,
+        "details": []
+      },
+      {
+        "name": "no console errors",
+        "passed": true,
+        "details": []
+      },
+      {
+        "name": "no external requests",
+        "passed": true,
+        "details": []
+      },
+      {
+        "name": "presentation sources and PDF unchanged by QA",
+        "passed": true
+      }
+    ]
   },
-  "source_files": {
-    "README.md": "50ab3ec3dcf1db985d68669937112b594c73f851ed191f86976732f47d784ad8",
-    "reports/final/METHODOLOGY_REPORT.md": "eac6946257866a8a1acf2691ef96648cf3425a35346896725c9fef343c1a5efe",
-    "reports/final/RESULTS_SUMMARY.md": "fc0e9813e1d416a84a15a9d97818b9ea70fade9ef5e1097a1904ede6f0715860",
-    "reports/final/results_summary.json": "2ad46fc62bea4804dd281b8b8f040f92fc76929cdff5886ebd2e1c7482fa4359",
-    "reports/final/figure_manifest.csv": "e21ad21f705f59470c13affb2af9ed3b95a825e039cad91b1b87e4e9be13abea"
+  "real_case": {
+    "municipality": "21",
+    "selection": "minimum numeric ID in existing evaluated cohort",
+    "existing_figure": true,
+    "new_rows_published": 0,
+    "new_figures": 0,
+    "boundary": "2024-03",
+    "phase": "warmup",
+    "analyzed_end_period": "2024-12",
+    "monitoring_eligible": false,
+    "economic_cause_independently_verified": false,
+    "metadata_already_in": "reports/results/E06a_offline_detection.md",
+    "verification_status": "PASS",
+    "data_rights": "Historical publication decisions unchanged; no new license claim"
   },
-  "checked_claim_scope": [
-    "Forecasting is real pilot holdout,not the full2190MO panel",
-    "National/Local LightGBM minimum limited to nine main strategies,h1/3/6; validation advantage not stable",
-    "Chronos zero-shot no strong baseline uplift on holdout; checkpoint after backtest period and possible pretraining overlap",
-    "Real detection signals diagnostic only; no independent real ground truth",
-    "News coverage insufficient to estimate predictive contribution; corpus versions not independent events",
-    "Real early warning not trained; temporal positives/onset dates insufficient; data-sufficiency result",
-    "Synthetic detection and early warning evaluate controlled mechanism,not real economic-shock prediction quality",
-    "Offline detection excluded from early-warning features"
-  ],
-  "commands_completed": [
-    {
-      "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/final/presentation/export_pdf.ps1",
-      "exit_code": 0
+  "source_sha256": {
+    "reports/final/presentation/presentation.html": "931f5753ffbc36463464b80679f48170591414cf55ad46dafc6d6d741e47f6c7",
+    "reports/final/presentation/presentation.md": "bf7087307d098af89088d4a88950b6a319b3347e904f73931a71c883b0068f24",
+    "reports/final/figures/rolling_forecast.png": "0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2",
+    "reports/final/results_summary.json": "da55cc0db211cf0af9e5884f030f087775935e933124881b3975380670ec2b22",
+    "reports/final/forecasting_metrics.csv": "ecb91aada02b7b87d1da019c8969eb17f6535077c9095f3a09531c209f02a1cd",
+    "reports/final/detection_metrics.csv": "1d89f04c640402ce716dedf77b851878f06fa345d989479cf4804ca7720db0ce"
+  },
+  "figure_sha256": {
+    "reports/final/figures/forecast_mae.png": "058aca599d828b2fda7e5a03eb73ce71850345ffd9ab99cc757878f53245eb12",
+    "reports/final/figures/news_timeline.png": "5c49646fc8c749b076b79039a8c9c84a1588038e6ac6118f5b7bb7c7316ea432",
+    "reports/final/figures/offline_example.png": "3641a50d7cde55284fea7841800c670bb6c2f352b61c088252b9e14707a79e1a",
+    "reports/final/figures/online_comparison.png": "e584d79d91af96c19606367e88227aec814bd3b5ac58f5f100dba188bf067e41",
+    "reports/final/figures/real_diagnostic.png": "825541db769afc514e37951dbb221b782acd3a1493d684f62b64a76212316bc1",
+    "reports/final/figures/real_warning_sufficiency.png": "ca2e5643eb6023ec28c412c201160d7d1d4bb9e9afb88adbebe3a74d08e32b5f",
+    "reports/final/figures/rolling_forecast.png": "0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2",
+    "reports/final/figures/synthetic_event_performance.png": "01fa62b6a346b5299794d866cac3c9b664cd53fa44c826af8dbdee5bc537b551",
+    "reports/final/figures/warning_false.png": "5f59469d3548820f72248f43251c88a53555151f4269461a6d384bb523b1f565",
+    "reports/final/figures/warning_miss.png": "7171331352f06cbbf78b9c142372d64b5191837a3a481d9e73447237776dcce8",
+    "reports/final/figures/warning_success.png": "329e43899d4d409c74c87df4b846c7b28758c398c8363397b6c909a1c7e3a1ea"
+  },
+  "relevant_tests": {
+    "passed": 143,
+    "failed": 0,
+    "skipped": 0,
+    "synthetic_fixtures": true,
+    "model_fits": 0
+  },
+  "results_summary_and_saved_metrics_unchanged": true,
+  "NO_NEW_MODEL_FITS": true,
+  "NO_NEW_EXPERIMENTS": true,
+  "NO_RAW_DATA_PUBLICATION": true,
+  "NO_SITE_DEPLOYMENT": true,
+  "NO_COMMIT_PUSH_MERGE": true,
+  "historical_verification": {
+    "task": "F4",
+    "slide_count": 12,
+    "claims": [
+      {
+        "claim": "36 MAE cells in both outline and HTML; h12 fallback markings",
+        "status": "PASS"
+      },
+      {
+        "claim": "YoY vs both Prophet; N/L LightGBM minimum among nine holdout strategies h1/3/6, validation caveat; Chronos zero-shot holdout scope; h12 one origin",
+        "status": "PASS"
+      },
+      {
+        "claim": "24 months,2190 MO,63 evaluated pilot MO; news93/197/89,26+26,7 temporal vectors,no historical regional/municipal events",
+        "status": "PASS"
+      },
+      {
+        "claim": "Real EW weak events/onset dates,k1 train/test positives and dates,k3 infeasible,classifier not trained",
+        "status": "PASS"
+      },
+      {
+        "claim": "Synthetic S3 TEST recall .428/.617,median successful lead1/2 months,180 events",
+        "status": "PASS"
+      },
+      {
+        "claim": "167 existing README/docs/configs/scripts/src/reports files unchanged",
+        "status": "PASS",
+        "aggregate_sha256": "f38fe201455c2a58e3ee9b2772ec1e3e3ef61008c44f0ab4e055b32e80c60d9d"
+      }
+    ],
+    "figures": [
+      {
+        "path": "../figures/rolling_forecast.png",
+        "data_status": "real",
+        "sha256": "0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2"
+      },
+      {
+        "path": "../figures/online_comparison.png",
+        "data_status": "synthetic",
+        "sha256": "e584d79d91af96c19606367e88227aec814bd3b5ac58f5f100dba188bf067e41"
+      },
+      {
+        "path": "../figures/real_warning_sufficiency.png",
+        "data_status": "not_evaluated",
+        "sha256": "ca2e5643eb6023ec28c412c201160d7d1d4bb9e9afb88adbebe3a74d08e32b5f"
+      },
+      {
+        "path": "../figures/synthetic_event_performance.png",
+        "data_status": "synthetic",
+        "sha256": "01fa62b6a346b5299794d866cac3c9b664cd53fa44c826af8dbdee5bc537b551"
+      }
+    ],
+    "relative_links_checked": 24,
+    "broken_links": 0,
+    "forbidden_terms_or_absolute_paths": 0,
+    "markdown_mermaid_offline_branch_terminal": true,
+    "git_diff_check": "PASS",
+    "new_text_whitespace_check": "PASS",
+    "NO_MODEL_FITS": true,
+    "NO_NEW_EXPERIMENTS": true,
+    "NO_COMMIT_PUSH": true,
+    "pdf_export": "Microsoft Edge headless,local HTML,offline",
+    "checks_pending": [],
+    "pdf": {
+      "status": "PASS",
+      "sha256": "3f9124fcee6363081058f4766c620e0d27ac3faf9d3206e871dab4f217ac6a69",
+      "bytes": 395557,
+      "pages": 12,
+      "page_size_pt": [
+        960,
+        540
+      ],
+      "aspect_ratio": "16:9",
+      "utf8_text": "PASS",
+      "all_slide_titles_present": true,
+      "all_mae_values_present_on_slide_5": true,
+      "outside_page_word_bboxes": 0,
+      "word_bboxes_checked": 924,
+      "visual_review": {
+        "pages_reviewed": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "clipping": false,
+        "overlapping_content": false,
+        "missing_figures": false,
+        "method": "Poppler PNG rendering at 150 dpi; all 12 pages inspected"
+      }
     },
-    {
-      "command": "pdfinfo --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -box -f 1 -l 12 presentation.pdf",
-      "exit_code": 0
+    "browser_layout": {
+      "slides_checked": 12,
+      "footer_overlaps": 0,
+      "horizontal_overflows": 0,
+      "image_load_failures": 0
     },
-    {
-      "command": "pdftotext --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -layout -enc UTF-8 presentation.pdf <temporary-text>",
-      "exit_code": 0
+    "source_files": {
+      "README.md": "50ab3ec3dcf1db985d68669937112b594c73f851ed191f86976732f47d784ad8",
+      "reports/final/METHODOLOGY_REPORT.md": "eac6946257866a8a1acf2691ef96648cf3425a35346896725c9fef343c1a5efe",
+      "reports/final/RESULTS_SUMMARY.md": "fc0e9813e1d416a84a15a9d97818b9ea70fade9ef5e1097a1904ede6f0715860",
+      "reports/final/results_summary.json": "2ad46fc62bea4804dd281b8b8f040f92fc76929cdff5886ebd2e1c7482fa4359",
+      "reports/final/figure_manifest.csv": "e21ad21f705f59470c13affb2af9ed3b95a825e039cad91b1b87e4e9be13abea"
     },
-    {
-      "command": "pdftotext --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -bbox-layout -enc UTF-8 presentation.pdf <temporary-bbox>",
-      "exit_code": 0
-    },
-    {
-      "command": "pdftoppm --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -png -r 150 -cropbox -f 1 -l 12 presentation.pdf <temporary-previews>",
-      "exit_code": 0
-    },
-    {
-      "command": "git diff --check",
-      "exit_code": 0
-    }
-  ],
-  "temporary_artifacts": "Removed after checks; source PNG files preserved",
-  "git_status_note": "Existing .gitignore excludes reports; six local presentation files were not staged. Existing .vscode/ was untouched.",
-  "files_created": [
-    "presentation.md",
-    "presentation.html",
-    "presentation.pdf",
-    "export_pdf.ps1",
-    "README.md",
-    "verification.json"
-  ]
+    "checked_claim_scope": [
+      "Forecasting is real pilot holdout,not the full2190MO panel",
+      "National/Local LightGBM minimum limited to nine main strategies,h1/3/6; validation advantage not stable",
+      "Chronos zero-shot no strong baseline uplift on holdout; checkpoint after backtest period and possible pretraining overlap",
+      "Real detection signals diagnostic only; no independent real ground truth",
+      "News coverage insufficient to estimate predictive contribution; corpus versions not independent events",
+      "Real early warning not trained; temporal positives/onset dates insufficient; data-sufficiency result",
+      "Synthetic detection and early warning evaluate controlled mechanism,not real economic-shock prediction quality",
+      "Offline detection excluded from early-warning features"
+    ],
+    "commands_completed": [
+      {
+        "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/final/presentation/export_pdf.ps1",
+        "exit_code": 0
+      },
+      {
+        "command": "pdfinfo --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -box -f 1 -l 12 presentation.pdf",
+        "exit_code": 0
+      },
+      {
+        "command": "pdftotext --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -layout -enc UTF-8 presentation.pdf <temporary-text>",
+        "exit_code": 0
+      },
+      {
+        "command": "pdftotext --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -bbox-layout -enc UTF-8 presentation.pdf <temporary-bbox>",
+        "exit_code": 0
+      },
+      {
+        "command": "pdftoppm --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose -png -r 150 -cropbox -f 1 -l 12 presentation.pdf <temporary-previews>",
+        "exit_code": 0
+      },
+      {
+        "command": "git diff --check",
+        "exit_code": 0
+      }
+    ],
+    "temporary_artifacts": "Removed after checks; source PNG files preserved",
+    "git_status_note": "Existing .gitignore excludes reports; six local presentation files were not staged. Existing .vscode/ was untouched.",
+    "files_created": [
+      "presentation.md",
+      "presentation.html",
+      "presentation.pdf",
+      "export_pdf.ps1",
+      "README.md",
+      "verification.json"
+    ]
+  }
 }
