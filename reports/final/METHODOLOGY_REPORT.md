@@ -120,6 +120,26 @@ $$
 
 National/Local + LightGBM остаётся исследовательской стратегией. Наблюдавшийся минимум holdout MAE в основной таблице требует сопоставления с validation и повторения на новых периодах. Метод и настройки описаны в [отчёте о разложении](../results/E05d_national_local_lightgbm.md) и [конфигурации](../../configs/national_local_lightgbm.yaml).
 
+### 4.4.1. National/Local Persistence
+
+Методологическая ablation проверяет, какая часть наблюдаемого улучшения National/Local + LightGBM сохраняется без обучения локальной динамики. Используется прежнее разложение расходов муниципальных образований СберИндекса:
+
+$$
+y_{i,t}=N_t R_{i,t},\qquad
+\hat R_{i,O+h}=R^{last}_{i,O},\qquad
+\hat y_{i,O+h}=\hat N_{O+h}R^{last}_{i,O}.
+$$
+
+`R_last` — последнее конечное отношение расходов МО к национальной медиане того же месяца, доступное не позже `O−L`. Национальная медиана и её прогноз SeasonalNaiveYoY переиспользованы без изменений. Локальное отношение фиксируется для всех горизонтов. Правило последнего отношения задано заранее; tuning и поиск признаков не проводились.
+
+Сравнение LightGBMDirect → National/Local Persistence → National/Local + LightGBM выполнено на прежних 1890 случаях с конечным фактом у 63 МО, с теми же ключами, пропусками, датами доступности и разделением validation/holdout. Reproduction gate пройден пересчётом метрик сохранённых reference predictions; новых model fits — 0. Holdout уже просмотрен, поэтому ablation является описательной проверкой компонентов, а не новым слепым тестом.
+
+На holdout h=1/3/6 Persistence закрывает 68.32% / 69.24% / 76.26% наблюдаемого разрыва MAE между LightGBMDirect и National/Local + LightGBM. Обучение локальной модели дополнительно уменьшает holdout MAE относительно Persistence на 7.47% / 5.67% / 6.61%. Это указывает на существенную роль разложения в данном сравнении; доля разрыва не измеряет причинный вклад.
+
+Устойчивость ограничена: Persistence уступает SeasonalNaiveYoY на всех validation горизонтах и на holdout h=3/6, а learned вариант на validation h=3/6 уступает Persistence. На holdout улучшение Persistence относительно LightGBMDirect приходится лишь на 3 из 6 дат для h=1 и h=6. Предзаданные критерии дают категорию D на каждом основном горизонте. h=12 остаётся описательным: Persistence применяет фиксированную формулу, тогда как обе learned references используют прежний SeasonalNaive fallback; годовое обучение этим не оценено.
+
+Сохранённые [результаты ablation](../results/national_local_persistence.md), [метрики](../results/national_local_persistence/metrics.csv), [сравнения по датам](../results/national_local_persistence/origin_stability.csv) и [конфигурация](../../configs/national_local_persistence.yaml) описывают отдельную проверку разложения; состав девяти основных стратегий не расширяется.
+
 ### 4.5. Foundation model: Chronos-2
 
 Chronos-2 проверен в режиме **zero-shot**: готовый checkpoint применён без обучения на проектной панели. Инференс выполнен на CPU в float32; точечный прогноз соответствует quantile 0.5. Вход сохраняет календарные пропуски, внешние covariates не добавляются, cross-learning выключен. Поэтому сравнение относится к конкретному использованному режиму, а не ко всем возможным способам адаптации foundation model.

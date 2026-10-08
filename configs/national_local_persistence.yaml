@@ -1,0 +1,41 @@
+experiment: national_local_persistence_v1
+branch: research/national-local-persistence
+seed: 42
+reference_config: configs/national_local_lightgbm.yaml
+reference_output: outputs/national_local_lightgbm_v1
+ratio_rule: last_causal_available_ratio
+national_component: unchanged_E05d_full_panel_median
+national_forecast: unchanged_E05d_SeasonalNaiveYoY
+ratio_transformations: []
+local_model_fits: 0
+new_reference_fits: 0
+primary_horizons: [1, 3, 6]
+descriptive_horizons: [12]
+reference_tolerance: 0.00000001
+reference_gate: saved_predictions_rescored_on_fixed_E05d_keys
+missing_policy: unchanged_ratio_NaN_last_finite_anchor_no_future_fill
+failure_policy: unchanged_NL_batch_failure_no_replacement
+national_prediction_guard: strictly_positive_finite
+h12_policy: fixed_persistence_rule_without_training_pair_requirement
+holdout_status: previously_inspected_not_independent
+interpretation:
+  substantial_improvement_pct: 5.0
+  closeness_to_learned_pct: 5.0
+  minimum_share_for_most: 0.5
+  origin_majority: strictly_more_than_half
+  origin_direction_check: improvements_and_deteriorations
+  priority: [D_instability, A, B, C, D_other_mixed]
+  overall_rule: same_non_D_category_on_all_primary_horizons_else_D
+  A_rule: substantial_simple_benefit_and_close_to_learned_and_most_positive_direct_gap
+  B_rule: substantial_simple_benefit_and_learned_adds_at_least_5pct
+  C_rule: every_simple_benefit_below_5pct_and_learned_adds_5pct_to_persistence_and_raw
+  categories:
+    A: DECOMPOSITION DRIVES MOST OF THE GAIN
+    B: DECOMPOSITION HELPS, LEARNED LOCAL MODEL ADDS VALUE
+    C: LEARNED LOCAL MODEL DRIVES THE RESULT
+    D: NO STABLE DECOMPOSITION BENEFIT
+output_dir: outputs/national_local_persistence_v1
+smoke_output_dir: outputs/national_local_persistence_smoke_v1
+smoke_origin: 2024-03
+report_path: reports/results/national_local_persistence.md
+public_dir: reports/results/national_local_persistence
