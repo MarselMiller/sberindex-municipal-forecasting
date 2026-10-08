@@ -110,8 +110,11 @@ def persistence_gap_rows(ablation: dict) -> list[dict]:
 def forecasting_data() -> dict:
     path = "reports/final/forecasting_metrics.csv"
     summary_path = "reports/final/results_summary.json"
-    ablation = read_json(summary_path)["forecasting_ablation"]
+    summary = read_json(summary_path)
+    ablation = summary["forecasting_ablation"]
+    robustness = summary["forecasting_robustness"]
     persistence_gap_rows(ablation)
+    robustness_holdout_rows(robustness)
     source = read_csv(path)
     expected = {(m, split, h) for m in MODEL_ORDER for split in ["holdout", "validation"] for h in [1, 3, 6, 12]}
     actual = {(r["model"], r["split"], int(r["horizon"])) for r in source}
@@ -138,6 +141,7 @@ def forecasting_data() -> dict:
         "note": "Общая benchmark-выборка муниципальных расходов СберИндекса: категория «Все категории», оценка средних безналичных расходов жителей. Просмотренный holdout июля–декабря 2024, 63 оцениваемых МО.",
         "rows": rows,
         "ablation": ablation,
+        "robustness": robustness,
     }
 
 
@@ -361,6 +365,51 @@ def render_forecasting_ablation(ablation: dict) -> str:
     )
 
 
+def robustness_holdout_rows(block: dict) -> list[dict]:
+    pair = block["primary_pair"]
+    if (block.get("schema_version") != 1 or block.get("id") != "forecasting_robustness"
+            or block.get("included_in_main_benchmark") is not False
+            or block.get("primary_horizons") != [1, 3, 6] or block.get("descriptive_horizons") != [12]
+            or pair["baseline"] != "SeasonalNaiveYoY" or pair["candidate"] != "National/Local + LightGBM"
+            or block.get("delta_convention") != "MAE baseline − MAE candidate; positive = candidate better"):
+        raise ValueError("Robustness must preserve comparison sign, strategies and inference scope")
+    keys = [(r["split"], r["horizon"]) for r in pair["records"]]
+    if len(keys) != 6 or set(keys) != {(s, h) for s in ("validation", "holdout") for h in (1, 3, 6)}:
+        raise ValueError("Robustness requires separate validation and holdout on h1/h3/h6")
+    return sorted((r for r in pair["records"] if r["split"] == "holdout"), key=lambda r: r["horizon"])
+
+
+def render_forecasting_robustness(block: dict) -> str:
+    rows = []
+    for row in robustness_holdout_rows(block):
+        ci = row["origin_bootstrap"]
+        if ci["status"] != "DESCRIPTIVE_EMPIRICAL_SENSITIVITY":
+            raise ValueError("Holdout robustness requires saved descriptive origin intervals")
+        label = "Интервал включает ноль" if ci["includes_zero"] else "Интервал выше нуля"
+        rows.append([f'h = {row["horizon"]}', formatted(row["delta_mae"], 2),
+                     formatted(row["municipality_win_rate"] * 100, 2) + "%",
+                     f'{row["origin_wins"]}/{row["n_origins"]}',
+                     f'[{formatted(ci["lower"], 2)}; {formatted(ci["upper"], 2)}]', label])
+    return (
+        '<div id="forecasting-robustness">\n<h3>Устойчивость сравнения</h3>\n'
+        '<p>National/Local + LightGBM и SeasonalNaiveYoY сравниваются на одинаковых наблюдениях '
+        'у 63 оцениваемых МО. ΔMAE = MAE SeasonalNaiveYoY − MAE National/Local + LightGBM; '
+        'положительное значение означает меньшую ошибку National/Local + LightGBM.</p>\n'
+        '<div class="table-scroll" tabindex="0" role="region" aria-label="Устойчивость сравнения прогнозов">'
+        + table('Holdout: разница MAE и чувствительность к датам выпуска',
+                ['Горизонт', 'ΔMAE, руб.', 'Доля МО с меньшей MAE', 'Выигрыши по origins',
+                 'Описательный 95% origin-интервал, руб.', 'Неопределённость оценки'], rows)
+        + '</div>\n<p class="caution">На validation преимущество не воспроизводится; из-за малого '
+        'числа forecast origins интервалы следует рассматривать как описательную оценку неопределённости. '
+        'На holdout h = 3 / 6 интервалы включают ноль. Устойчивое преимущество между периодами оценки '
+        'не подтверждено. Holdout уже просмотрен; это анализ сохранённых прогнозов.</p>\n'
+        '<p class="source-note"><a href="../reports/results/forecast_robustness.md">Протокол и результаты</a> '
+        '/ <a href="../reports/results/forecast_robustness/pairwise_metrics.csv">Парные метрики</a> '
+        '/ <a href="../reports/results/forecast_robustness/bootstrap_origin.csv">Интервалы по датам</a>.</p>\n'
+        '</div>'
+    )
+
+
 def render_fragments(data: dict) -> dict[str, str]:
     fragments = {}
     lookup = {(r["model"], r["split"], r["horizon"]): r for r in data["forecasting"]["rows"]}
@@ -379,6 +428,7 @@ def render_fragments(data: dict) -> dict[str, str]:
         forecast_tables.append(table(label + ": MAE macro, руб.", ["Стратегия", "h = 1", "h = 3", "h = 6", "h = 12"], rows))
     fragments["forecasting-table"] = "\n".join(forecast_tables)
     fragments["forecasting-ablation"] = render_forecasting_ablation(data["forecasting"]["ablation"])
+    fragments["forecasting-robustness"] = render_forecasting_robustness(data["forecasting"]["robustness"])
     fragments["detection-table"] = table(
         "Synthetic TEST: качество обнаружения уже начавшегося сдвига",
         ["Метод", "Режим", "Precision", "Recall", "F1", "Miss rate", "Delay, мес.", "Localisation error, мес.", "FP / 12 мес."],

@@ -7,6 +7,48 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## Интеграция устойчивости прогнозов в финальные материалы
+
+2026-10-09, ветка research/forecast-robustness, исходный research commit eb02b0f;
+перед интеграцией рабочая папка была чистой. В results_summary.json добавлен
+отдельный forecasting_robustness: точные агрегаты сохранённых CSV, знак
+baseline − candidate, отдельные validation/holdout h1/3/6, доли выигрышей МО,
+выигрыши по origins, описательные интервалы и раздельные сравнения с
+ProphetAuto/ProphetYearly. h12 остаётся описательным и в inference не входит.
+Source SHA сверены; исходный gate PASS (1890 общих случаев/63 МО,
+максимальное расхождение метрик 9.09e-13 при допуске 1e-8) подтверждён
+проверкой прежних ключей, фактов, split, статусов, cutoff и парных MAE.
+
+Главный вывод: National/Local + LightGBM сохраняет минимум основной holdout
+таблицы на h1/3/6, но устойчивое преимущество над SeasonalNaiveYoY между
+периодами оценки не подтверждено. На holdout h1 описательный origin-интервал
+положителен; на h3/6 включает ноль; validation ΔMAE отрицательна на всех трёх
+горизонтах. Сравнение с ProphetAuto меняет направление на validation h3/6;
+ProphetYearly имеет большую MAE на обоих splits, но неопределённость по
+времени велика. Результат Persistence (68–76% наблюдаемого Direct→NL разрыва)
+сохранён как отдельная описательная ablation, без причинной атрибуции.
+
+Сборка: build_final_summary.py --forecasting-robustness-only обновляет только
+добавленный JSON-объект и отмеченный блок RESULTS_SUMMARY.md; полный старый
+builder не запускался. build_project_report.py переносит объект в forecasting.json
+и offline bundle и формирует компактную таблицу в HTML. early_warning.json
+получил только новый SHA источника results_summary.json; прежние значения
+и остальные числовые блоки SoT неизменны. forecasting_metrics.csv,
+исходные predictions, все research artifacts, README, презентация, PNG,
+CSS/JS интеракций и canonical glossary сохранены.
+
+Проверки интеграции: 92 релевантных synthetic tests, 1141 независимая сверка
+источников/значений/ссылок/сохранности и 65 локальных Edge browser checks PASS.
+Проверены offline file://, прежние 246 ячеек таблиц, новые интервалы, anchors,
+75 glossary terms, переключатели, темы, клавиатура, mobile 390/320 и режим
+без JavaScript. Текст текущего PDF содержит ограничение validation и не
+заявляет устойчиво лучшую модель; PDF не экспортировался. В старом JSON
+сохранены исторические абсолютные command paths, описанные в FINAL_AUDIT;
+новые metadata и ссылки не содержат локальных путей, secrets или raw rows.
+Локальные доказательства: outputs/forecast_robustness_integration_checks/.
+Новых fits, bootstrap runs, tuning, features, данных и experiments нет.
+Следующий шаг — review интеграции; commit/push/merge не выполнялись.
+
 ## Forecasting robustness: завершённый анализ сохранённых прогнозов
 
 2026-10-09, research/forecast-robustness, исходный HEAD c1b6123.

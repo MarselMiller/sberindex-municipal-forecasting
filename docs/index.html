@@ -123,6 +123,15 @@
 <p class="source-note">Отдельная методологическая ablation; девять основных стратегий сохранены. <a href="../reports/results/national_local_persistence.md">Протокол и выводы</a> / <a href="../reports/results/national_local_persistence/gap_analysis.csv">Доли разрыва MAE</a>.</p>
 </div>
 <!-- forecasting-ablation:end -->
+      <!-- forecasting-robustness:begin -->
+<div id="forecasting-robustness">
+<h3>Устойчивость сравнения</h3>
+<p>National/Local + LightGBM и SeasonalNaiveYoY сравниваются на одинаковых наблюдениях у 63 оцениваемых МО. ΔMAE = MAE SeasonalNaiveYoY − MAE National/Local + LightGBM; положительное значение означает меньшую ошибку National/Local + LightGBM.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Устойчивость сравнения прогнозов"><table class="metrics-table"><caption>Holdout: разница MAE и чувствительность к датам выпуска</caption><thead><tr><th scope="col">Горизонт</th><th scope="col">ΔMAE, руб.</th><th scope="col">Доля МО с меньшей MAE</th><th scope="col">Выигрыши по origins</th><th scope="col">Описательный 95% origin-интервал, руб.</th><th scope="col">Неопределённость оценки</th></tr></thead><tbody><tr><th scope="row">h = 1</th><td>121,15</td><td>55,56%</td><td>5/6</td><td>[39,31; 188,97]</td><td>Интервал выше нуля</td></tr><tr><th scope="row">h = 3</th><td>27,68</td><td>52,38%</td><td>4/6</td><td>[-184,13; 218,36]</td><td>Интервал включает ноль</td></tr><tr><th scope="row">h = 6</th><td>8,79</td><td>57,14%</td><td>3/6</td><td>[-480,45; 467,33]</td><td>Интервал включает ноль</td></tr></tbody></table></div>
+<p class="caution">На validation преимущество не воспроизводится; из-за малого числа forecast origins интервалы следует рассматривать как описательную оценку неопределённости. На holdout h = 3 / 6 интервалы включают ноль. Устойчивое преимущество между периодами оценки не подтверждено. Holdout уже просмотрен; это анализ сохранённых прогнозов.</p>
+<p class="source-note"><a href="../reports/results/forecast_robustness.md">Протокол и результаты</a> / <a href="../reports/results/forecast_robustness/pairwise_metrics.csv">Парные метрики</a> / <a href="../reports/results/forecast_robustness/bootstrap_origin.csv">Интервалы по датам</a>.</p>
+</div>
+<!-- forecasting-robustness:end -->
       <figure class="forecast-example"><img src="assets/figures/rolling_forecast.png" width="1517" height="692" loading="lazy" alt="Одномесячные прогнозы SeasonalNaiveYoY и последующие факты для МО 21."><figcaption>Одномесячные прогнозы SeasonalNaiveYoY и факты для МО 21 — первого числового ID оцениваемой выборки. Пример показывает ошибки отдельных месяцев и не заменяет MAE по панели. Использован ранее опубликованный рисунок.</figcaption></figure>
     </div></section>
 
