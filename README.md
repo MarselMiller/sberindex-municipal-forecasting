@@ -4,17 +4,19 @@
 Проект объединяет forecasting, обнаружение структурных изменений и проверку возможности early warning.<br>
 Результаты на реальных данных и controlled synthetic benchmarks представлены отдельно.
 
-### Интерактивный отчёт
+### Полноценный HTML-отчёт
 
-Основные результаты проекта, графики, методология и глоссарий доступны в удобной HTML-версии:
+Для проекта подготовлен интерактивный HTML-отчёт с основными результатами, графиками и глоссарием.
 
-[Открыть интерактивный отчёт](https://marselmiller.github.io/sberindex-municipal-forecasting/)
+[Открыть HTML-отчёт в репозитории](docs/index.html)
+
+Для локального просмотра скачайте репозиторий целиком (`Code → Download ZIP`), распакуйте архив и откройте `docs/index.html` в браузере.
 
 [Результаты](#результаты) · [Архитектура](#архитектура) · [Воспроизведение](#воспроизведение) · [Ограничения](#ограничения)
 
 [Методологический отчёт](reports/final/METHODOLOGY_REPORT.md) · [Презентация PDF](reports/final/presentation/presentation.pdf) · [Итоговая сводка](reports/final/RESULTS_SUMMARY.md) · [Ограничения](reports/final/limitations.md) · [Глоссарий](reports/final/terminology.md)
 
-[Интерактивный HTML-отчёт](docs/index.html) · [Открытие и публикация сайта](docs/README_SITE.md)
+[Открытие и публикация сайта](docs/README_SITE.md)
 
 ## Результаты
 
