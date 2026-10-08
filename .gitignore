@@ -54,3 +54,17 @@ catboost_info/
 !/reports/results/national_local_persistence/municipality_win_rates.csv
 !/reports/results/national_local_persistence/gap_analysis.csv
 !/reports/results/national_local_persistence/run_manifest.json
+
+# Только сводные агрегаты forecasting robustness; per-MO audit остаётся локальным.
+!/reports/results/forecast_robustness.md
+!/reports/results/forecast_robustness/
+/reports/results/forecast_robustness/*
+!/reports/results/forecast_robustness/pairwise_metrics.csv
+!/reports/results/forecast_robustness/municipality_summary.csv
+!/reports/results/forecast_robustness/origin_deltas.csv
+!/reports/results/forecast_robustness/origin_summary.csv
+!/reports/results/forecast_robustness/bootstrap_origin.csv
+!/reports/results/forecast_robustness/bootstrap_municipality.csv
+!/reports/results/forecast_robustness/concentration.csv
+!/reports/results/forecast_robustness/applicability_checks.csv
+!/reports/results/forecast_robustness/run_manifest.json

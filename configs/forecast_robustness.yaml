@@ -1,0 +1,35 @@
+experiment: forecast_robustness_v1
+branch: research/forecast-robustness
+seed: 42
+bootstrap_iterations: 10000
+smoke_iterations: 200
+primary_horizons: [1, 3, 6]
+descriptive_horizons: [12]
+splits: [validation, holdout]
+delta_convention: baseline_mae_minus_candidate_mae
+primary_bootstrap: forecast_origin_cluster
+secondary_bootstrap: municipality_cluster_sensitivity_only
+confidence_percentiles: [2.5, 97.5]
+minimum_primary_origins: 4
+ties_absolute_tolerance: 0.00000001
+metric_reproduction_absolute_tolerance: 0.00000001
+interpretation:
+  A: positive_delta_and_municipality_majority_and_origin_majority_and_origin_ci_lower_above_zero
+  B: positive_delta_and_municipality_majority_but_not_A
+  C: positive_delta_and_municipality_win_rate_at_most_half
+  D: nonpositive_aggregate_delta
+  across_split_rule: D_if_any_primary_split_delta_nonpositive_else_same_category_or_B
+  concentration: descriptive_only_no_category_threshold
+concentration_top_counts: [5, 10]
+concentration_top_fraction: 0.2
+winsorized_sensitivity_quantiles: [0.05, 0.95]
+two_way_bootstrap: not_estimated_optional
+diebold_mariano: not_estimated_few_temporal_origins
+holdout_status: previously_inspected_post_hoc_not_blind
+availability_assumption: month_end_plus_0_months_unverified_vintages
+output_dir: outputs/forecast_robustness_v1
+smoke_output_dir: outputs/forecast_robustness_smoke_v1
+gate_output_dir: outputs/forecast_robustness_gate_v1
+public_dir: reports/results/forecast_robustness
+report_path: reports/results/forecast_robustness.md
+private_municipality_artifact: reports/results/forecast_robustness/municipality_deltas.csv

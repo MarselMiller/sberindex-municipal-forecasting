@@ -7,6 +7,47 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## Forecasting robustness: завершённый анализ сохранённых прогнозов
+
+2026-10-09, research/forecast-robustness, исходный HEAD c1b6123.
+Новые модели, tuning, признаки и primary subsets не создавались. Сохранённые
+E01/E05d predictions использованы для шести заранее заданных пар, отдельно
+validation/holdout и h1/3/6; h12 только descriptive. Gate PASS: все пары имеют
+1890 одинаковых evaluable keys/63 МО, max metric difference 9.09e-13 при 1e-8.
+Сверены duplicate keys, факты, split, статусы, календарь и saved history_cutoff;
+L=0 и historical vintages остаются предпосылкой. Обучение заново не проверялось.
+ΔMAE = baseline − candidate, положительное значение — улучшение candidate.
+Primary origin-cluster bootstrap: 10 000 draws/seed42, все МО внутри выбранной
+даты сохраняются, equal-MO macro пересчитывается. Secondary MO bootstrap
+сохраняет всю историю выбранных МО и является только spatial sensitivity.
+При одной origin primary CI NOT ESTIMABLE; 4–6 origins допускают только
+descriptive empirical sensitivity, зависимость соседних дат не устранена.
+До расчётов приняты консервативные A/B/C/D: A требует positive lower95% bound
+и majority МО/origins; C определяется win-rate≤50%, концентрация описывается
+отдельно без нового порога; D при Δ≤0. Across-split D при смене знака/Δ≤0.
+NL+LightGBM vs SNY на holdout: Δ121.15/27.68/8.79, МО wins55.56/52.38/57.14%,
+origins5/6,4/6,3/6; primary CI39.31..188.97 / −184.13..218.36 / −480.45..467.33.
+На validation Δ−15.65/−351.52/−748.18, поэтому общая категория D на h1/3/6.
+Seasonal/panel vs ProphetYearly сохраняет положительный aggregate Δ и majority
+МО в обоих split, но temporal неопределённость велика. ProphetAuto на validation
+h3/h6 лучше обоих SNY/NL; универсальное превосходство над Prophet не установлено.
+Top5 МО дают33–38% положительной массы NL gain на holdout; h3/h6 net gain
+мал из-за компенсации positive/negative mass, влияние отдельных МО не исключено.
+DM NOT RELIABLE/NOT ESTIMATED: только1–6 временных точек; two-way не выполнялся.
+Smoke200draws PASS; full42groups, runtime5.711s, 0fits. 51 targeted synthetic
+tests +1 test report formatting PASS; independent saved-only audit1894PASS.
+Отчёт reports/results/forecast_robustness.md и восемь сводных CSV/manifest
+разрешены в Git; requested municipality_deltas.csv содержит local-only per-MO
+audit и остаётся ignored. Public summary использует локальные порядковые refs,
+без исходных IDs, target/prediction rows, секретов и абсолютных путей.
+Исходный execution code сохранён в ignored snapshot; после запуска исправлен
+только renderer/ответы отчёта из сохранённых CSV, это отдельно записано в manifest.
+README, reports/final, presentation, HTML/data и старые results не изменены.
+Анализ post-hoc на просмотренном holdout, 24 месяца, без нового blind period.
+Следующий шаг — review research output; final Source of Truth до review не менять.
+NO NEW MODEL FITS; NO TUNING; NO FEATURE SEARCH; NO PRIMARY SUBSET SELECTION;
+NO FINAL MATERIAL CHANGES; NO COMMIT/PUSH.
+
 ## National/Local Persistence: интеграция в итоговые материалы
 
 2026-10-08, research/national-local-persistence, исходный research commit 19f3722.
