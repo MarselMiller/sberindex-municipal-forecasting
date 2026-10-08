@@ -197,15 +197,15 @@ Linear и damped trend оценивают скорость изменения п
 
 **Мотивация.** Для прогнозирования муниципальных расходов SberIndex проверены ключевая ставка Банка России и официальный USD/RUB Банка России. Ставка потенциально связана с кредитованием и сбережениями, FX — с импортными ценами и ожиданиями. Опережающий механизм требует проверки.
 
-**Историческая доступность.** E08a допустил эти источники при доверии официальному архиву без независимых historical snapshots. Остальные ряды отнесены к B/C из-за недостаточной реконструкции first-release timing и vintages; фиксированный лаг этого не исправляет. E08b построил десять признаков на 12 origins с cutoff 00:00 Europe/Moscow последнего дня месяца. Ставка требует доступного объявления и наступившей effective date; date-only объявление доступно со следующего дня. Для FX effective midnight — консервативная граница доступности при публикации до вступления курса в силу, не actual publication time. Обучающая пара использует свою origin `r`, а не позднейшее знание на `O`. Future observations/backfill исключены; cutoff checks пройдены. Неизвестные vintages расходов и смена методики FX в июне 2024 остаются ограничениями.
+**Историческая доступность.** Аудит финансовых источников допустил эти источники при доверии официальному архиву без независимых historical snapshots. Остальные ряды отнесены к B/C из-за недостаточной реконструкции first-release timing и vintages; фиксированный лаг этого не исправляет. При построении финансовых признаков получены десять признаков на 12 origins с cutoff 00:00 Europe/Moscow последнего дня месяца. Ставка требует доступного объявления и наступившей effective date; date-only объявление доступно со следующего дня. Для FX effective midnight — консервативная граница доступности при публикации до вступления курса в силу, не actual publication time. Обучающая пара использует свою origin `r`, а не позднейшее знание на `O`. Future observations/backfill исключены; cutoff checks пройдены. Неизвестные vintages расходов и смена методики FX в июне 2024 остаются ограничениями.
 
-**Forecasting ablation.** E08c сравнил F0 без финансовых признаков, F1 с пятью признаками ставки, F2 с пятью FX и F3 со всеми десятью. Основная модель — National/Local + LightGBM; LightGBMDirect — sensitivity. Протокол и параметры E05d фиксированы; F0 воспроизведён, tuning отсутствовал. F3 должен был улучшить MAE macro в обеих частях минимум на двух горизонтах из h=1/3/6 с проверкой концентрации по origins. Улучшился только h=6: F2 −1.67% / −2.11%, F3 −1.67% / −1.78% на validation / holdout. Validation h=6 имеет одну origin, holdout просмотрен. Ставка устойчивого улучшения не дала; финансовые sensitivity-варианты ухудшили holdout. Вывод — **no stable forecasting uplift**; h=6 не доказывает predictive effect.
+**Forecasting ablation.** Сравнены базовая модель без финансовых признаков, вариант с пятью признаками ставки, вариант с пятью FX и вариант со всеми десятью. Основная модель — National/Local + LightGBM; LightGBMDirect — sensitivity. Протокол и параметры National/Local + LightGBM фиксированы; базовый вариант воспроизведён, tuning отсутствовал. Вариант со всеми финансовыми признаками должен был улучшить MAE macro в обеих частях минимум на двух горизонтах из h=1/3/6 с проверкой концентрации по origins. Улучшился только h=6: вариант только с FX −1.67% / −2.11%, вариант со всеми финансовыми признаками −1.67% / −1.78% на validation / holdout. Validation h=6 имеет одну origin, holdout просмотрен. Ставка устойчивого улучшения не дала; финансовые sensitivity-варианты ухудшили holdout. Вывод — **no stable forecasting uplift**; h=6 не доказывает predictive effect.
 
-**Early-warning diagnostic.** E08d использовал weak-event labels и onset dates из E07: 73 муниципальных события, шесть onset months мая–октября 2024, 12 origins. Это сдвиги ошибки SeasonalNaiveYoY, а не независимо размеченные экономические шоки. Единица анализа — календарная дата. Positive требует хотя бы одной fully-known positive метки в исходной eligible at-risk группе; negative — непустой группы с полностью известными отрицательными метками. Остальные даты unknown; сохранены censoring и подтверждение до `O+k+2`. Для k=1 получено 6 eligible / 6 positive / 0 negative, для k=3 — 4 / 4 / 0. Без отрицательных дат сравнительный эффект и permutation inference non-estimable; raw/Holm p-values — NA. Общего направления ставки/FX перед шестью onset months не обнаружено. Classifier fits и tuning порогов отсутствовали. Синтетические данные в E08d не использовались.
+**Early-warning diagnostic.** Диагностика финансовых предвестников использовала weak-event labels и onset dates, построенные по устойчивым изменениям ошибки прогноза: 73 муниципальных события, шесть onset months мая–октября 2024, 12 origins. Это сдвиги ошибки SeasonalNaiveYoY, а не независимо размеченные экономические шоки. Единица анализа — календарная дата. Positive требует хотя бы одной fully-known positive метки в исходной eligible at-risk группе; negative — непустой группы с полностью известными отрицательными метками. Остальные даты unknown; сохранены censoring и подтверждение до `O+k+2`. Для k=1 получено 6 eligible / 6 positive / 0 negative, для k=3 — 4 / 4 / 0. Без отрицательных дат сравнительный эффект и permutation inference non-estimable; raw/Holm p-values — NA. Общего направления ставки/FX перед шестью onset months не обнаружено. Classifier fits и tuning порогов отсутствовали. Синтетические данные в этой диагностике не использовались.
 
 **Интерпретация.** Дополнительный precursor effect оценить не удалось; отсутствие предвестников этим не доказано. Национальные признаки, повторённые для МО, не добавляют независимых календарных наблюдений. Для сравнения нужны более длинная история цели и сопоставимые известные отрицательные даты.
 
-Протоколы: [E08b](../../configs/leading_financial_e08b.yaml), [E08c](../../configs/e08c_leading_financial_forecasting.yaml), [E08d](../../configs/e08d_real_financial_early_warning.yaml). Подробные отчёты — в [сводке E08](RESULTS_SUMMARY.md#leading-financial-indicators); полные outputs и raw cache остаются локальными. Таблицы F1 и результаты F1–F7 сохранены.
+Протоколы: [Построение финансовых признаков](../../configs/leading_financial_e08b.yaml), [Forecasting ablation](../../configs/e08c_leading_financial_forecasting.yaml), [Диагностика early warning](../../configs/e08d_real_financial_early_warning.yaml). Подробные отчёты — в [сводке финансовых индикаторов](RESULTS_SUMMARY.md#leading-financial-indicators); полные outputs и raw cache остаются локальными. Основные итоговые таблицы и результаты предыдущих этапов сохранены.
 
 ## 7. Online change-point detection
 
@@ -382,11 +382,11 @@ $$
 
 ### 11.2. Модели и выбор рабочих точек
 
-S0 ConstantRisk выдаёт частоту positive в TRAIN. S1 HistoryOnly использует историю ряда. S2 History + DetectorState добавляет состояния online-детекторов на origin. S3 + ExternalPrecursors добавляет стохастические внешние каналы генератора. Разность S2−S1 проверяет дополнительную информацию detector states; S3−S2 — информацию synthetic external precursor.
+Constant risk выдаёт частоту positive в TRAIN. History only использует историю ряда. History + detector state добавляет состояния online-детекторов на origin. History + detector state + external precursors добавляет стохастические внешние каналы генератора. Сравнение варианта с состояниями детекторов с вариантом только истории проверяет дополнительную информацию detector states; добавление внешних предвестников — информацию synthetic external precursor.
 
 Состояния вычисляются по доступному префиксу; offline segmentation исключена. Здесь свои настройки warmup, а alarm не сбрасывает состояние. Поэтому calibration detector features отличается от рабочих точек detection-раздела.
 
-S1–S3 используют фиксированную регуляризованную logistic regression. Отбор features, заполнение пропусков и scaling обучаются на TRAIN. Порог model/k выбирается на VALIDATION по row-F1 при бюджете не более одной false monthly alert на 12 monitoring-месяцев controls. TEST исключён из обучения, preprocessing и выбора порога. Алгоритм оптимизации и параметры — в приложении B.
+Все варианты, кроме Constant risk, используют фиксированную регуляризованную logistic regression. Отбор features, заполнение пропусков и scaling обучаются на TRAIN. Порог model/k выбирается на VALIDATION по row-F1 при бюджете не более одной false monthly alert на 12 monitoring-месяцев controls. TEST исключён из обучения, preprocessing и выбора порога. Алгоритм оптимизации и параметры — в приложении B.
 
 ### 11.3. Row-level и event-level metrics
 
@@ -400,26 +400,26 @@ False alerts/12 нормирует ложные месячные предупр�
 
 | k | Модель | PR-AUC | Event recall | Alert precision | Median lead, мес. | False alerts/12 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | S0 | 0.066 | 0.000 | — | — | 0.000 |
-| 1 | S1 | 0.121 | 0.217 | 0.165 | 1 | 0.873 |
-| 1 | S2 | 0.155 | 0.167 | 0.160 | 1 | 0.697 |
-| 1 | S3 | 0.341 | 0.428 | 0.374 | 1 | 0.569 |
-| 3 | S0 | 0.218 | 0.000 | — | — | 0.000 |
-| 3 | S1 | 0.328 | 0.267 | 0.268 | 2 | 0.633 |
-| 3 | S2 | 0.390 | 0.400 | 0.385 | 2 | 0.556 |
-| 3 | S3 | 0.538 | 0.617 | 0.516 | 2 | 0.503 |
+| 1 | Constant risk (S0) | 0.066 | 0.000 | — | — | 0.000 |
+| 1 | History only (S1) | 0.121 | 0.217 | 0.165 | 1 | 0.873 |
+| 1 | History + detector state (S2) | 0.155 | 0.167 | 0.160 | 1 | 0.697 |
+| 1 | History + detector state + external precursors (S3) | 0.341 | 0.428 | 0.374 | 1 | 0.569 |
+| 3 | Constant risk (S0) | 0.218 | 0.000 | — | — | 0.000 |
+| 3 | History only (S1) | 0.328 | 0.267 | 0.268 | 2 | 0.633 |
+| 3 | History + detector state (S2) | 0.390 | 0.400 | 0.385 | 2 | 0.556 |
+| 3 | History + detector state + external precursors (S3) | 0.538 | 0.617 | 0.516 | 2 | 0.503 |
 
-Источник: [early-warning CSV](early_warning_metrics.csv), data_status=`synthetic`, cohort=`test`, scenario=`base_all`; 180 пригодных событий. PR-AUC обозначает сохранённую average precision; lead — календарные месяцы. Для S0 alerts отсутствуют, поэтому alert precision и median lead не определены.
+Источник: [early-warning CSV](early_warning_metrics.csv), data_status=`synthetic`, cohort=`test`, scenario=`base_all`; 180 пригодных событий. PR-AUC обозначает сохранённую average precision; lead — календарные месяцы. Для Constant risk alerts отсутствуют, поэтому alert precision и median lead не определены.
 
-На k=3 S3 имеет event recall 0.617, alert precision 0.516 и median lead два месяца при false alerts/12 = 0.503. S2 улучшает k=3 относительно S1, но на k=1 recall ниже при более высокой PR-AUC. Результат зависит от фиксированного генератора и validation-порогов; состояния не улучшают каждую рабочую метрику.
+На k=3 вариант с историей, состояниями детекторов и внешними предвестниками имеет event recall 0.617, alert precision 0.516 и median lead два месяца при false alerts/12 = 0.503. Вариант с состояниями детекторов улучшает k=3 относительно варианта только истории, но на k=1 recall ниже при более высокой PR-AUC. Результат зависит от фиксированного генератора и validation-порогов; состояния не улучшают каждую рабочую метрику.
 
 ![Event-level early-warning результаты](figures/synthetic_event_performance.png)
 
-*Рисунок 6. SYNTHETIC BENCHMARK. TEST-оценка S0–S3 на 180 событиях. Преимущество S3 характеризует доступные synthetic precursor, а не вклад реального news-корпуса.*
+*Рисунок 6. SYNTHETIC BENCHMARK. TEST-оценка синтетических стратегий на 180 событиях. Преимущество варианта с внешними предвестниками характеризует доступные synthetic precursor, а не вклад реального news-корпуса.*
 
-**Таблица 10. SYNTHETIC BENCHMARK — S3 с precursor, без precursor и на ложных controls.**
+**Таблица 10. SYNTHETIC BENCHMARK — вариант с внешними предвестниками: с precursor, без precursor и на ложных controls.**
 
-| Срез S3 | Событий | Recall k=1 | Recall k=3 | False alerts/12, k=1 | False alerts/12, k=3 |
+| Срез варианта с внешними предвестниками | Событий | Recall k=1 | Recall k=3 | False alerts/12, k=1 | False alerts/12, k=3 |
 | --- | --- | --- | --- | --- | --- |
 | С наблюдаемым precursor | 135 | 0.541 | 0.741 | 0.619 | 0.571 |
 | Без precursor | 45 | 0.089 | 0.244 | 0.471 | 0.720 |
@@ -448,7 +448,7 @@ Controlled benchmark проверяет механизм при известно
 
 **Реальные структурные сигналы остаются диагностикой.** Отклонение от сезонного прогноза может отражать изменение расходов, недостаток baseline, пропуск или пересмотр факта. Без независимой разметки alerts и breakpoints не подтверждают экономическое событие. Synthetic detection показывает precision/recall tradeoff, а реальное число сигналов — объём предметной проверки. Online принимает последовательные решения; offline использует будущие относительно границы наблюдения и может пересматривать её.
 
-**Для обучения и оценки real early warning нужны более длинная история и больше независимых onset dates.** Ожидание доступности меток и общие даты событий ограничивают обучение сильнее, чем число МО. Необучение классификатора сохраняет постановку: неизвестные метки не превращаются в отрицательные. В controlled benchmark наблюдаемый до onset precursor помогает, события без него труднее, а ложные precursor создают тревоги. S3−S2 проверяет этот условный механизм, без доказательства пользы реальных news.
+**Для обучения и оценки real early warning нужны более длинная история и больше независимых onset dates.** Ожидание доступности меток и общие даты событий ограничивают обучение сильнее, чем число МО. Необучение классификатора сохраняет постановку: неизвестные метки не превращаются в отрицательные. В controlled benchmark наблюдаемый до onset precursor помогает, события без него труднее, а ложные precursor создают тревоги. Сравнение варианта с внешними предвестниками с вариантом только истории и состояний детекторов проверяет этот условный механизм, без доказательства пользы реальных news.
 
 Для news и macro важнее подтвердить доступность и vintages, чем увеличить число записей. Повторение национального feature по МО не добавляет независимых временных наблюдений. Дальнейшая проверка требует новых периодов, подтверждённых исторических версий и независимой разметки; поиск моделей в завершённой исследовательской фазе не продолжается.
 
@@ -476,7 +476,7 @@ Controlled benchmark проверяет механизм при известно
 
 Финальный **Source of Truth** — [RESULTS_SUMMARY.md](RESULTS_SUMMARY.md), [results_summary.json](results_summary.json), [forecasting](forecasting_metrics.csv), [detection](detection_metrics.csv) и [early-warning](early_warning_metrics.csv) CSV. [Figure manifest](figure_manifest.csv) задаёт источники и правила выбора изображений. [Table manifest](report_table_manifest.csv) связывает таблицы этого документа с источниками, фильтрами, статусом и округлением. Он не вводит новых метрик.
 
-В F1 выполнен один полный pytest: 1461 passed и одно прежнее warning. После коррекции выбора TEST в графике прошёл 31 целевой тест. Полный набор запускался до коррекции и не подтверждает более позднее состояние. Это сохранённые результаты проверок; при подготовке F3 модели, pytest и builder не запускались.
+При сборке итоговой сводки выполнен один полный pytest: 1461 passed и одно прежнее warning. После коррекции выбора TEST в графике прошёл 31 целевой тест. Полный набор запускался до коррекции и не подтверждает более позднее состояние. Это сохранённые результаты проверок; при подготовке методологического отчёта модели, pytest и builder не запускались.
 
 Базовые зависимости — в [requirements.txt](../../requirements.txt), отдельные компоненты — в requirements для [Prophet](../../requirements-prophet.txt), [LightGBM](../../requirements-lightgbm.txt) и [ruptures](../../requirements-ruptures.txt). Chronos использует отдельную среду и [собственные requirements](../../requirements-chronos.txt); checkpoint и revision закреплены в [конфигурации](../../configs/chronos_zero_shot.yaml) и manifest. Наличие дополнительных зависимостей в новой копии проекта требует проверки.
 
@@ -523,7 +523,7 @@ days_in_month, time_index
 | Online EWMA | alpha 0.4; threshold 2.5 |
 | Online BOCPD | hazard 1/24; recent run length 1–2; threshold 0.2 |
 | PELT / Binary Segmentation | cost L2; min_size 2; jump 1; penalty 4 |
-| Synthetic warning S1–S3 | logistic L2; C=1; max_iter 2000; no class weighting; seed 42 |
+| Synthetic warning: обучаемые варианты | logistic L2; C=1; max_iter 2000; no class weighting; seed 42 |
 | Synthetic cohorts | TRAIN seed 420101; VALIDATION 420201; TEST 420301 |
 | Synthetic bootstrap | whole-series; 500 resamples; seed 420401; 95% intervals |
 
@@ -531,7 +531,7 @@ days_in_month, time_index
 
 LightGBM использует deterministic и force_col_wise; ноль не считается пропуском. Chronos checkpoint закреплён revision `29ec3766d36d6f73f0696f85560a422f50e8498c`. Отрицательные Chronos-прогнозы не обрезались; это часть использованного режима. Context limit задаёт верхнюю границу входа, но не увеличивает фактическую длину наблюдаемой истории.
 
-Фактический backend synthetic logistic regression — SciPy L-BFGS-B с суммой logloss и L2 penalty, без штрафа intercept. Точная численная идентичность конкретной версии sklearn не заявляется. Train-only preprocessing и validation threshold сохраняются независимо от backend. Никакие параметры этой таблицы не подбирались при написании F3.
+Фактический backend synthetic logistic regression — SciPy L-BFGS-B с суммой logloss и L2 penalty, без штрафа intercept. Точная численная идентичность конкретной версии sklearn не заявляется. Train-only preprocessing и validation threshold сохраняются независимо от backend. Никакие параметры этой таблицы не подбирались при написании методологического отчёта.
 
 ## Приложение C. Дополнительные forecasting ablations
 
@@ -567,21 +567,21 @@ Month encoding сравнивает три схемы: numeric month с sin/cos;
 | 4 | offline_example.png | synthetic | первый TEST level-ряд |
 | 5 | real_warning_sufficiency.png | not_evaluated (real feasibility) | full-panel sufficiency |
 | 6 | synthetic_event_performance.png | synthetic | TEST, 180 событий |
-| 7 | warning_success.png | synthetic | первый пригодный успех S3/k=3 |
-| 8 | warning_false.png | synthetic | первая пригодная false alert S3/k=3 |
-| 9 | warning_miss.png | synthetic | первый пригодный пропуск S3/k=3 |
+| 7 | warning_success.png | synthetic | первый пригодный успех варианта с внешними предвестниками, k=3 |
+| 8 | warning_false.png | synthetic | первая пригодная false alert варианта с внешними предвестниками, k=3 |
+| 9 | warning_miss.png | synthetic | первый пригодный пропуск варианта с внешними предвестниками, k=3 |
 
 ![Пример успешного предупреждения](figures/warning_success.png)
 
-*Рисунок 7. SYNTHETIC BENCHMARK. S3/k=3, первый пригодный пример успеха. Предупреждение появляется до onset; шкала ряда условная, не реальные рубли конкретного МО. Это иллюстрация механизма, не отдельная оценка качества.*
+*Рисунок 7. SYNTHETIC BENCHMARK. Вариант с внешними предвестниками, k=3, первый пригодный пример успеха. Предупреждение появляется до onset; шкала ряда условная, не реальные рубли конкретного МО. Это иллюстрация механизма, не отдельная оценка качества.*
 
 ![Пример ложного предупреждения](figures/warning_false.png)
 
-*Рисунок 8. SYNTHETIC BENCHMARK. Первый пригодный пример false alert S3/k=3. Probability пересекает выбранный на validation threshold без события в разрешённом будущем окне.*
+*Рисунок 8. SYNTHETIC BENCHMARK. Первый пригодный пример false alert варианта с внешними предвестниками, k=3. Probability пересекает выбранный на validation threshold без события в разрешённом будущем окне.*
 
 ![Пример пропуска](figures/warning_miss.png)
 
-*Рисунок 9. SYNTHETIC BENCHMARK. Первый пригодный пропуск S3/k=3. Событие возникает без успешного предупреждения в окне. Вместе с предыдущими примерами он показывает разные исходы при одном протоколе.*
+*Рисунок 9. SYNTHETIC BENCHMARK. Первый пригодный пропуск варианта с внешними предвестниками, k=3. Событие возникает без успешного предупреждения в окне. Вместе с предыдущими примерами он показывает разные исходы при одном протоколе.*
 
 Известные onset и precursor annotations на этих графиках служат объяснением генератора, а не входом classifier. Изображения не пересоздавались и не использовались для последующей настройки модели.
 
@@ -594,6 +594,6 @@ Month encoding сравнивает три схемы: numeric month с sin/cos;
 - Обнаружение изменений: [online detection](../results/E04a_online_detection.md), [offline segmentation и prefix stability](../results/E06a_offline_detection.md).
 - Внешние события и real feasibility: [news pipeline](../results/E06b_news_events.md), [weak labels и доступность](../results/E07a_early_warning_feasibility.md), [full-panel sufficiency](../results/E07b_early_warning_full_panel.md).
 - Проверка механизма предупреждения: [controlled synthetic benchmark](../results/E07c_synthetic_early_warning.md).
-- Локальные проверки F1: `reports/final/verification.json` и `reports/final/post_build_validation.json` (вне Git). Публичные материалы: [аудит воспроизведения](REPRODUCTION_AUDIT.md), [терминология](terminology.md), [ограничения](limitations.md).
+- Локальные проверки итоговой сводки: `reports/final/verification.json` и `reports/final/post_build_validation.json` (вне Git). Публичные материалы: [аудит воспроизведения](REPRODUCTION_AUDIT.md), [терминология](terminology.md), [ограничения](limitations.md).
 
 Численные таблицы этого документа читают финальный Source of Truth. Подробные отчёты уточняют правила и ограничения, не создавая дополнительные финальные результаты. Любая будущая проверка на новой истории потребует отдельного протокола и новых artifacts; она не входит в подготовку этого методологического отчёта.

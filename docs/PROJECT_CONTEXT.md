@@ -7,6 +7,13 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## F8: ссылка на интерактивный отчёт в README
+
+2026-10-08: после вступления README добавлен нейтральный блок «Интерактивный отчёт»
+с будущим адресом https://marselmiller.github.io/sberindex-municipal-forecasting/.
+Остальной README сохранён; docs/index.html существует, инструкция main /docs
+в docs/README_SITE.md уже готова. Публикация и доступность будущего URL не проверялись.
+
 ## F8: третий editorial pass — русскоязычные пояснения
 
 2026-10-08: в docs/index.html выполнены 27 редакционных замен обычной прозы.

@@ -125,11 +125,11 @@ flowchart LR
 
 **SYNTHETIC BENCHMARK — не оценка предсказания реальных экономических шоков.**
 
-- S0 — постоянная вероятность; S1 — история; S2 — история + online states; S3 — также сгенерированные внешние precursor features.
+- Обозначения на сохранённом рисунке: Constant risk (S0) — постоянная вероятность; History only (S1) — история; History + detector state (S2) — история и состояния online-детекторов; History + detector state + external precursors (S3) — также сгенерированные внешние precursor features.
 
-![SYNTHETIC TEST — event recall и alert precision S0–S3](../figures/synthetic_event_performance.png)
+![SYNTHETIC TEST — event recall и alert precision четырёх early-warning стратегий](../figures/synthetic_event_performance.png)
 
-- S3 на k=1 / k=3: **event recall 0.428 / 0.617**, медианный **lead time 1 / 2 месяца** среди успешных предупреждений; TEST — 180 событий.
+- History + detector state + external precursors на k=1 / k=3: **event recall 0.428 / 0.617**, медианный **lead time 1 / 2 месяца** среди успешных предупреждений; TEST — 180 событий.
 - Наблюдаемые до onset предвестники помогают в заданном генераторе. Результат не доказывает полезность реальных news.
 
 Источники: `results_summary.json → synthetic_early_warning`; `figure_manifest.csv`, группа 9; методологический отчёт, §11, таблица 9.

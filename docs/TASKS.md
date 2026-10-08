@@ -39,7 +39,7 @@
 | F5 | Clean-clone reproduction audit | Выполнен: PASS WITH LIMITATION | Новый GitHub clone 6ada526; Python 3.12.10/pip 25.0.1; fresh install + pip check; 1432 passed/34 deselected/1 warning без новых fit; CLI/imports/links/figures/PDF PASS; clone clean; private data/full experiments NOT TESTED; исторические provenance paths сохранены |
 | F6 | Финальный audit и cleanup публичного репозитория | Выполнен: PASS WITH LIMITATION | Base3371a44 синхронизирован с GitHub; навигация и шесть private/ignored links исправлены; claims/AI/135 file links+4anchors/11PNG/PDF/manifests/security PASS; 23 historical paths сохранены с SHA-обоснованием; .vscode/build/temp ignored; docs-only, без pytest/fits/experiments/commit/push |
 | F7 | Data publication and reproducibility audit | Выполнен: PASS WITH LIMITATION | 90 решений/1877 inventory entries; 12 public artifacts (2.39 MB), SYNTHETIC byte-copy demo; primary terms/provenance; stdlib preflight public12PASS; новый GitHub base e50e044 + reviewed overlay; research9/sources5MISSING в clone; source rights/full experiments не подтверждены; старые local-only links сохранены; без fits/experiments/pytest/commit/push |
-| F8 | Interactive HTML project report и canonical glossary | Выполнен: third editorial PASS; Ready for review | 27 языковых замен; audit details перенесены/сокращены; 75 terms / 7 групп / 22 first-use definitions; 6 таблиц / 246 cells и 1480 saved values неизменны; builder/links/integrity/53 Edge browser + 15 browser static checks PASS; без fits/experiments/tuning/result changes/commit/push |
+| F8 | Interactive HTML project report и canonical glossary | Выполнен: third editorial и README Pages link PASS; Ready for review | 27 языковых замен; audit details перенесены/сокращены; 75 terms / 7 групп / 22 first-use definitions; 6 таблиц / 246 cells и 1480 saved values неизменны; builder/links/integrity/53 Edge browser + 15 browser static checks PASS; без fits/experiments/tuning/result changes/commit/push |
 | R01 | Зафиксировать протокол проверки | Для E02b/E03/E04a/E05b/E05c/E05d/E06a зафиксирован; независимая реальная проверка требует решения | Временные границы/выборка E01 сохранены, L=0/vintages неподтверждены; A принимает датированный архив; holdout просмотрен; Chronos checkpoint позже backtest; E04a split seed/ID раздельны, E06a повторяет просмотренный synthetic test; offline future access явно отделён от online |
 | F01 | Выполнить сопоставимый пилот Prophet | Выполнен как E01 | outputs/prophet_comparison_v1/ и reports/results/E01_prophet_comparison.md; это пилот, не полный набор МО |
 | F02 | Улучшить прогнозирование и проверить фундаментальную модель | Chronos-2 проверен в E03; обычный model search закрыт после E05d | Сопоставимые опыты сохранены с ограничениями; прирост E05d на просмотренном holdout не является независимым подтверждением или выбором окончательного победителя |
@@ -52,6 +52,14 @@
 | D02 | Проверить финальную воспроизводимость и публикацию | F5 code audit и F6 финальный audit выполнены с ограничениями; полное воспроизведение и права на данные не подтверждены | Код/навигация/claims/security/figures PASS; private data/full experiment reproduction NOT TESTED; historical paths документированы как исключение; права на исходные/производные данные NOT VERIFIED; финальный commit отдельно |
 
 ## Карточка текущей задачи
+ID: F8 — README GITHUB PAGES LINK, 2026-10-08.
+Добавлен точный блок «Интерактивный отчёт» после вступления и до навигации.
+Pages URL в README встречается один раз; остальной README побайтово сохранён.
+docs/index.html и инструкция Settings → Pages → Deploy from a branch → main → /docs
+проверены; git diff --check PASS. Следующий шаг — review блока автором.
+NO MODEL FITS; NO NEW EXPERIMENTS; NO RESULT CHANGES; NO COMMIT/PUSH.
+
+## F8: третий editorial pass
 ID: F8 — THIRD AND FINAL EDITORIAL PASS: RUSSIAN TECHNICAL PROSE, 2026-10-08.
 Ветка main, исходный HEAD eb49040978ea8d6b84aa7a5de45be3b326d01d74.
 В docs/index.html выполнены 27 языковых замен; новые эксперименты не проводились.

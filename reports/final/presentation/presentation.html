@@ -159,9 +159,9 @@ body.single-slide{background:white}.single-slide .slide{display:none;margin:0}.s
 <section class="slide" data-slide="10">
   <p class="kicker" style="color:var(--orange)">Controlled synthetic early-warning benchmark</p><h2>Предвестники позволяют проверить механизм</h2>
   <p class="small"><strong>SYNTHETIC BENCHMARK — не оценка предсказания реальных экономических шоков.</strong></p>
-  <p class="small muted">S0: постоянная вероятность · S1: история · S2: + online states · S3: + synthetic external precursor features</p>
-  <img class="figure" src="../figures/synthetic_event_performance.png" alt="SYNTHETIC TEST: event recall и alert precision S0–S3, 180 событий" style="width:1050px;height:268px">
-  <div class="callout synthetic" style="margin-top:12px;font-size:20px"><strong>S3, k=1 / k=3:</strong> event recall <strong>0.428 / 0.617</strong>; median lead <strong>1 / 2 месяца</strong> среди успешных предупреждений. TEST: 180 событий.</div>
+  <p class="small muted">Обозначения рисунка: Constant risk (S0) · History only (S1) · History + detector state (S2) · History + detector state + external precursors (S3)</p>
+  <img class="figure" src="../figures/synthetic_event_performance.png" alt="SYNTHETIC TEST: event recall и alert precision четырёх early-warning стратегий, 180 событий" style="width:1050px;height:268px">
+  <div class="callout synthetic" style="margin-top:12px;font-size:20px"><strong>History + detector state + external precursors, k=1 / k=3:</strong> event recall <strong>0.428 / 0.617</strong>; median lead <strong>1 / 2 месяца</strong> среди успешных предупреждений. TEST: 180 событий.</div>
   <p class="caption">Вывод условен на заданном генераторе и наблюдаемых до onset предвестниках; польза реальных news не доказана.</p>
   <div class="footer"><span>Источники: ../results_summary.json → synthetic_early_warning; ../figure_manifest.csv, группа 9</span><span class="page">10 / 12</span></div>
 </section>
