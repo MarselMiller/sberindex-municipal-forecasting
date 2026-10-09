@@ -7,6 +7,36 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
+## Самостоятельный HTML publication package
+
+2026-10-09, ветка `release/html-publication`, чистый исходный HEAD `9ab65bf`.
+Подготовлена воспроизводимая сборка `scripts/build_publication_site.py`:
+`dist/submission-site/` и ZIP с содержимым корня, manifest/SHA256 и link audit.
+Canonical HTML, пять JSON, data bundle, Markdown, CSV, PDF и исследовательские
+артефакты остаются исходниками; изменяются только ссылки в выходном HTML.
+Явный allowlist — `configs/publication_site.json`; фиксированный внешний link
+review — `configs/publication_external_links.json`. Инструкция автора и таблица
+18 исходных адресов — [README_PUBLICATION.md](README_PUBLICATION.md).
+
+Методология, PDF, словарь, сводка, ограничения, Persistence/robustness/E08
+и проверенные агрегированные приложения открываются локально без GitHub.
+Подробный E06a исключён из-за локальных путей и муниципальных таблиц;
+служебные аудиты, полные manifests/Source of Truth JSON, код и остальные
+research artifacts обозначены через доступное пояснение «по приглашению».
+Raw/row-level data не включены; исходные parquet rights остаются UNCLEAR.
+Существующий МО 21 PNG сохранён побайтово и проверяется по фиксированному SHA256
+и прежнему figure manifest; новые муниципальные точки не экспортируются.
+
+Package readiness PASS для review: 73 файла, 478 внутренних links/anchors,
+20 targeted tests, 89 browser checks; isolated package вне репозитория,
+1440/390/320 px, light/dark, клавиатура, no-JS, controls, локальные приложения/PDF.
+Из 30 внешних URL web-инструмент получил 25 документов, три XLSX endpoint
+ответили spreadsheet content type без разбора содержимого, один файл ЦБ
+вернул HTTP 403 (явно помечен в приложении), GitHub требует приглашения.
+Сборка и --check совпадают; MAE, NA, SoT и старые результаты сохранены.
+Сайт не развёрнут, анонимный доступ к будущему hosted URL ещё не проверен.
+Модели/эксперименты/visibility/deploy/commit/push/merge не выполнялись.
+
 ## Финальный содержательный и редакционный аудит сдачи
 
 2026-10-09, ветка research/forecast-robustness, исходный HEAD e0f5ad5;

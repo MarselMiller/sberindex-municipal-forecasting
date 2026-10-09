@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "base_commit": "9ab65bf",
+  "runtime": [
+    "docs/index.html",
+    "docs/assets/project-report.css",
+    "docs/assets/project-report.js",
+    "docs/assets/project-report-data.js",
+    "docs/assets/figures/rolling_forecast.png",
+    "docs/data/forecasting.json",
+    "docs/data/detection.json",
+    "docs/data/early_warning.json",
+    "docs/data/financial_indicators.json",
+    "docs/data/glossary.json"
+  ],
+  "documents": {
+    "README.md": "references/repository-readme.html",
+    "reports/final/METHODOLOGY_REPORT.md": "references/methodology.html",
+    "reports/final/RESULTS_SUMMARY.md": "references/results.html",
+    "reports/final/terminology.md": "references/glossary.html",
+    "reports/final/limitations.md": "references/limitations.html",
+    "reports/results/national_local_persistence.md": "references/national-local-persistence.html",
+    "reports/results/forecast_robustness.md": "references/forecast-robustness.html",
+    "reports/results/E08a_leading_financial_indicators_audit.md": "references/financial-sources.html",
+    "reports/results/E08b_leading_financial_features.md": "references/financial-features.html",
+    "reports/results/E08c_leading_financial_forecasting.md": "references/financial-forecasting.html",
+    "reports/results/E08d_real_financial_early_warning.md": "references/financial-warning.html"
+  },
+  "copies": {
+    "reports/final/presentation/presentation.pdf": "presentation/presentation.pdf",
+    "reports/final/forecasting_metrics.csv": "references/forecasting_metrics.csv",
+    "reports/final/detection_metrics.csv": "references/detection_metrics.csv",
+    "reports/final/early_warning_metrics.csv": "references/early_warning_metrics.csv",
+    "reports/results/national_local_persistence/gap_analysis.csv": "references/persistence/gap_analysis.csv",
+    "reports/results/national_local_persistence/metrics.csv": "references/persistence/metrics.csv",
+    "reports/results/national_local_persistence/origin_stability.csv": "references/persistence/origin_stability.csv",
+    "reports/results/forecast_robustness/pairwise_metrics.csv": "references/robustness/pairwise_metrics.csv",
+    "reports/results/forecast_robustness/bootstrap_origin.csv": "references/robustness/bootstrap_origin.csv",
+    "reports/results/e08b/financial_features_by_origin.csv": "references/financial/financial_features_by_origin.csv",
+    "reports/results/e08b/feature_coverage.csv": "references/financial/feature_coverage.csv",
+    "reports/results/e08c/forecasting_metrics.csv": "references/financial/forecasting_metrics.csv",
+    "reports/results/e08d/origin_event_study.csv": "references/e08d/origin_event_study.csv",
+    "reports/results/e08d/event_window_table.csv": "references/e08d/event_window_table.csv",
+    "reports/results/e08d/diagnostic_comparisons.csv": "references/e08d/diagnostic_comparisons.csv",
+    "reports/results/e08d/permutation_results.csv": "references/e08d/permutation_results.csv",
+    "reports/results/e08d/leave_one_event_out.csv": "references/e08d/leave_one_event_out.csv",
+    "reports/results/e08d/event_intensity.csv": "references/e08d/event_intensity.csv",
+    "reports/results/e08d/eligibility_summary.csv": "references/e08d/eligibility_summary.csv",
+    "reports/final/figures/forecast_mae.png": "references/figures/forecast_mae.png",
+    "reports/final/figures/online_comparison.png": "references/figures/online_comparison.png",
+    "reports/final/figures/offline_example.png": "references/figures/offline_example.png",
+    "reports/final/figures/real_warning_sufficiency.png": "references/figures/real_warning_sufficiency.png",
+    "reports/final/figures/synthetic_event_performance.png": "references/figures/synthetic_event_performance.png",
+    "reports/final/figures/warning_success.png": "references/figures/warning_success.png",
+    "reports/final/figures/warning_false.png": "references/figures/warning_false.png",
+    "reports/final/figures/warning_miss.png": "references/figures/warning_miss.png",
+    "reports/results/e08d/figures/e08d_financial_by_origin.png": "references/figures/e08d_financial_by_origin.png",
+    "reports/results/e08d/figures/e08d_event_centered_financial.png": "references/figures/e08d_event_centered_financial.png",
+    "docs/assets/publication-reference.css": "assets/publication-reference.css"
+  },
+  "aliases": {
+    "reports/final/figures/rolling_forecast.png": "assets/figures/rolling_forecast.png",
+    "docs/index.html": "index.html"
+  },
+  "restricted": {
+    "reports/results/E06a_offline_detection.md": "offline-detection",
+    "reports/final/REPRODUCTION_AUDIT.md": "audits",
+    "reports/final/DATA_PUBLICATION_AUDIT.md": "audits",
+    "reports/final/SUBMISSION_READINESS.md": "audits",
+    "reports/final/results_summary.json": "audit-metadata",
+    "reports/results/e08d/run_manifest.json": "audit-metadata",
+    "reports/results/e08d/independent_validation.json": "audit-metadata",
+    "reports/results/e08d/figure_manifest.json": "audit-metadata"
+  },
+  "review": {
+    "raw_parquet_redistribution": "UNCLEAR; raw and row-level files are excluded",
+    "aggregate_csv": "Only reviewed final metrics, origin-level national indicators and aggregate diagnostics; no municipality IDs or predictions",
+    "mo21_figure": "Existing report illustration only; byte-identical SHA256 0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2; no source rows copied; does not establish raw redistribution rights",
+    "offline_report": "Excluded: absolute local paths and detailed municipality tables",
+    "audit_metadata": "Excluded service journals; source-of-truth JSON contains historical local commands; retained privately without modification",
+    "source_code": "Private GitHub; invitation required"
+  }
+}
