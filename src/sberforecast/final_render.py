@@ -1,7 +1,62 @@
 """Russian F1 narrative and tables, rendered from the canonical evidence object."""
 from __future__ import annotations
 
-from .final_summary import forecasting_table, fmt, table
+import json
+from pathlib import Path
+import re
+
+from .final_summary import forecasting_table, fmt, output_path, table
+
+FORECAST_HEADING = 'Прогнозирование: сравнение моделей на общей выборке'
+INTERNAL_HEADING = 'Обнаруженные несовпадения и подготовленная формулировка'
+
+
+def public_editorial(text: str, summary: dict) -> str:
+    """Idempotent public wording, preserving saved tables and later research blocks."""
+    facts = summary['forecasting']['facts']['comparison_area']
+    if facts['evaluable_municipalities'] != 63:
+        raise ValueError('Editorial scope requires the frozen 64/63 municipality comparison')
+    text = re.sub(r'^### ' + re.escape(INTERNAL_HEADING) + r'\n.*?(?=^#{1,3} |\Z)', '', text,
+                  flags=re.MULTILINE | re.DOTALL)
+    text = text.replace('## A. Forecasting: сопоставимый реальный пилот', '## ' + FORECAST_HEADING)
+    paragraph = (
+        'Для сравнения выбраны 64 МО; для 63 доступны оцениваемые факты. '
+        f"Все стратегии сравниваются на одних случаях: {facts['evaluable_keys']} одинаковых прогнозных ключей на каждую стратегию. "
+        'Выводы не распространяются автоматически на все 2190 МО. '
+        'МО 1471 сохранено в исходной выборке, но его факты не позволяют оценку; '
+        '7 строк без конечного факта остаются в исходных predictions. '
+        'Данные full panel baseline в таблицу не добавлены. '
+        'Ключ сравнения: МО × forecast origin × target month × h. '
+        'Все факты и множества ключей сверены, fallback оставлен в полной стратегии.'
+    )
+    text = re.sub(r'(^## ' + re.escape(FORECAST_HEADING) + r'\n\n)([^\n]+)',
+                  lambda match: match[1] + paragraph, text, count=1, flags=re.MULTILINE)
+    text = text.replace('real pilot holdout', 'holdout общей выборки')
+    text = text.replace('pilot holdout', 'holdout общей выборки')
+    text = re.sub(r'^F1 — единый источник чисел.*?\n\n',
+                  'Сводка содержит сохранённые результаты прогнозирования, обнаружения изменений и раннего предупреждения.\n\n',
+                  text, count=1, flags=re.MULTILINE | re.DOTALL)
+    # Historical execution logs stay in their original audit files. This public
+    # paragraph explains reproducibility, rather than narrating editorial work.
+    text = re.sub(r'^Фактический один полный pytest:.*?(?=\n\n|\Z)',
+                  'Исторические проверки и границы воспроизведения описаны в [REPRODUCTION_AUDIT.md](REPRODUCTION_AUDIT.md). '
+                  'Сборка публичного сайта использует сохранённые агрегаты; повторение реальных backtests требует исходного комплекта данных и, для Chronos, весов. '
+                  'Команда `python scripts/build_final_summary.py --editorial-only` обновляет только публичные формулировки, сохраняя числовые таблицы и дополнительные исследовательские разделы.',
+                  text, count=1, flags=re.MULTILINE | re.DOTALL)
+    return text.rstrip() + '\n'
+
+
+def refresh_public_editorial(root: Path, output_dir='reports/final', check=False) -> dict:
+    folder = output_path(Path(root), output_dir)
+    summary = json.loads((folder / 'results_summary.json').read_text(encoding='utf-8-sig'))
+    path = folder / 'RESULTS_SUMMARY.md'
+    original = path.read_text(encoding='utf-8-sig')
+    revised = public_editorial(original, summary)
+    if check and original != revised:
+        raise ValueError('Public summary needs editorial refresh')
+    if not check and original != revised:
+        path.write_text(revised, encoding='utf-8', newline='\n')
+    return {'status': 'PASS', 'changed': original != revised}
 
 
 def render_summary(s: dict) -> str:
@@ -190,15 +245,7 @@ def render_summary(s: dict) -> str:
         'при существенном расхождении останавливается. JSON и Markdown формируются из той же структуры, что CSV. '
         'Сохранены research HEAD, текущий Git/status, команда, версии, SHA входных файлов и кода. '
         'F1 не запускает модели, детекторы, optimizer, загрузки или новый эксперимент.',
-        'Один полный pytest запускается отдельно после сборки; фактический результат и визуальная проверка фиксируются '
-        'в `verification.json`, а не приписываются сборщику заранее. `build_validation.json` подтверждает неизменность '
-        'защищённых прежних файлов во время сборки; область проверки указана явно. '
-        'Воспроизведение из чистой копии и финальный аудит публичной публикации остаются непроверенными. '
-        'Исходные данные и веса не входят в итоговую сводку, `.gitignore` не менялся.',
-        '### Обнаруженные несовпадения и подготовленная формулировка',
-        ('\n'.join('- ' + r['description'] for r in s['discrepancies']) if s['discrepancies'] else 'Числовых расхождений между проверенными ключевыми таблицами прежних отчётов и сохранёнными данными не найдено.'),
-        'Смена news v2 → v3 и нативной годовой модели → fallback являются различиями версии/области, а не исправлением старых результатов. '
-        'Финальная формулировка AI disclosure подготовлена в [ai_disclosure_draft.md](ai_disclosure_draft.md); '
-        'в README, отчёт и презентацию автоматически не вставлялась. Следующий шаг — использовать эту сводку для README/отчёта/презентации.',
+        'Исторические проверки и границы воспроизведения описаны в [REPRODUCTION_AUDIT.md](REPRODUCTION_AUDIT.md). '
+        'Сборка публичного сайта использует сохранённые агрегаты; повторение реальных backtests требует исходного комплекта данных и, для Chronos, весов.',
     ]
-    return '\n\n'.join(paragraphs) + '\n'
+    return public_editorial('\n\n'.join(paragraphs) + '\n', s)

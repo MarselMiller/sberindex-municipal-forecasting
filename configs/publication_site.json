@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "base_commit": "9ab65bf",
+  "base_commit": "4b0c1b6",
   "runtime": [
     "docs/index.html",
     "docs/assets/project-report.css",
@@ -62,7 +62,7 @@
     "reports/final/figures/rolling_forecast.png": "assets/figures/rolling_forecast.png",
     "docs/index.html": "index.html"
   },
-  "restricted": {
+  "not_bundled": {
     "reports/results/E06a_offline_detection.md": "offline-detection",
     "reports/final/REPRODUCTION_AUDIT.md": "audits",
     "reports/final/DATA_PUBLICATION_AUDIT.md": "audits",
@@ -73,11 +73,11 @@
     "reports/results/e08d/figure_manifest.json": "audit-metadata"
   },
   "review": {
-    "raw_parquet_redistribution": "UNCLEAR; raw and row-level files are excluded",
+    "raw_parquet_redistribution": "CC BY-SA 4.0 confirmed for the reviewed consumption dataset; no raw Parquet or row-level CSV/forecasts added to site; dictionary/news/other inputs not covered",
     "aggregate_csv": "Only reviewed final metrics, origin-level national indicators and aggregate diagnostics; no municipality IDs or predictions",
-    "mo21_figure": "Existing report illustration only; byte-identical SHA256 0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2; no source rows copied; does not establish raw redistribution rights",
+    "mo21_figure": "Existing report illustration; byte-identical SHA256 0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2; CC BY-SA 4.0 with SberIndex attribution and accepted adapted contribution; no source rows copied to site; no licence assigned to own code",
     "offline_report": "Excluded: absolute local paths and detailed municipality tables",
-    "audit_metadata": "Excluded service journals; source-of-truth JSON contains historical local commands; retained privately without modification",
-    "source_code": "Private GitHub; invitation required"
+    "audit_metadata": "Excluded from site; historical journals retained without modification in Git. Whole-repository safety must be reviewed separately",
+    "source_code": "Owner chose the existing repository as public with preserved Git history; own code licence unassigned; no visibility change or deployment during preparation"
   }
 }

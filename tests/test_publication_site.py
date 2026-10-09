@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import sys
 import zipfile
+from urllib.parse import unquote, urljoin, urlsplit
 
 import pytest
 
@@ -69,10 +70,11 @@ def test_allowlist_is_exclusive_and_raw_files_absent(package):
         assert Path(name).suffix not in {'.parquet', '.gz', '.pkl', '.env', '.key', '.pem', '.ipynb', '.zip'}
         assert Path(name).name not in {'results_summary.json', 'run_manifest.json', 'independent_validation.json', 'figure_manifest.json'}
         publication.audit_text(name, payload[name])
-    excluded = set(builder.policy['restricted'])
+    excluded = set(builder.policy['not_bundled'])
     published_sources = {x.get('source') for x in builder.provenance.values()}
     assert not excluded.intersection(published_sources)
-    assert builder.policy['review']['raw_parquet_redistribution'].startswith('UNCLEAR')
+    assert builder.policy['review']['raw_parquet_redistribution'].startswith('CC BY-SA 4.0 confirmed for the reviewed consumption dataset')
+    assert 'no raw Parquet or row-level CSV/forecasts added to site' in builder.policy['review']['raw_parquet_redistribution']
 
 
 @pytest.mark.parametrize('name,data', [
@@ -119,20 +121,48 @@ def test_local_pdf_methodology_glossary_and_no_root_escapes(package):
     assert payload['presentation/presentation.pdf'].startswith(b'%PDF-')
 
 
-def test_private_github_is_explicit_and_not_a_document_gateway(package):
-    _, payload = package
+def test_repository_links_use_tracked_files_without_invitation_claims(package):
+    builder, payload = package
     for name, data in payload.items():
         if name.endswith('.html'):
             text = data.decode()
             for tag, attr, url, attrs in publication.Inventory(text).links:
                 if 'github.com' in url:
-                    assert url == publication.GITHUB
-                    assert attrs.get('data-access') == 'restricted'
-                    assert publication.INVITATION in text
+                    assert url == publication.GITHUB or url.startswith(publication.GITHUB + '/blob/main/') or url.startswith(publication.GITHUB + '/tree/main/')
+                    assert attrs.get('data-access') != 'restricted'
+                    if '/main/' in url:
+                        target = unquote(urlsplit(url).path.split('/main/', 1)[1])
+                        assert target in builder.tracked or any(p.startswith(target.rstrip('/') + '/') for p in builder.tracked)
+            assert 'доступ по приглашению' not in text
+            assert 'остаётся приватным' not in text
     audit = json.loads(payload['link-audit.json'])
     main = audit['original_html_link_changes']
     assert len({r['original_url'] for r in main if r['original_url'].startswith(publication.GITHUB)}) == 12
     assert len({r['original_url'] for r in main if r['original_url'].startswith('../reports/')}) == 6
+
+
+def test_pages_project_prefix_and_excluded_local_artifacts(package):
+    builder, payload = package
+    for item in builder.check_links():
+        if item['kind'] == 'local':
+            deployed = urlsplit(urljoin(publication.PAGES + item['document'], item['url']))
+            prefix = urlsplit(publication.PAGES).path
+            assert deployed.path.startswith(prefix)
+            assert unquote(deployed.path[len(prefix):]) in payload
+    url, excluded = builder.resolve('../outputs/local-only.json', 'docs/index.html', 'index.html')
+    assert excluded and url == 'references/materials.html#local-artifacts'
+    url, excluded = builder.resolve(publication.PAGES, 'README.md', 'references/repository-readme.html')
+    assert not excluded and url == '../index.html'
+
+
+def test_publication_rejects_local_only_required_input(monkeypatch):
+    original = publication.Builder.__init__
+    def without_one_source(self, root):
+        original(self, root)
+        self.tracked.discard('reports/results/e08b/feature_coverage.csv')
+    monkeypatch.setattr(publication.Builder, '__init__', without_one_source)
+    with pytest.raises(ValueError, match='not tracked'):
+        publication.build(ROOT, check=True, require_tracked_inputs=True)
 
 
 def test_methodology_content_formulas_tables_figures_preserved(package):
@@ -172,6 +202,39 @@ def test_glossary_canonical_terms_and_anchors(package):
     assert {a.decode() for a in anchors} <= inventory.ids
 
 
+def test_public_e08_html_omits_workflow_notes_but_preserves_historical_sources(package):
+    builder, payload = package
+    for source, dest in builder.policy['documents'].items():
+        if not source.startswith('reports/results/E08'):
+            continue
+        raw = (ROOT / source).read_bytes()
+        assert payload['references/' + Path(dest).stem + '.md'] == raw
+        public_text = publication.public_document_text(source, raw.decode('utf-8-sig'))
+        assert re.findall(r'^\|.*$', public_text, re.MULTILINE) == re.findall(r'^\|.*$', raw.decode('utf-8-sig'), re.MULTILINE)
+        for term in ['NO COMMIT/PUSH', 'Для review созданы', 'следующий этап']:
+            assert term not in payload[dest].decode()
+
+
 def test_no_ml_modules_loaded_by_publication_build(package):
     builder, _ = package
     assert not {'prophet', 'lightgbm', 'catboost', 'sberforecast'} & builder.imported_modules
+
+
+def test_pages_workflow_is_manual_with_default_deployment_disabled():
+    import yaml
+    workflow = yaml.load((ROOT / '.github/workflows/pages.yml').read_text(encoding='utf-8'), Loader=yaml.BaseLoader)
+    assert set(workflow['on']) == {'workflow_dispatch'}
+    assert workflow['on']['workflow_dispatch']['inputs']['deploy']['default'] == 'false'
+    assert workflow['permissions'] == {'contents': 'read'}
+    assert 'inputs.deploy' in workflow['jobs']['deploy']['if'] and 'refs/heads/main' in workflow['jobs']['deploy']['if']
+    assert workflow['jobs']['deploy']['needs'] == 'build'
+    assert workflow['jobs']['deploy']['environment']['name'] == 'github-pages'
+    assert workflow['jobs']['deploy']['permissions'] == {'pages': 'write', 'id-token': 'write'}
+    steps = workflow['jobs']['build']['steps']
+    strict_step = next(i for i, step in enumerate(steps) if '--strict' in step.get('run', ''))
+    upload_step = next(i for i, step in enumerate(steps) if step.get('uses', '').startswith('actions/upload-pages-artifact@'))
+    assert strict_step < upload_step
+    for job in workflow['jobs'].values():
+        for step in job['steps']:
+            if 'uses' in step:
+                assert re.search(r'@[0-9a-f]{40}$', step['uses'])

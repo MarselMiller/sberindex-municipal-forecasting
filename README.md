@@ -4,11 +4,15 @@
 Проект объединяет forecasting, обнаружение структурных изменений и проверку возможности early warning.<br>
 Результаты на реальных данных и controlled synthetic benchmarks представлены отдельно.
 
-### Полноценный HTML-отчёт
+### Интерактивный отчёт и GitHub Pages
 
 Для проекта подготовлен интерактивный HTML-отчёт с основными результатами, графиками и глоссарием.
 
-[Открыть HTML-отчёт в репозитории](docs/index.html)
+[GitHub Pages — планируемый адрес отчёта](https://marselmiller.github.io/sberindex-municipal-forecasting/)
+
+Сайт ещё не опубликован. До deployment можно [открыть HTML в репозитории](docs/index.html),
+[скачать презентацию PDF](reports/final/presentation/presentation.pdf) и
+[прочитать методологию](reports/final/METHODOLOGY_REPORT.md).
 
 Для локального просмотра скачайте репозиторий целиком (`Code → Download ZIP`), распакуйте архив и откройте `docs/index.html` в браузере.
 
@@ -18,11 +22,18 @@
 
 [Открытие и публикация сайта](docs/README_SITE.md)
 
+Сборка самостоятельного сайта из сохранённых результатов (Python 3.12):
+`python -m pip install -r requirements-publication.txt`,
+`python scripts/build_publication_site.py`.
+Откройте `dist/submission-site/index.html` или выполните
+`python -m http.server 8000 --bind 127.0.0.1 --directory dist/submission-site`.
+Подробные проверки и ручной Pages workflow описаны в [инструкции публикации](docs/README_PUBLICATION.md).
+
 ## Результаты
 
 ### Что получилось
 
-- **SeasonalNaiveYoY**, прогноз по доступной к forecast origin истории, **превосходит оба проверенных Prophet на h=1/3/6** по MAE на сопоставимом pilot holdout.
+- **SeasonalNaiveYoY**, прогноз по доступной к forecast origin истории, **превосходит оба проверенных Prophet на h=1/3/6** по MAE на holdout общей выборки.
 - **National/Local + LightGBM:** MAE **799.6 / 1212.7 / 1897.2 руб.** на h=1/3/6. Это минимумы основной таблицы holdout; преимущество не полностью устойчиво на validation.
 - **CUSUM / EWMA / BOCPD и PELT / Binary Segmentation** проверены в отдельном synthetic benchmark. Результаты на реальных МО являются диагностическими сигналами.
 - **Реальной панели недостаточно для корректной оценки early-warning модели с временным разбиением.** Отдельный controlled synthetic benchmark проверяет предупреждение при наличии наблюдаемых предвестников.
@@ -69,7 +80,7 @@ Forecasting оценивает будущие расходы. Детекторы
 
 Основная метрика — **MAE macro в исходных рублях**: средняя абсолютная ошибка каждого МО усредняется с равными весами. Меньше — лучше. MAE micro, pooled R², coverage и числа прогнозов без/с fallback доступны в [forecasting_metrics.csv](reports/final/forecasting_metrics.csv). Pooled R² не заменяет проверку динамики отдельных МО.
 
-**Реальные данные: pilot holdout, цели июля–декабря 2024.** Все значения округлены непосредственно из финального CSV до одного десятичного знака.
+**Реальные данные: holdout общей выборки, цели июля–декабря 2024.** Все значения округлены непосредственно из финального CSV до одного десятичного знака.
 
 | Модель | 1 мес. | 3 мес. | 6 мес. | 12 мес. |
 | --- | ---: | ---: | ---: | ---: |
@@ -93,7 +104,9 @@ Forecasting оценивает будущие расходы. Детекторы
 
 Дополнительно проверены ключевая ставка Банка России и официальный курс USD/RUB; для каждого forecast origin использовались только значения, доступные к моменту формирования прогноза. Фиксированное сравнение моделей не показало устойчивого улучшения: снижение MAE с FX наблюдалось только на h=6 и не было устойчивым по горизонтам. Для weak-event labels, построенных по устойчивым изменениям ошибки baseline, сравнительный early-warning эффект оценить не удалось, поскольку среди дат с известной меткой не было отрицательного класса ([подробности](reports/final/RESULTS_SUMMARY.md#leading-financial-indicators)).
 
-![MAE macro на реальном pilot holdout; годовые direct-стратегии используют fallback](reports/final/figures/forecast_mae.png)
+![MAE macro на holdout общей выборки; годовые direct-стратегии используют fallback](reports/final/figures/forecast_mae.png)
+
+Реальный пример — [последовательные прогнозы для МО 21](reports/final/figures/rolling_forecast.png): факты и сохранённые прогнозы SeasonalNaiveYoY, h=1, за январь–декабрь 2024. МО выбран по минимальному числовому ID. Описание интерпретации и ограничений примера — в [методологическом отчёте](reports/final/METHODOLOGY_REPORT.md).
 
 ### Foundation model
 
