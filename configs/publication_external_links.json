@@ -1,0 +1,43 @@
+{
+  "checked_on": "2026-10-09",
+  "method": "Read-only web tool retrieval. Retrieved content may use the tool cache; this is not a claim of live HTTP 200. Direct Python sockets are restricted in this environment.",
+  "retrieved_documents": [
+    "https://cbr.ru/press/pr/?id=39834",
+    "https://www.cbr.ru/Collection/Collection/File/40970/Bbs2203r.pdf",
+    "https://www.cbr.ru/Collection/Collection/File/43415/razv_bs_22_09.pdf",
+    "https://www.cbr.ru/Collection/Collection/File/43486/razv_bs_22_10.pdf",
+    "https://www.cbr.ru/Collection/Collection/File/43890/Bbs2303r.pdf",
+    "https://www.cbr.ru/Collection/Collection/File/49066/Bbs2403r.pdf",
+    "https://www.cbr.ru/Content/Document/File/135988/meth_rates.pdf",
+    "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?op=KeyRate",
+    "https://www.cbr.ru/calendar/",
+    "https://www.cbr.ru/currency_base/dynamics/",
+    "https://www.cbr.ru/development/SXML/",
+    "https://www.cbr.ru/dkp/cal_mp/",
+    "https://www.cbr.ru/faq/foreign_exchange_market/",
+    "https://www.cbr.ru/hd_base/KeyRate/",
+    "https://www.cbr.ru/hd_base/zcyc_params/",
+    "https://www.cbr.ru/press/pr/?file=15082023_103000Key.htm",
+    "https://www.cbr.ru/press/pr/?file=16092022_133000Key.htm",
+    "https://www.cbr.ru/press/pr/?file=26072024_133000key.htm",
+    "https://www.cbr.ru/statichtml/file/105133/ps_b.pdf",
+    "https://www.cbr.ru/statistics/avgprocstav/",
+    "https://www.cbr.ru/statistics/bbs/",
+    "https://www.cbr.ru/vfs/statistics/ssrd/meth/exr_b.pdf",
+    "https://www.moex.com/a3642",
+    "https://www.moex.com/n63910",
+    "https://www.moex.com/ru/marketdata/indices/state/g-curve/archive/"
+  ],
+  "spreadsheet_endpoints": [
+    "https://www.cbr.ru/vfs/statistics/BankSector/Mortgage/02_05_Debt_ind.xlsx",
+    "https://www.cbr.ru/vfs/statistics/pdko/int_rat/deposits.xlsx",
+    "https://www.cbr.ru/vfs/statistics/pdko/int_rat/loans_ind.xlsx"
+  ],
+  "spreadsheet_note": "Endpoints replied with application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; parser does not support it. No spreadsheet content is bundled or validated.",
+  "access_not_confirmed": {
+    "https://www.cbr.ru/vfs/statistics/banksector/borrowings/02_27_Dep_ind_excluding_escrow.xlsx": "HTTP 403; anonymous access not confirmed by web tool"
+  },
+  "invitation_required": [
+    "https://github.com/MarselMiller/sberindex-municipal-forecasting"
+  ]
+}
