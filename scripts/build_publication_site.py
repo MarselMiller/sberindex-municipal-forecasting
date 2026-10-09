@@ -17,13 +17,14 @@ from pathlib import Path, PurePosixPath
 import posixpath
 import re
 import shutil
+import subprocess
 import tempfile
-from urllib.parse import unquote, urlsplit
+from urllib.parse import unquote, urljoin, urlsplit
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 GITHUB = "https://github.com/MarselMiller/sberindex-municipal-forecasting"
-INVITATION = "Исходный код — доступ по приглашению"
+PAGES = "https://marselmiller.github.io/sberindex-municipal-forecasting/"
 SCHEMA = "sberindex-publication-v1"
 
 
@@ -117,6 +118,24 @@ def table_cells(line: str) -> list[str]:
     return [x.strip().replace(r"\|", "|") for x in re.split(r"(?<!\\)\|", line.strip().strip("|"))]
 
 
+def public_document_text(source: str, text: str) -> str:
+    """Hide workflow chatter in E08 HTML; retain historical Markdown verbatim."""
+    if not re.fullmatch(r'reports/results/E08[a-d]_[^/]+\.md', source):
+        return text
+    text = text.replace('## Артефакты, ограничения и следующий этап', '## Артефакты и ограничения')
+    text = text.replace('## Итоговая проверка выполнения', '## Проверка признаков и воспроизводимость')
+    text = re.sub(r'^.*NO COMMIT/PUSH\.?\s*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^Для review созданы .*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^Следующий конкретный шаг после прохождения tests:.*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^Результат не обновляет F1–F7 Source of Truth.*$', '', text, flags=re.MULTILINE)
+    text = text.replace(' Следующий шаг — отдельно обсудить этот результат; новые модели, sources или early-warning training этим запуском не разрешаются.', '')
+    text = text.replace('Матрица/audit и report остаются в ignored reports/results/. Code/config/tests и две project docs пригодны для review; ', '')
+    # The scientific run counts and independent numerical verification below
+    # this paragraph remain. Temporary setup errors are historical audit detail.
+    text = re.sub(r'(\*\*65 passed in 1\.92 s, code 0\.\*\*)[^\n]*', r'\1 Сохранённый запуск тестов успешно завершён.', text)
+    return text
+
+
 class Builder:
     def __init__(self, root: Path):
         self.root = root.resolve()
@@ -137,6 +156,7 @@ class Builder:
             safe_path(dest)
         self.documents = {}
         self.math_count = 0
+        self.tracked = set(subprocess.check_output(['git', 'ls-files', '-z'], cwd=self.root).decode().split('\0')) - {''}
 
     def put(self, dest: str, data: bytes, source=None, kind="generated"):
         safe_path(dest)
@@ -153,14 +173,24 @@ class Builder:
     def resolve(self, url: str, source: str, dest: str, image=False):
         url = html.unescape(url)
         parsed = urlsplit(url)
-        restricted = False
+        excluded = False
         target = None
+        destination_type = 'local_file'
+        fragment = parsed.fragment
         if parsed.scheme or parsed.netloc:
             if url.rstrip("/") == GITHUB:
                 replacement = GITHUB
-                restricted = True
+                destination_type = 'repository_after_review'
+            elif url.startswith(PAGES):
+                mapped = unquote(parsed.path[len(urlsplit(PAGES).path):]) or 'index.html'
+                safe_path(mapped)
+                replacement = posixpath.relpath(mapped, posixpath.dirname(dest) or '.')
+                if fragment:
+                    replacement += '#' + fragment
             elif url.startswith(GITHUB + "/blob/main/"):
                 target = unquote(parsed.path.split("/blob/main/", 1)[1])
+            elif url.startswith(GITHUB + "/tree/main/"):
+                target = unquote(parsed.path.split("/tree/main/", 1)[1])
             elif parsed.scheme in {"https", "http", "mailto"}:
                 return url, False
             else:
@@ -172,24 +202,35 @@ class Builder:
         if target is not None:
             if target in self.mapping:
                 mapped = self.mapping[target]
-                fragment = parsed.fragment
             else:
                 if image:
                     raise ValueError(f"Unreviewed figure: {target}")
-                mapped = "references/restricted.html"
-                fragment = self.policy["restricted"].get(target, "source-materials")
-                restricted = True
-            replacement = posixpath.relpath(mapped, posixpath.dirname(dest) or ".")
-            if fragment:
-                replacement += "#" + fragment
+                repository_target = target in self.tracked or any(name.startswith(target.rstrip('/') + '/') for name in self.tracked)
+                denied_rows = target.startswith(('data/input/', 'data/raw/', 'data/private/', 'reports/final/figure_data/'))
+                if repository_target and not denied_rows:
+                    kind = 'blob' if target in self.tracked else 'tree'
+                    replacement = GITHUB + '/' + kind + '/main/' + target.rstrip('/')
+                    if fragment:
+                        replacement += '#' + fragment
+                    destination_type = 'repository_after_review'
+                    mapped = None
+                else:
+                    mapped = 'references/materials.html'
+                    fragment = 'local-artifacts'
+                    excluded = True
+                    destination_type = 'excluded_artifact_notice'
+            if mapped is not None:
+                replacement = posixpath.relpath(mapped, posixpath.dirname(dest) or ".")
+                if fragment:
+                    replacement += "#" + fragment
         self.link_changes.append({
             "source_document": source, "package_document": dest,
             "original_url": url, "package_url": replacement,
-            "destination_type": "invitation_notice" if restricted and target else ("private_repository" if restricted else "local_file"),
-            "anonymous_accessibility": "notice only; original requires invitation" if restricted and target else ("invitation required" if restricted else "yes"),
-            "publication_status": "restricted; source excluded" if restricted and target else ("private code" if restricted else "reviewed public copy"),
+            "destination_type": destination_type,
+            "anonymous_accessibility": 'pending repository publication' if destination_type == 'repository_after_review' else 'yes',
+            "publication_status": 'planned public repository; not checked anonymously before visibility change' if destination_type == 'repository_after_review' else ('source excluded; notice only' if excluded else 'reviewed public copy'),
         })
-        return replacement, restricted
+        return replacement, excluded
 
     def math(self, latex: str, dest: str, inline=False):
         # SVG IDs and metadata must be stable between builds. Source TeX is kept
@@ -231,7 +272,7 @@ class Builder:
                     pieces.append(f'<img loading="lazy" src="{html.escape(mapped, quote=True)}" alt="{html.escape(label, quote=True)}">')
                 else:
                     mark = ' data-access="restricted"' if restricted else ''
-                    suffix = ' <span class="restricted-label">— доступ по приглашению</span>' if restricted else ''
+                    suffix = ' <span class="restricted-label">— файл не включён; см. пояснение</span>' if restricted else ''
                     if url in self.external_review['access_not_confirmed']:
                         suffix += ' <span class="restricted-label">— внешний файл: доступ не подтверждён, HTTP 403 при проверке</span>'
                     pieces.append(f'<a href="{html.escape(mapped, quote=True)}"{mark}>' + self.emphasis(label) + suffix + '</a>')
@@ -362,14 +403,16 @@ class Builder:
         return '\n'.join(output), headings
 
     @staticmethod
-    def wrapper(title: str, body: str, headings=(), markdown_name=None):
+    def wrapper(title: str, body: str, headings=(), markdown_name=None, historical=False):
         toc = ''
         if headings:
             toc = '<nav class="toc" aria-label="Содержание документа"><ul>' + ''.join(f'<li><a href="#{html.escape(identifier)}">{html.escape(label)}</a></li>' for identifier, label in headings) + '</ul></nav>'
         download = f'<p><a href="{markdown_name}">Исходный Markdown этого документа</a> · содержание сохранено; ссылки HTML адаптированы для публикационного пакета.</p>' if markdown_name else ''
+        if historical:
+            download = f'<p><a href="{markdown_name}">Исторический Markdown отчёта</a> · сохранён побайтово как provenance; рабочие заметки не включены в HTML.</p>'
         return ('<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
-                '<meta name="color-scheme" content="light dark"><title>' + html.escape(title) + '</title><link rel="stylesheet" href="../assets/publication-reference.css"></head><body>'
-                '<header><nav aria-label="Навигация приложений"><a href="../index.html">Интерактивный отчёт</a><a href="methodology.html">Методология</a><a href="../presentation/presentation.pdf">Презентация PDF</a><a href="glossary.html">Глоссарий</a><a href="restricted.html">Условия доступа</a></nav>' + download + '</header><main>' + toc + body + '</main><footer>Статическое приложение итогового отчёта. Новые расчёты при сборке не выполняются.</footer></body></html>')
+                '<meta name="color-scheme" content="light dark"><title>' + html.escape(title) + '</title><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="../assets/publication-reference.css"></head><body>'
+                '<header><nav aria-label="Навигация приложений"><a href="../index.html">Интерактивный отчёт</a><a href="methodology.html">Методология</a><a href="../presentation/presentation.pdf">Презентация PDF</a><a href="glossary.html">Глоссарий</a><a href="materials.html">Состав материалов</a></nav>' + download + '</header><main>' + toc + body + '</main><footer>Статическое приложение итогового отчёта. Новые расчёты при сборке не выполняются.</footer></body></html>')
 
     def main_html(self, text: str):
         def anchor(match):
@@ -378,15 +421,14 @@ class Builder:
             attributes = attributes.replace(f'href="{value}"', f'href="{html.escape(mapped, quote=True)}"')
             if restricted:
                 attributes += ' data-access="restricted"'
-                if mapped == GITHUB:
-                    contents = INVITATION
-                else:
-                    contents += ' <span class="restricted-label">— доступ по приглашению</span>'
+                contents += ' <span class="restricted-label">— файл не включён; см. пояснение</span>'
             return '<a' + attributes + '>' + contents + '</a>'
-        return re.sub(r'<a(\b[^>]*href="([^"]+)"[^>]*)>(.*?)</a>', anchor, text, flags=re.DOTALL)
+        text = re.sub(r'<a(\b[^>]*href="([^"]+)"[^>]*)>(.*?)</a>', anchor, text, flags=re.DOTALL)
+        return text.replace('</head>', '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">\n</head>', 1)
 
     def build(self):
         self.check_figure_integrity()
+        self.put('assets/favicon.svg', b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#12644f"/><path d="M7 23V16h4v7zm7 0V10h4v13zm7 0V6h4v17z" fill="white"/></svg>\n', kind='navigation_icon')
         for source in self.policy["runtime"]:
             dest = self.mapping[source]
             raw = read_source(self.root, source)
@@ -398,27 +440,26 @@ class Builder:
             raw = read_source(self.root, source)
             audit_text(source, raw)
             text = raw.decode("utf-8-sig")
-            body, headings = self.markdown(text, source, dest)
+            public_text = public_document_text(source, text)
+            body, headings = self.markdown(public_text, source, dest)
             title = next(line.lstrip('# ') for line in text.splitlines() if line.startswith('# '))
             markdown_name = PurePosixPath(dest).stem + '.md'
             self.put('references/' + markdown_name, raw, source, "verbatim_markdown")
-            self.put(dest, self.wrapper(title, body, headings, markdown_name).encode(), source, "rendered_markdown")
-            self.documents[source] = {"destination": dest, "headings": len(re.findall(r'^#{1,6} ', text, re.MULTILINE)), "tables": body.count('<table>'), "figures": len(re.findall(r'!\[', text)), "source_sha256": sha(raw)}
-        restricted = '''<h1>Доступ к вспомогательным материалам</h1>
-<p class="access-note">HTML-отчёт, презентация PDF, методология, глоссарий, итоговая сводка, ограничения и включённые агрегированные приложения доступны в этом пакете без GitHub. Основной репозиторий остаётся приватным.</p>
-<h2 id="offline-detection">Подробный отчёт offline detection</h2><p>Полный отчёт содержит локальные пути и подробные муниципальные таблицы и не включён в публикационный пакет. Сводные результаты и разрешённые иллюстрации доступны в методологии. Допустимость публикации подробного приложения требует отдельного решения.</p>
-<h2 id="audits">Служебные аудиты</h2><p>Полные журналы воспроизводимости и проверки публикации доступны автору в приватном репозитории. Ссылки на них в пакете обозначены как требующие приглашения.</p>
-<h2 id="audit-metadata">Полные metadata и Source of Truth</h2><p>Полные журналы запусков, независимой проверки, manifests и исходный results_summary.json сохранены в проекте без изменений. Они не включены в этот публичный пакет. Агрегированные результаты и JSON интерактивного отчёта доступны локально.</p>
-<h2 id="source-materials">Исходный код и дополнительные research artifacts</h2><p>Код, конфигурации, первичные материалы и приложения вне явного allowlist доступны только при предоставленном доступе. Этот пакет не предоставляет доступ к исходным или построчным муниципальным данным.</p>
-<h2 id="publication-policy">Политика публикации и рисунок МО 21</h2><p>Право на перераспространение исходных муниципальных parquet остаётся UNCLEAR. Исходные данные, построчные прогнозы и таблицы отдельных муниципалитетов исключены. Сохранены только уже проверенные иллюстрации итогового отчёта, включая существующий пример МО 21; его байты и SHA256 не изменены. Это исключение для иллюстрации не подтверждает право на распространение исходных рядов.</p>'''
-        restricted += f'<p><a href="{GITHUB}" data-access="restricted">{INVITATION}</a></p>'
-        self.put('references/restricted.html', self.wrapper('Условия доступа', restricted).encode())
+            self.put(dest, self.wrapper(title, body, headings, markdown_name, historical=public_text != text).encode(), source, "rendered_markdown")
+            self.documents[source] = {"destination": dest, "headings": len(re.findall(r'^#{1,6} ', public_text, re.MULTILINE)), "tables": body.count('<table>'), "figures": len(re.findall(r'!\[', text)), "source_sha256": sha(raw), 'public_editorial_applied': public_text != text}
+        restricted = '''<h1>Состав публикационного пакета</h1>
+<p class="access-note">HTML-отчёт, презентация PDF, методология, глоссарий, итоговая сводка, ограничения и агрегированные приложения включены в пакет. Код, конфигурации и дополнительные tracked-материалы доступны по ссылкам на GitHub после согласованной публикации репозитория. Изменение его видимости и deployment выполняются отдельно.</p>
+<h2 id="local-artifacts">Материалы вне пакета</h2><p>Некоторые исторические ссылки относятся к локальным журналам или исходному комплекту исследования. Эти файлы не включены в сайт. Для полного повторения реальных экспериментов требуются исходные данные и, для Chronos, веса; сборка сайта использует только сохранённые агрегаты. Исходные и построчные муниципальные данные этот пакет не предоставляет.</p>
+<h2 id="audit-metadata">Исторические аудиты и metadata</h2><p>Исторические отчёты, manifests и Source of Truth сохранены без изменения. Ссылки на tracked-файлы ведут в репозиторий; это не означает включения этих файлов в статический сайт. Аудит всего публичного репозитория проводится отдельно от проверки состава пакета.</p>
+<h2 id="publication-policy">Источник данных и рисунок МО 21</h2><p>Источник наблюдений в примере МО 21 — СберИндекс, «Потребительские безналичные расходы на уровне муниципальных образований по категориям трат», январь 2023 — декабрь 2024. В <a href="https://sberindex.ru/ru/research/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim">официальном описании</a> указан режим <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ru">CC BY-SA 4.0</a>. Дата исходного скачивания неизвестна; условия проверены 2026-10-09. Выбраны категория «Все категории», один МО и 12 месяцев; добавлены сохранённые прогнозы SeasonalNaiveYoY, h=1. Наблюдения не менялись, МО выбран по минимальному ID. СберИндекс не заявлял одобрения выводов проекта.</p><p>CSV примера и эта иллюстрация, включая вклад автора в отбор и сохранённые прогнозы, предоставляются на условиях CC BY-SA 4.0; сохраняются атрибуция, ссылка на лицензию, описание изменений и ShareAlike. Собственному коду лицензия не назначена; права на другие наборы этим указанием не определяются. Исходные Parquet, построчные прогнозы и муниципальные CSV в сайт не копируются. Существующий рисунок МО 21 и его SHA256 сохранены.</p>'''
+        restricted += f'<p><a href="{GITHUB}">Код и конфигурации в GitHub</a> · владелец согласовал публичность существующего репозитория; изменение visibility выполняется отдельно.</p>'
+        self.put('references/materials.html', self.wrapper('Состав материалов', restricted).encode())
         links = self.check_links()
         external_urls = {item['url'] for item in links if item['kind'] == 'external'}
-        reviewed_urls = set(self.external_review['retrieved_documents']) | set(self.external_review['spreadsheet_endpoints']) | set(self.external_review['access_not_confirmed']) | set(self.external_review['invitation_required'])
-        if external_urls != reviewed_urls:
+        reviewed_urls = set(self.external_review['retrieved_documents']) | set(self.external_review['spreadsheet_endpoints']) | set(self.external_review['access_not_confirmed'])
+        if {url for url in external_urls if not url.startswith(GITHUB)} != reviewed_urls:
             raise ValueError('External URL inventory changed: update the explicit read-only link review')
-        audit = {"schema": SCHEMA, "policy": self.policy['review'], "original_html_link_changes": [item for item in self.link_changes if item['source_document'] == 'docs/index.html'], "all_document_link_changes": self.link_changes, "checks": links, "document_conversion": self.documents, "external_links": sorted(external_urls), "external_link_review": self.external_review, "external_access_note": "Runtime is entirely local. Private GitHub requires invitation. External primary-source references need a network and are not bundled."}
+        audit = {"schema": SCHEMA, "policy": self.policy['review'], "original_html_link_changes": [item for item in self.link_changes if item['source_document'] == 'docs/index.html'], "all_document_link_changes": self.link_changes, "checks": links, "document_conversion": self.documents, "external_links": sorted(external_urls), "external_link_review": self.external_review, "external_access_note": "Runtime is entirely local. Repository paths are checked against Git; anonymous access is pending publication approval. External primary-source references need a network and are not bundled."}
         self.put('link-audit.json', json_bytes(audit))
         records = [{"path": name, "size": len(data), "sha256": sha(data), **self.provenance[name]} for name, data in sorted(self.payload.items())]
         manifest = {"schema": SCHEMA, "base_commit": self.policy['base_commit'], "allowlist_sha256": sha(read_source(self.root, 'configs/publication_site.json')), "builder_sha256": sha(read_source(self.root, 'scripts/build_publication_site.py')), "external_link_review_sha256": sha(read_source(self.root, 'configs/publication_external_links.json')), "files": records, "file_count_excluding_manifest": len(records), "total_bytes_excluding_manifest": sum(x['size'] for x in records), "manifest_hash_note": "Manifest excludes itself; its SHA256 and ZIP SHA256 are printed by the builder.", "no_model_fits": True, "no_metric_changes": True, "no_raw_data": True, "formula_occurrences": self.math_count}
@@ -452,9 +493,15 @@ class Builder:
                         raise ValueError(f'Nonportable URL in {name}: {url}')
                     if tag != 'a':
                         raise ValueError(f'External runtime dependency: {name}: {url}')
-                    if parsed.hostname == 'github.com' and (url != GITHUB or attrs.get('data-access') != 'restricted'):
-                        raise ValueError('Private GitHub link disguised as a public document')
-                    checks.append({'document': name, 'url': url, 'kind': 'external', 'status': 'invitation_required' if parsed.hostname == 'github.com' else 'primary_source_reference'})
+                    if parsed.hostname == 'github.com':
+                        if url != GITHUB:
+                            prefix = GITHUB + '/blob/main/' if url.startswith(GITHUB + '/blob/main/') else GITHUB + '/tree/main/'
+                            if not url.startswith(prefix):
+                                raise ValueError('Unreviewed GitHub destination')
+                            target = unquote(parsed.path.split('/main/', 1)[1])
+                            if target not in self.tracked and not any(p.startswith(target.rstrip('/') + '/') for p in self.tracked):
+                                raise ValueError('GitHub destination is not tracked')
+                    checks.append({'document': name, 'url': url, 'kind': 'external', 'status': 'repository_path_checked_publication_pending' if parsed.hostname == 'github.com' else 'primary_source_reference'})
                     continue
                 if parsed.path.startswith('/') or '\\' in parsed.path:
                     raise ValueError(f'Nonportable path: {name}: {url}')
@@ -465,6 +512,9 @@ class Builder:
                 if parsed.fragment and target in inventories and unquote(parsed.fragment) not in inventories[target].ids:
                     raise ValueError(f'Broken anchor: {name} -> {url}')
                 checks.append({'document': name, 'url': url, 'kind': 'local', 'status': 'PASS', 'target': target})
+                deployed = urlsplit(urljoin(PAGES + name, url))
+                if deployed.netloc != urlsplit(PAGES).netloc or not deployed.path.startswith(urlsplit(PAGES).path):
+                    raise ValueError(f'Link escapes Pages project prefix: {name}: {url}')
         # CSS URLs also have to be local and resolve to packaged assets.
         for name, data in self.payload.items():
             if name.endswith('.css'):
@@ -488,9 +538,15 @@ def zip_bytes(payload: dict[str, bytes]) -> bytes:
     return output.getvalue()
 
 
-def build(root=ROOT, check=False):
+def build(root=ROOT, check=False, require_tracked_inputs=False):
     root = Path(root).resolve()
     builder = Builder(root)
+    if require_tracked_inputs:
+        sources = set(builder.policy['runtime']) | set(builder.policy['documents']) | set(builder.policy['copies'])
+        sources |= {'reports/final/figure_manifest.csv', 'configs/publication_site.json', 'configs/publication_external_links.json', 'scripts/build_publication_site.py'}
+        missing = sorted(sources - builder.tracked)
+        if missing:
+            raise ValueError(f'Publication inputs are not tracked in Git: {missing}')
     payload = builder.build()
     archive = zip_bytes(payload)
     output = root / 'dist/submission-site'
@@ -528,8 +584,9 @@ def build(root=ROOT, check=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Verify package and ZIP without writing')
+    parser.add_argument('--require-tracked-inputs', action='store_true', help='Reject local-only publication dependencies (required in Pages CI)')
     args = parser.parse_args()
-    print(json.dumps(build(check=args.check), ensure_ascii=False, indent=2))
+    print(json.dumps(build(check=args.check, require_tracked_inputs=args.require_tracked_inputs), ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':

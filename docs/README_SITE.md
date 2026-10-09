@@ -44,15 +44,18 @@ git diff --check
 
 ## Самостоятельная публикация
 
-Основной репозиторий остаётся PRIVATE. Для анонимного просмотра HTML,
-презентации и методологии подготовлен отдельный воспроизводимый пакет:
+Для публикации через GitHub Pages подготовлен самостоятельный воспроизводимый пакет:
 `python scripts/build_publication_site.py` → `dist/submission-site/` и ZIP.
-Инструкция сборки, allowlist, таблица перенаправлений и ручное размещение
-на Netlify Drop / Cloudflare Pages — в [README_PUBLICATION.md](README_PUBLICATION.md).
+Инструкция сборки, allowlist и ручной Actions workflow — в [README_PUBLICATION.md](README_PUBLICATION.md).
 Исходные `docs/` остаются canonical; публикация только этой папки не включает
-приложения из `reports/` и сохраняет ссылки в приватный GitHub.
+приложения из `reports/`. Для полного пакета нужно использовать Actions:
+Settings → Pages → Build and deployment → Source → GitHub Actions.
 Журналы `PROJECT_CONTEXT.md` и `TASKS.md` в пакет не входят.
-Сайт ещё не опубликован; visibility, commit/push/merge не выполнялись.
+Сайт ещё не опубликован. Планируемый адрес —
+`https://marselmiller.github.io/sberindex-municipal-forecasting/`.
+Автор выбрал публикацию существующего репозитория с сохранением Git history;
+visibility, deployment и commit/push в ходе подготовки не выполняются.
+Короткая инструкция — [PUBLISH_GITHUB_PAGES.md](PUBLISH_GITHUB_PAGES.md).
 
 Перед публикацией проверить страницу на настольной и мобильной ширине,
 переключатели, поиск, навигацию с клавиатуры и консоль браузера.

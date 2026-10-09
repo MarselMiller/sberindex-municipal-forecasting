@@ -1,0 +1,11 @@
+feature,origins,nonmissing,missing
+key_rate_level,12,12,0
+key_rate_delta_last,12,12,0
+key_rate_change_3m,12,12,0
+key_rate_change_6m,12,12,0
+months_since_rate_change,12,12,0
+usd_rub_last,12,12,0
+usd_rub_change_1m,12,12,0
+usd_rub_change_3m,12,12,0
+usd_rub_vol_1m,12,12,0
+usd_rub_vol_3m,12,12,0

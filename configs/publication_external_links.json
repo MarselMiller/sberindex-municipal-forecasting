@@ -2,6 +2,7 @@
   "checked_on": "2026-10-09",
   "method": "Read-only web tool retrieval. Retrieved content may use the tool cache; this is not a claim of live HTTP 200. Direct Python sockets are restricted in this environment.",
   "retrieved_documents": [
+    "https://creativecommons.org/licenses/by-sa/4.0/deed.ru",
     "https://cbr.ru/press/pr/?id=39834",
     "https://www.cbr.ru/Collection/Collection/File/40970/Bbs2203r.pdf",
     "https://www.cbr.ru/Collection/Collection/File/43415/razv_bs_22_09.pdf",
@@ -34,10 +35,19 @@
     "https://www.cbr.ru/vfs/statistics/pdko/int_rat/loans_ind.xlsx"
   ],
   "spreadsheet_note": "Endpoints replied with application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; parser does not support it. No spreadsheet content is bundled or validated.",
-  "access_not_confirmed": {
-    "https://www.cbr.ru/vfs/statistics/banksector/borrowings/02_27_Dep_ind_excluding_escrow.xlsx": "HTTP 403; anonymous access not confirmed by web tool"
+  "sberindex_rights_review": {
+    "checked_on": "2026-10-09",
+    "method": "Official SberIndex research JSON retrieved directly by curl, HTTP 200; same consumption CC BY-SA 4.0 grant as local licence PDF. HTML landing page access was not confirmed; its API content was verified. CC legalcode/deed retrieved via web tool.",
+    "primary_api": "https://sberindex.ru/api/researches/v1/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim",
+    "proof": "data/metadata/publication_rights_review.json"
   },
-  "invitation_required": [
-    "https://github.com/MarselMiller/sberindex-municipal-forecasting"
-  ]
+  "access_not_confirmed": {
+    "https://www.cbr.ru/vfs/statistics/banksector/borrowings/02_27_Dep_ind_excluding_escrow.xlsx": "HTTP 403; anonymous access not confirmed by web tool",
+    "https://sberindex.ru/ru/research/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim": "Landing-page retrieval not confirmed; corresponding official API HTTP 200 and explicit licence grant verified (see sberindex_rights_review)"
+  },
+  "repository": {
+    "url": "https://github.com/MarselMiller/sberindex-municipal-forecasting",
+    "status": "planned public after review; anonymous access not claimed",
+    "path_check": "Builder validates repository destinations against tracked Git files"
+  }
 }

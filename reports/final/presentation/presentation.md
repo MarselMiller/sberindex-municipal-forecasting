@@ -56,7 +56,7 @@ flowchart LR
 
 ## 5. Forecasting: сильный сезонный baseline
 
-**REAL DATA — pilot holdout, MAE macro в рублях. Меньше — лучше.**
+**REAL DATA — holdout общей выборки, MAE macro в рублях. Меньше — лучше.**
 
 | Стратегия | h=1 | h=3 | h=6 | h=12 |
 | --- | ---: | ---: | ---: | ---: |

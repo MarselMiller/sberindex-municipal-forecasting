@@ -7,7 +7,126 @@ README и сохранённый отчёт outputs/baseline_v1/experiment_repor
 E04a, аудита E05a, E05b, E05c, E05d, E06a, E06b, E07a/b/c и F1–F7 на 2026-10-07.
 Источник каждого нового вывода указан ниже.
 
-## Самостоятельный HTML publication package
+## Final public repository preparation: решение автора
+
+2026-10-09: публикуется существующий `sberindex-municipal-forecasting`,
+Git history сохраняется. Рабочая ветка `release/github-pages`, HEAD `4b0c1b6`.
+Владелец принял раскрытие известных historical local paths и Git commit identities
+при отсутствии иных блокирующих данных. Атрибуция СберИндекса и CC BY-SA 4.0
+сохранены для reviewed CSV/иллюстрации МО 21, включая соответствующий вклад автора.
+Лицензия собственного кода не назначена; MIT не добавлена. Решение зафиксировано
+в `data/metadata/publication_rights_review.json` и текущем rights review.
+
+Второй репозиторий, новый публичный snapshot и history rewrite исключены.
+Private research archive сохраняется локально. `feature_coverage.csv` включён
+в подготовленный index; финальный candidate собирается из tracked Git inputs.
+PDF после разрешённой правки проверяется без нового экспорта; число слайдов,
+метрики, формулы, реальные примеры и PNG сохраняются. Manual workflow собирает
+самостоятельный пакет, deploy=false по умолчанию, deployment только из main.
+README покрывает code/run/configs, методологию и results/architecture/real examples.
+
+Финальная проверка: staged candidate содержит 362 tracked inputs. Git-only export
+и минимальное publication окружение: clean build/check, 57 no-fit tests,
+385 package links/anchors и 89 project-prefix browser checks PASS. Аудит
+43 commits и всех reachable blobs не нашёл BLOCKER; `PASS_WITH_REVIEW` сохраняет
+известные и принятые замечания. PDF: 17 layout/9 PDF checks PASS, SHA совпадает
+с предыдущим исправленным экспортом. В README добавлен только указатель на
+существующий реальный пример МО 21; результаты, модели и метрики не менялись.
+
+Точные команды commit/push/обычного merge, GitHub-only verification и отдельная
+инструкция visibility/Pages — [PUBLISH_GITHUB_PAGES.md](PUBLISH_GITHUB_PAGES.md).
+Эти действия ожидают review diff, самостоятельно не выполняются. Сайт ещё
+не опубликован; фактический GitHub-only check нового commit выполняется после push.
+Доказательства текущих проверок — ignored `outputs/final_public_preparation/`.
+
+## Final publication blockers: предыдущий review до решения автора
+
+2026-10-09, `release/github-pages`, HEAD `4b0c1b6` не изменён.
+**PUBLICATION PERMITTED** для существующего 12-строчного `rolling_forecast.csv`
+при соблюдении CC BY-SA 4.0: официальный API именно набора расходов 2023–2024
+вернул HTTP 200 и явный grant, согласующийся с прочитанным локальным PDF.
+Все 12 строк совпали с сохранёнными predictions и подготовленным target;
+`y_true` является перераспространением наблюдений. Исходный Parquet сейчас
+не найден в проекте; связь с ним подтверждается историческим manifest/audit.
+Архив не скачивался, новые raw files не добавлены. F7 metadata/audits сохранены.
+Доказательства и атрибуция: [PUBLICATION_RIGHTS_REVIEW](../reports/final/PUBLICATION_RIGHTS_REVIEW.md),
+[metadata](../data/metadata/publication_rights_review.json),
+[README примера](../reports/final/figure_data/README.md).
+
+Аудит текущего дерева и reachable-истории: **PASS_WITH_REVIEW**, 43 commits,
+без найденных реальных секретов по эвристике. Только exact-content CSV под
+исходным именем переведён из BLOCKER в REVIEW; остальные real-row files
+блокируются. До публичности автор должен принять атрибуцию/CC BY-SA для своего
+вклада и раскрытие historical paths/Git identities. Необъявленные remote refs,
+dangling objects и GitHub releases/attachments не проверены. Новый public snapshot
+без старой history предложен как альтернатива, процедура не выполнялась.
+
+`feature_coverage.csv`: 303 байта, 10 строк счётчиков, без наблюдаемых значений,
+секретов и путей; побайтово совпадает с E08b output и нужен publication allowlist.
+Он и точное исключение `.gitignore` добавлены в index основного репозитория.
+Новый GitHub main clone по-прежнему FAIL без этого файла; запрет commit/push
+сохранён. **CLEAN CLONE REVIEW-CANDIDATE PASS**: кандидат sealed как Git tree
+в validation clone, экспортирован из Git objects (361 tracked input) и собран
+в новом Python 3.12 окружении без private inputs/ML libraries. 57 no-fit tests,
+summary/HTML builders, package build/check и strict audit прошли; 89 browser checks
+Git-object пакета под Pages project-prefix PASS. Текущий
+GitHub main этим не объявляется исправленным; после разрешённого push нужна
+проверка GitHub-only clone без review overlay.
+
+Разрешённая подпись `pilot holdout` → `holdout общей выборки` исправлена
+только в двух presentation sources, PDF пересобран штатным pipeline.
+12 страниц, все numeric tokens и 36 MAE cells сохранены; остальные 11 страниц
+попиксельно идентичны прежнему PDF. Visual review всех 12 страниц, 17 slide-layout
+и 9 PDF checks PASS; прежние verification records сохранены как historical metadata.
+Метрики, конфигурации моделей, прогнозы, canonical results и PNG не менялись.
+Доказательства текущей проверки — ignored `outputs/publication_blockers_review/`.
+Visibility, deployment, history rewrite, model fits, experiments, commit/push
+не выполнялись. Следующий шаг — решение автора о лицензировании вклада,
+раскрытии существующей истории либо отдельном публичном snapshot.
+
+## Подготовка GitHub Pages: первичный review до проверки прав и PDF
+
+2026-10-09: `origin/main` обновлён; чистый исходный HEAD `4b0c1b6`, отдельная
+ветка `release/github-pages`. Используется GitHub Pages с Actions и сборкой
+`dist/submission-site/`; прежняя инструкция Netlify заменена. Репозиторий
+планируется публичным после review, анонимный доступ пока не утверждается.
+Workflow имеет только `workflow_dispatch`, `deploy=false` по умолчанию,
+deployment только из `main` после build/tests/security gate. Actions закреплены SHA.
+
+Аудит текущего дерева и reachable-истории: **FAIL для публичности всего Git**.
+352 исходных tracked-файла, 43 commit, 489 blob; tracked
+`reports/final/figure_data/rolling_forecast.csv` содержит 12 реальных построчных
+фактов/прогнозов и присутствует в истории. Отдельное решение о допустимости
+этих строк необходимо до изменения видимости; права остаются UNCLEAR.
+Найдены исторические локальные пути и Git identity metadata для review владельца.
+Реальные секреты эвристикой не обнаружены; тестовый credential URL классифицирован
+как synthetic fixture. Внешние GitHub attachments/releases и необъявленные refs
+не проверены. История, исходные данные и этот CSV не изменяются.
+
+GitHub clone исходного `main` не собирал пакет: `feature_coverage.csv` существовал
+только локально. Для 303-байтового файла с десятью агрегированными счётчиками
+национальных признаков добавлено точное исключение `.gitignore`; байты сохранены.
+Clone + точный review overlay проверен в новом Python 3.12 окружении с пятью
+publication/test dependencies, без ML-библиотек. Новые файлы до commit/push
+не доступны в GitHub; после review нужен повтор чистой проверки без overlay.
+Чистая сборка review-кандидата: PASS, 74 файла; 56 релевантных тестов,
+383 package links/anchors и 176 source-relative links PASS. Browser QA:
+89 проверок file URL и 89 под Pages project-prefix PASS. По SHA сохранены
+105 числовых/config/PNG/PDF файлов; в 20 изменённых/новых файлах не обнаружены
+секреты или абсолютные локальные пути. `git diff --check` PASS.
+
+Сводка обновляется через `--editorial-only`: внутренний раздел удалён,
+сравнение 64/63 МО и граница применимости к 2190 МО объяснены. Числовые таблицы,
+h12 fallback, ограничения news coverage и дополнительные исследовательские
+разделы сохраняются. ChatGPT/Codex disclosure остаётся в README.
+Исторические E08 источники не меняются; их публичный HTML исключает рабочие
+заметки, сохраняя таблицы и Markdown provenance. PDF и все PNG сохранены;
+редактура `pilot holdout` в презентации ожидает разрешения из-за явного запрета
+менять презентацию. Deployment, visibility, commit/push, model fits и новые
+эксперименты не выполнялись. Проверки и точный diff фиксируются в ignored
+`outputs/pages_publication_checks/`; текущая инструкция — [README_PUBLICATION.md](README_PUBLICATION.md).
+
+## Самостоятельный HTML publication package (исторический этап)
 
 2026-10-09, ветка `release/html-publication`, чистый исходный HEAD `9ab65bf`.
 Подготовлена воспроизводимая сборка `scripts/build_publication_site.py`:

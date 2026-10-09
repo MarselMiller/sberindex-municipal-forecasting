@@ -1,4 +1,5 @@
 .venv/
+/.venv-publication/
 /.venv-chronos/
 __pycache__/
 *.pyc
@@ -43,6 +44,11 @@ catboost_info/
 !/reports/final/DATA_PUBLICATION_AUDIT.md
 # Проверенный содержательный аудит готовности к сдаче; без новых данных.
 !/reports/final/SUBMISSION_READINESS.md
+# Reviewed rights metadata and attribution only; no additional observations.
+!/reports/final/PUBLICATION_RIGHTS_REVIEW.md
+!/reports/final/figure_data/
+/reports/final/figure_data/*
+!/reports/final/figure_data/README.md
 
 # Проверенные агрегаты методологической ablation National/Local Persistence.
 !/reports/results/
@@ -70,3 +76,8 @@ catboost_info/
 !/reports/results/forecast_robustness/concentration.csv
 !/reports/results/forecast_robustness/applicability_checks.csv
 !/reports/results/forecast_robustness/run_manifest.json
+
+# Publication build: reviewed national-feature coverage counts (no MO rows).
+!/reports/results/e08b/
+/reports/results/e08b/*
+!/reports/results/e08b/feature_coverage.csv

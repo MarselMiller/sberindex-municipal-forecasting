@@ -17,12 +17,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', default='reports/final')
     mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--editorial-only', action='store_true',
+                      help='Refresh public wording only; keep every saved metric and additive research section')
     mode.add_argument('--forecasting-ablation-only', action='store_true',
                         help='Refresh only the completed ablation JSON object; preserve other final artifacts')
     mode.add_argument('--forecasting-robustness-only', action='store_true',
                       help='Refresh the saved robustness JSON and summary block only')
     parser.add_argument('--check', action='store_true', help='Check the selected additive block without writing')
     args = parser.parse_args()
+    if args.editorial_only:
+        from sberforecast.final_render import refresh_public_editorial
+        result = refresh_public_editorial(ROOT, args.output_dir, check=args.check)
+        print(f"Public summary: {result['status']}; editorial only. NO MODEL FITS / NO METRIC CHANGES.")
+        return
     if args.forecasting_robustness_only:
         result = refresh_forecasting_robustness(ROOT, args.output_dir, check=args.check)
         print(f"Forecasting robustness: {result['status']}; {result['primary_comparison_records']} saved rows. "
@@ -34,7 +41,7 @@ def main() -> None:
               'NO NEW MODEL FITS / NO NEW EXPERIMENTS.')
         return
     if args.check:
-        parser.error('--check requires --forecasting-ablation-only or --forecasting-robustness-only')
+        parser.error('--check requires --editorial-only, --forecasting-ablation-only or --forecasting-robustness-only')
     result = build_final_summary(ROOT, args.output_dir, command=sys.orig_argv)
     print(f"F1: {result['status']}; {result['forecasting_records']} forecasting / "
           f"{result['detection_records']} detection / {result['early_warning_records']} early-warning rows; "

@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-09",
+  "verdict": "PUBLICATION PERMITTED",
+  "licence": "CC BY-SA 4.0",
+  "scope": "Only the reviewed 12-row consumption example; not enriched target/geography/news/macro raw archives",
+  "example": {
+    "path": "reports/final/figure_data/rolling_forecast.csv",
+    "sha256": "4e5152a0200307fcf376512509f660d57c6555ef56575847333b25ecc22ad0bf",
+    "rows": 12,
+    "columns": [
+      "municipality_id",
+      "forecast_origin",
+      "target_period",
+      "y_true",
+      "y_pred",
+      "split"
+    ],
+    "municipality_id": "21",
+    "target_first": "2024-01-01",
+    "target_last": "2024-12-01",
+    "split_counts": {
+      "validation": 6,
+      "holdout": 6
+    },
+    "saved_predictions_match": true,
+    "original_target_observations_match": true,
+    "contains_redistributed_source_observations": true,
+    "git_normalized_sha256": "af1e10aa3327738ded377f367f7888f8daaac83cb5689784720bf3dc75a0798f",
+    "historical_git_blob": "75b4a28dd28f75b10ef8e70e258308cceaaca533"
+  },
+  "provenance": {
+    "prepared_target_sha256": "9802b7b2448b42afbb4152c16a12346ebcb5d074ff6eedda8783669abf35a63c",
+    "saved_predictions_sha256": "f0a6c25ab103aa81f451d52c3402e979b6655b888860339187f0d4c304214285",
+    "selection_code": "src/sberforecast/final_figures.py:97",
+    "original_consumption_sha256": "9833ddaaee7b2a182ed4cceeed16469031700ea87d508bd976150c6770ef8a61"
+  },
+  "primary_source": {
+    "page_url": "https://sberindex.ru/ru/research/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim",
+    "api_url": "https://sberindex.ru/api/researches/v1/data-sense-opisanie-nabora-dannikh-khakatona-sberindeksa-po-munitsipalnim-dannim",
+    "http_status": 200,
+    "research_id": "33fd3aed-4f44-4214-ad8c-182b34a68047",
+    "research_json_sha256": "1b88f25e1fbd4badee830d089b3d78b7c5c86a7a5cf7c4532bc0ccf33317ecb1",
+    "dataset_period": "2023-01 through 2024-12",
+    "official_archive_url": "https://www.sberbank.com/common/img/uploaded/files/pdf/sberindex/hackathonlicence.zip",
+    "official_archive_downloaded": false,
+    "grant_verified_in_official_template": true
+  },
+  "local_document": {
+    "name": "reports/Данные_СберИндекс_лицензия.pdf",
+    "bytes": 538791,
+    "sha256": "030269e726f969250b911a1fcb72131a4b61c3952aad10c8470ce9c0736c472f",
+    "consumption_grant_page": 2,
+    "content_consistent_with_official_grant": true,
+    "official_pdf_byte_equality_verified": false
+  },
+  "conditions": [
+    "Source attribution, licence link and notice of selection/added forecasts",
+    "ShareAlike for adapted contributions; accepted by author for reviewed CSV and MO21 illustration",
+    "No other blockers; preserve full existing Git history; no automatic visibility/deployment/commit/push/merge"
+  ],
+  "feature_coverage": {
+    "path": "reports/results/e08b/feature_coverage.csv",
+    "sha256": "3304417a49a7161942ae571ea5e5faab59435efbff9ecb5ef7467074d49bce28",
+    "bytes": 303,
+    "rows": 10,
+    "contains_observed_indicator_values": false,
+    "identical_to_saved_output": true,
+    "needed_by_publication_allowlist": true,
+    "safe_to_track": true
+  },
+  "author_decision": {
+    "date": "2026-10-09",
+    "source": "Explicit user instruction: FINAL PUBLIC REPOSITORY PREPARATION",
+    "existing_repository": "MarselMiller/sberindex-municipal-forecasting",
+    "publish_existing_repository": true,
+    "preserve_git_history": true,
+    "historical_local_paths_disclosure_accepted": true,
+    "git_commit_identities_disclosure_accepted": true,
+    "condition": "No other blocking data or secret findings",
+    "cc_by_sa_scope": [
+      "reports/final/figure_data/rolling_forecast.csv",
+      "reports/final/figures/rolling_forecast.png"
+    ],
+    "adapted_contribution_cc_by_sa_accepted": true,
+    "own_code_licence_assigned": false,
+    "mit_added": false,
+    "second_repository_created": false,
+    "new_public_snapshot_created": false,
+    "visibility_changed": false,
+    "deployed": false,
+    "commit_push_merge_executed": false
+  }
+}

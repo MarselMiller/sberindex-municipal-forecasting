@@ -1,157 +1,172 @@
-# Самостоятельный публикационный пакет
+# Публикационный пакет и GitHub Pages
 
-Пакет готовится из существующих `docs/` и проверенных итоговых материалов.
-Основной GitHub-репозиторий остаётся **PRIVATE**. Сборка не публикует сайт,
-не меняет visibility и не запускает модели. Публичного адреса пока нет.
+Планируемый адрес: [sberindex-municipal-forecasting](https://marselmiller.github.io/sberindex-municipal-forecasting/).
+Сайт ещё не опубликован. Репозиторий планируется сделать публичным после review;
+изменение видимости, commit/push и deployment не входят в подготовку пакета.
 
-## Сборка и проверка
+2026-10-09 автор утвердил публикацию **существующего** репозитория с сохранением
+Git history, атрибуцию/CC BY-SA 4.0 для примера МО 21 и раскрытие исторических
+путей/Git identities при отсутствии других blockers. Второй репозиторий,
+новый публичный snapshot и переписывание истории исключены. Лицензия собственного
+кода не назначена, MIT не добавлена. [Команды и короткая инструкция](PUBLISH_GITHUB_PAGES.md).
 
-Из корня проекта в существующем Python-окружении с Matplotlib:
+GitHub Pages публикует **`dist/submission-site/`**, собранный существующим
+`scripts/build_publication_site.py`. Простая публикация `/docs` не включает
+PDF и приложения из `reports/`, поэтому используется GitHub Actions.
 
-```powershell
+## Локальная сборка из сохранённых результатов
+
+Из корня репозитория, Python 3.12, в отдельном окружении:
+
+```sh
+python -m venv .venv-publication
+# Windows: .venv-publication/Scripts/python; Linux/macOS: .venv-publication/bin/python
+```
+
+Следующие команды выполняйте Python из этого окружения:
+
+```sh
+python -m pip install -r requirements-publication.txt
+python scripts/build_final_summary.py --editorial-only --check
 python scripts/build_project_report.py --check
-python scripts/build_publication_site.py
-python scripts/build_publication_site.py --check
-python -m pytest tests/test_publication_site.py -q -p no:cacheprovider
-python scripts/verify_publication_browser.py
+python scripts/build_publication_site.py --require-tracked-inputs
+python scripts/build_publication_site.py --require-tracked-inputs --check
+python -m pytest -q tests/test_publication_site.py tests/test_public_editorial.py tests/test_public_repository_audit.py tests/test_final_summary.py
+python scripts/audit_public_repository.py --strict
 git diff --check
 ```
 
-Последняя browser-команда использует установленный Microsoft Edge в Windows,
-копирует пакет в отдельную временную папку и блокирует внешние запросы страницы.
-Она сохраняет доказательства и скриншоты в ignored
-`outputs/publication_site_checks/browser/`. Ничего устанавливать для неё не нужно.
-Проверяющему Python, Edge конкретной версии или локальный сервер не требуются:
-сайт открывается обычным браузером, в том числе напрямую через `index.html`.
+Кандидат записывается в Git index для review; это делает входы tracked локально,
+но до commit/push не подтверждает их доступность в GitHub. Проверка
+`--require-tracked-inputs` обязательна и локально, и в Actions.
 
-Результат: `dist/submission-site/` и `dist/submission-site.zip`.
-ZIP содержит содержимое корня сайта, включая `index.html`, без внешней папки.
-`dist/` и ZIP игнорируются Git. Не добавляйте их автоматически в репозиторий.
+Проверка blockers 2026-10-09: безопасный `feature_coverage.csv` добавлен в index;
+новый validation clone и экспорт candidate Git tree (361 tracked input) собраны
+в новом окружении без private artifacts, 57 no-fit tests PASS. Это **CLEAN CLONE
+REVIEW-CANDIDATE PASS**, а не утверждение, что изменения уже доступны в GitHub.
+Неизменённый GitHub main clone всё ещё FAIL без coverage. После разрешённого
+commit/push требуется GitHub-only проверка без candidate overlay.
+[Полный review и решения автора](../reports/final/PUBLICATION_RIGHTS_REVIEW.md).
 
-`manifest.json` перечисляет все файлы, размеры и SHA256, кроме самого manifest:
-его собственный SHA256 и SHA256 ZIP печатает builder. `link-audit.json` содержит
-точные старые/новые URL, решения о доступе, результаты внутренних проверок,
-объём Markdown-конверсии и отдельный статус каждого внешнего источника.
-Время ZIP фиксировано, файлы отсортированы; повторная сборка из тех же байтов
-источников и того же окружения даёт те же байты пакета и ZIP.
+Результат: `dist/submission-site/` и ZIP с содержимым корня сайта.
+Откройте `dist/submission-site/index.html` в браузере. Для локального HTTP-просмотра:
 
-## Что открывается без GitHub
+```sh
+python -m http.server 8000 --bind 127.0.0.1 --directory dist/submission-site
+```
 
-- Главный интерактивный отчёт со всеми существующими переключателями и поиском.
-- Презентация `presentation/presentation.pdf`, побайтовая копия текущего PDF.
-- Методология `references/methodology.html`: все 12 таблиц, шесть формул,
-  девять рисунков и исходный Markdown для сверки содержания.
-- Глоссарий, итоговая сводка, ограничения и README в локальном HTML.
-- Отчёты National/Local Persistence, forecasting robustness, E08a/b/c/d.
-- Проверенные агрегированные CSV и национальные origin features E08b.
+Адрес локального сервера — `http://127.0.0.1:8000/`.
+Нужно переносить всю папку сайта: CSS, JS, JSON, изображения и приложения
+являются отдельными файлами. Runtime не использует CDN или внешние данные.
+Новые прогнозы, метрики и model fits при сборке не выполняются.
 
-Определения берутся из `reports/final/terminology.md`. Главный HTML/data bundle
-копируется из canonical `docs/`; builder меняет только адреса ссылок и подписи
-ограниченного доступа в выходном HTML. Формулы рендерятся в локальные SVG,
-исходный LaTeX доступен рядом; MathJax, KaTeX и CDN не используются.
+## Ручной workflow
 
-Код, подробный E06a, служебные аудиты, полные run/verification manifests,
-`results_summary.json`, остальные конфигурации и research artifacts остаются
-в приватном репозитории. Их ссылки ведут на доступное пояснение
-`references/restricted.html` и явно подписаны «доступ по приглашению».
-Это пояснение не предоставляет доступ к самим исключённым материалам.
+[`.github/workflows/pages.yml`](../.github/workflows/pages.yml) запускается только
+через `workflow_dispatch`. Триггеров `push`, `pull_request` и расписания нет.
+Параметр `deploy` по умолчанию **false**: ручной запуск проверяет и собирает пакет.
 
-## Решения по 18 исходным адресам главной страницы
+Workflow: checkout полной reachable-истории → Python 3.12 и минимальные
+publication dependencies → проверка generated sources → сборка → тесты,
+link checks и security audit → `upload-pages-artifact` → `deploy-pages`.
+Deployment возможен только при явном `deploy=true`, запуске из `main`,
+успешном build/security gate и допуске environment `github-pages`.
+Actions закреплены полными commit SHA; build имеет только `contents: read`,
+deployment — `pages: write` и `id-token: write`.
 
-Повторные появления одного URL объединены. Полные адреса и все ссылки приложений
-также сохранены в `link-audit.json`.
+После review и устранения blockers владелец репозитория отдельно выполняет:
 
-| URL in original HTML | URL in publication package | Destination type | Anonymous accessibility | Publication status |
-| --- | --- | --- | --- | --- |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting` | тот же URL | private repository | требуется приглашение | явно подписан «Исходный код — доступ по приглашению» |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/METHODOLOGY_REPORT.md` | `references/methodology.html` | local HTML | да | включён |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/presentation/presentation.pdf` | `presentation/presentation.pdf` | local PDF | да | включён без изменения байтов |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/forecasting_metrics.csv` | `references/forecasting_metrics.csv` | aggregate CSV | да | включён без изменения байтов |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/results/E08a_leading_financial_indicators_audit.md` | `references/financial-sources.html` | local HTML | да | включён |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/results/E08b_leading_financial_features.md` | `references/financial-features.html` | local HTML | да | включён |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/results/E08c_leading_financial_forecasting.md` | `references/financial-forecasting.html` | local HTML | да | включён |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/results/E08d_real_financial_early_warning.md` | `references/financial-warning.html` | local HTML | да | включён |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/REPRODUCTION_AUDIT.md` | `references/restricted.html#audits` | access notice | доступно пояснение; оригинал по приглашению | исключён служебный журнал |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/DATA_PUBLICATION_AUDIT.md` | `references/restricted.html#audits` | access notice | доступно пояснение; оригинал по приглашению | исключён служебный журнал |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/terminology.md` | `references/glossary.html` | local HTML | да | canonical определения сохранены |
-| `https://github.com/MarselMiller/sberindex-municipal-forecasting/blob/main/reports/final/RESULTS_SUMMARY.md` | `references/results.html` | local HTML | да | включён |
-| `../reports/results/national_local_persistence.md` | `references/national-local-persistence.html` | local HTML | да | включён агрегированный отчёт |
-| `../reports/results/national_local_persistence/gap_analysis.csv` | `references/persistence/gap_analysis.csv` | aggregate CSV | да | включён без изменения байтов |
-| `../reports/results/forecast_robustness.md` | `references/forecast-robustness.html` | local HTML | да | включён агрегированный отчёт |
-| `../reports/results/forecast_robustness/pairwise_metrics.csv` | `references/robustness/pairwise_metrics.csv` | aggregate CSV | да | включён без изменения байтов |
-| `../reports/results/forecast_robustness/bootstrap_origin.csv` | `references/robustness/bootstrap_origin.csv` | aggregate CSV | да | включён без изменения байтов |
-| `../reports/results/E06a_offline_detection.md` | `references/restricted.html#offline-detection` | access notice | доступно пояснение; оригинал по приглашению | исключены локальные пути и подробные муниципальные таблицы |
+1. Финальное review diff; состав существующего Git и известные historical paths/identities приняты владельцем.
+2. Commit/push и перенос проверенного workflow в `main`.
+3. Settings → Pages → Build and deployment → Source → **GitHub Actions**.
+4. Настройку protection/required reviewers для environment `github-pages`.
+5. Ручной запуск из `main` с `deploy=true` и проверку фактического Pages URL.
 
-## Проверка внешних источников
+Эти действия здесь не выполнялись. До успешного deployment ссылка в README
+обозначена как планируемый адрес. `configure-pages` работает только в deploy job.
 
-На 09.10.2026 web-инструмент получил 25 внешних HTML/PDF-документов ЦБ/Мосбиржи.
-Три XLSX endpoint ответили spreadsheet content type; содержимое этих файлов
-не проверялось и не включалось в пакет. Один адрес
-`https://www.cbr.ru/vfs/statistics/banksector/borrowings/02_27_Dep_ind_excluding_escrow.xlsx`
-вернул HTTP 403: в HTML-приложении показано, что доступ не подтверждён.
-Единственный GitHub URL требует приглашения по условиям задачи.
+## Состав пакета и ссылки
 
-Эти 30 адресов сверены с полным inventory. Получение документа web-инструментом
-может использовать его cache и не означает live HTTP 200 из каждой сети.
-Источники приведены как внешние справочные ссылки; работа сайта от них
-не зависит. Фиксированный review хранится в
-`configs/publication_external_links.json`; builder не обращается к сети.
+Allowlist находится в [`configs/publication_site.json`](../configs/publication_site.json).
+В пакет входят основной HTML, PDF, методология (12 таблиц, шесть display-формул,
+девять рисунков), итоговая сводка, глоссарий, ограничения, отчёты Persistence,
+Robustness и E08a/b/c/d, проверенные агрегированные CSV и национальные признаки.
+Определения берутся из единственного canonical `reports/final/terminology.md`.
 
-## Allowlist и ограничения публикации
+Включённые приложения открываются по локальным относительным URL. Их адреса
+проверяются также под префиксом `/sberindex-municipal-forecasting/`.
+Tracked-код, YAML/JSON, исторические аудиты и дополнительные отчёты вне пакета
+ссылаются на существующие пути в GitHub. Анонимный доступ к ним до изменения
+видимости не утверждается. Для local-only inputs/outputs показывается
+локальное пояснение `references/materials.html#local-artifacts`, без broken link
+и без обещания предоставить исходные данные.
 
-Состав явно задан в `configs/publication_site.json`. Не копируются целые
-`reports/`, `outputs/`, `data/` или репозиторий. В пакет не входят parquet,
-построчные predictions, муниципальные CSV, веса, архивы данных, `.env`, ключи,
-виртуальные окружения, `.git`, локальные пути или непроверенные вложения.
-Включённые CSV содержат агрегаты, национальные финансовые значения или
-сводные диагностические counts; строки отдельных муниципальных расходов
-и прогнозов исключены. NA и числовые результаты не изменяются.
+`manifest.json` перечисляет размеры, SHA256 и источники всех файлов, кроме
+самого manifest. SHA manifest и ZIP печатает builder. `link-audit.json`
+содержит старые/новые URL, локальные проверки, решения по исключённым материалам,
+статусы GitHub destinations и внешний inventory. При одинаковых исходных байтах
+и окружении повторная сборка даёт одинаковые байты пакета и ZIP.
 
-Право на перераспространение исходных parquet остаётся **UNCLEAR**.
-Существующий рисунок МО 21 сохранён как ранее проверенная иллюстрация отчёта:
-SHA256 `0ae922414791a15ad63f1aefc4f7458faa4bdee1e2da53baa2f04da0c143d6c2`.
-Копии основной страницы и методологии идентичны. Исходные точки и другие
-муниципальные таблицы не добавляются. Это не подтверждает права на raw data.
+Внешние ссылки ЦБ/Мосбиржи сохранены как справочные. Предыдущая проверка получила
+25 HTML/PDF-документов; три XLSX endpoint ответили spreadsheet content type,
+их содержимое не проверялось. Для одного XLSX сохранён HTTP 403 и явная подпись
+о неподтверждённом доступе. Это исторический review, не новый live HTTP-тест.
+Работа сайта от этих внешних адресов не зависит.
 
-## Netlify Drop — действия автора после review
+Исторические E08 Markdown сохранены побайтово как provenance. В их публичном
+HTML builder убирает рабочие заметки о review/commit и временных ошибках
+подготовки; таблицы, независимые проверки, допущения и выводы сохраняются.
+Встроенный PDF viewer Edge может отдельно запросить `/favicon.ico` в корень
+домена. Browser QA фиксирует этот запрос интерфейса браузера отдельно;
+все ссылки и runtime assets сайта остаются под project-prefix.
 
-1. Соберите и проверьте пакет. Откройте `dist/submission-site/index.html`.
-2. Откройте [Netlify Drop](https://app.netlify.com/drop).
-3. Перетащите папку **submission-site**, внутри которой сразу находится
-   `index.html`. ZIP для этого способа сначала распакуйте.
-4. Сохраните фактически выданный адрес и проверьте его в инкогнито.
+## Безопасность всего публичного репозитория
 
-Для обновления загрузите заново собранную папку в раздел deploys того же сайта.
-Не загружайте корень репозитория. Официальная инструкция:
-[Create deploys](https://docs.netlify.com/deploy/create-deploys/).
+Безопасный allowlist сайта **не означает**, что безопасно раскрывать весь Git.
+[`scripts/audit_public_repository.py`](../scripts/audit_public_repository.py)
+проверяет tracked-файлы, каждый reachable blob под всеми историческими именами,
+commit/tag metadata; matched секреты и значения локальных путей не выводятся.
+Локальные доказательства сохраняются только в ignored `outputs/`.
 
-## Cloudflare Pages Direct Upload — действия автора после review
+**Data rights review 2026-10-09: PUBLICATION PERMITTED** для существующего
+12-строчного примера `reports/final/figure_data/rolling_forecast.csv` при
+соблюдении CC BY-SA 4.0. Он содержит исходные наблюдения, присутствует в истории
+и не включается в сайт. Официальный API именно набора расходов 2023–2024
+подтвердил grant; локальный PDF согласуется с ним. Проверка 12 строк против
+сохранённых прогнозов и target прошла. [Доказательства](../data/metadata/publication_rights_review.json)
+и [согласованная атрибуция](../reports/final/figure_data/README.md) сохранены;
+автор принял CC BY-SA 4.0 для соответствующего адаптированного материала
+и своего вклада. Лицензия кода не назначена. Старые F7-аудиты не изменяются.
 
-1. В dashboard откройте **Workers & Pages → Create application → Get started →
-   Drag and drop your files** для Pages.
-2. Загрузите `dist/submission-site.zip` либо папку `submission-site`.
-   В корне загружаемого содержимого должен лежать `index.html`.
-3. После проверки состава автор выбирает **Deploy site**.
-4. Проверьте выданный адрес в инкогнито. Следующие версии загружайте как новый
-   deployment того же проекта.
+Auditor допускает только точный SHA256 этого CSV под его исходным именем
+при наличии metadata review и attribution notice. Другой путь или изменённое
+содержание снова дают BLOCKER; secret/path checks не отключаются. Для этого
+примера возвращается REVIEW, а не безусловное разрешение публикации.
 
-Официальная инструкция: [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/).
-Публичный GitHub или подключение приватного репозитория для этого способа не нужны.
+Исторические локальные пути и Git identity metadata приняты владельцем к раскрытию.
+Эвристический аудит не доказывает отсутствие всех секретов/PII и не проверяет
+необъявленные remote refs, dangling objects, GitHub releases/attachments.
+Полные журналы сохраняются как provenance, а не подменяются новой проверкой.
 
-## Проверка опубликованного адреса и обновления
+В сайт не копируются raw/parquet, построчные прогнозы, муниципальные CSV,
+веса, архивы данных, `.env`, ключи, окружения, `.git` или целые `outputs/`.
+Существующий рисунок МО 21 сохранён побайтово; его источник и CC BY-SA 4.0
+указаны в приложении «Материалы». Права на справочник и другие private inputs
+этим решением не подтверждаются. `PASS_WITH_REVIEW` security audit сохраняет
+видимыми принятые замечания; решение автора записано отдельно в rights metadata.
+Manual workflow и отсутствие автоматического deployment сохраняются.
 
-Откройте адрес в отдельном окне инкогнито без GitHub-сессии. Проверьте основной
-HTML, PDF, методологию с формулами/рисунками, глоссарий, CSV, переключатели,
-поиск, светлую/тёмную тему, мобильную ширину и отсутствие ошибок console/network.
-Для этих документов не должен появляться login. Ссылки по приглашению должны
-открывать пояснение, а переход в GitHub — требовать предоставленного доступа.
-Доступ сайта на выбранном хостинге проверяется отдельно от GitHub visibility.
+## Проверка браузером
 
-Меняйте canonical HTML/JSON/PDF в проекте. Для изменения словаря или агрегатов
-сначала используйте существующий `build_project_report.py` и его `--check`.
-Затем повторите publication build, targeted tests, browser QA и `--check`.
-Не редактируйте `dist/` вручную. При новом внешнем URL обновите link review;
-при новом приложении или рисунке сначала пересмотрите allowlist и безопасность.
+`python scripts/verify_publication_browser.py` использует установленный Edge
+в Windows, копирует сайт в отдельную временную папку, блокирует внешние запросы
+и проверяет desktop/mobile, тему, клавиатуру, no-JS, переключатели,
+PDF, методологию и глоссарий. Доказательства и скриншоты — только в ignored
+`outputs/publication_site_checks/browser/`. Для обычного просмотра Edge
+конкретной версии и Python не требуются.
 
-В рамках подготовки пакета deployment, создание сайтов/репозиториев,
-изменение visibility, commit, push и merge не выполняются.
+`python scripts/verify_publication_browser.py --project-prefix` повторяет
+проверку на изолированном loopback HTTP-сервере под
+`/sberindex-municipal-forecasting/`. Он обслуживает только временную копию пакета,
+не публикует её во внешней сети; доказательства —
+`outputs/pages_publication_checks/browser-prefix/`.

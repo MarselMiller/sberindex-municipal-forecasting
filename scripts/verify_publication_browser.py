@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import argparse
 import hashlib
 import json
 import os
@@ -14,6 +15,9 @@ import sys
 import time
 import shutil
 import tempfile
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from functools import partial
+import threading
 import urllib.parse
 import urllib.request
 import uuid
@@ -140,10 +144,15 @@ class CDP:
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "outputs/publication_site_checks/browser"
 PAGE = ROOT / "dist/submission-site/index.html"
+HTTP_BASE = None
 EDGE = Path(os.environ.get("ProgramFiles(x86)", "C:/Program Files (x86)")) / "Microsoft/Edge/Application/msedge.exe"
 SOURCE_FILES = ["index.html", "assets/project-report.css", "assets/project-report.js", "assets/project-report-data.js"]
 checks: list[dict] = []
 screenshots: list[str] = []
+
+
+def page_url(path):
+    return HTTP_BASE + path.relative_to(PAGE.parent).as_posix() if HTTP_BASE else path.as_uri()
 
 
 def check(name: str, passed: bool, details=None):
@@ -176,7 +185,7 @@ def screenshot(client: CDP, name: str, target: str | None = None, selector: str 
     settle(client)
     response = client.call("Page.captureScreenshot", {"format": "png", "captureBeyondViewport": False, "fromSurface": True})
     (OUTPUT / name).write_bytes(base64.b64decode(response["data"]))
-    screenshots.append("outputs/publication_site_checks/browser/" + name)
+    screenshots.append(OUTPUT.relative_to(ROOT).as_posix() + '/' + name)
 
 
 def viewport(client: CDP, width: int, height: int, mobile: bool):
@@ -232,11 +241,11 @@ def run_qa(client: CDP):
     client.call("Runtime.enable")
     client.call("Log.enable")
     client.call("Network.enable")
-    client.call("Network.setBlockedURLs", {"urls": ["http://*", "https://*", "ws://*", "wss://*"]})
+    client.call("Network.setBlockedURLs", {"urls": (["https://*", "ws://*", "wss://*"] if HTTP_BASE else ["http://*", "https://*", "ws://*", "wss://*"])})
     client.call("Emulation.setEmulatedMedia", {"features": [{"name": "prefers-reduced-motion", "value": "reduce"}]})
     client.call("Emulation.setFocusEmulationEnabled", {"enabled": True})
     client.call("Emulation.setDeviceMetricsOverride", {"width": 1440, "height": 1000, "deviceScaleFactor": 1, "mobile": False})
-    client.call("Page.navigate", {"url": PAGE.as_uri()})
+    client.call("Page.navigate", {"url": page_url(PAGE)})
     wait_ready(client)
     client.evaluate("Promise.all([...document.images].map(img=>{img.loading='eager';return img.complete?Promise.resolve():new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true});});}))", True)
     initial = client.evaluate("(() => {const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);return {"
@@ -437,7 +446,7 @@ def run_qa(client: CDP):
     viewport(client, 390, 844, True)
 
     client.call("Emulation.setScriptExecutionDisabled", {"value": True})
-    client.call("Page.navigate", {"url": PAGE.as_uri() + "?no-js-qa=1"})
+    client.call("Page.navigate", {"url": page_url(PAGE) + "?no-js-qa=1"})
     wait_ready(client, False)
     nojs = client.evaluate("(() => ({interactive:document.documentElement.classList.contains('is-interactive'),"
                           "tables:document.querySelectorAll('table').length,tableRows:[...document.querySelectorAll('table')].map(x=>x.querySelectorAll('tbody tr').length),"
@@ -482,7 +491,7 @@ def reference_qa(client: CDP):
     pages = sorted((PAGE.parent / 'references').glob('*.html'))
     for path in pages:
         client.call('Emulation.setDeviceMetricsOverride', {'width': 1440, 'height': 1000, 'deviceScaleFactor': 1, 'mobile': False})
-        client.call('Page.navigate', {'url': path.as_uri()})
+        client.call('Page.navigate', {'url': page_url(path)})
         deadline = time.monotonic() + 10
         while time.monotonic() < deadline:
             if client.evaluate("document.readyState==='complete'&&!!document.querySelector('main h1')"):
@@ -512,21 +521,26 @@ def reference_qa(client: CDP):
                 check('local canonical glossary has 75 stable term anchors', count == 75, count)
     client.call('Emulation.setDeviceMetricsOverride', {'width': 1440, 'height': 1000, 'deviceScaleFactor': 1, 'mobile': False})
     pdf = PAGE.parent / 'presentation/presentation.pdf'
-    navigation = client.call('Page.navigate', {'url': pdf.as_uri()})
+    navigation = client.call('Page.navigate', {'url': page_url(pdf)})
     time.sleep(1)
     pdf_state = client.evaluate("({url:location.href,type:document.contentType,viewer:!!document.querySelector('embed[type=\"application/pdf\"]')})")
-    check('local PDF opens without GitHub', not navigation.get('errorText') and pdf_state['url'] == pdf.as_uri() and (pdf_state['type'] == 'application/pdf' or pdf_state['viewer']), pdf_state)
+    check('local PDF opens without GitHub', not navigation.get('errorText') and pdf_state['url'] == page_url(pdf) and (pdf_state['type'] == 'application/pdf' or pdf_state['viewer']), pdf_state)
     screenshot(client, 'local_presentation_pdf.png')
 
 
 def main():
-    global PAGE
+    global PAGE, HTTP_BASE, OUTPUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--project-prefix', action='store_true', help='Serve only an isolated package over loopback under the Pages project prefix')
+    args = parser.parse_args()
+    if args.project_prefix:
+        OUTPUT = ROOT / 'outputs/pages_publication_checks/browser-prefix'
     sys.stdout.reconfigure(encoding="utf-8")
     OUTPUT.mkdir(parents=True, exist_ok=True)
     if not EDGE.is_file() or not PAGE.is_file():
         raise RuntimeError("Existing Edge and completed local HTML are required")
     isolation = tempfile.TemporaryDirectory(prefix='sberindex-publication-qa-')
-    isolated_site = Path(isolation.name) / 'site'
+    isolated_site = Path(isolation.name) / ('sberindex-municipal-forecasting' if args.project_prefix else 'site')
     shutil.copytree(PAGE.parent, isolated_site)
     PAGE = isolated_site / 'index.html'
     profile = OUTPUT / ("browser_profile_" + uuid.uuid4().hex[:12])
@@ -535,6 +549,14 @@ def main():
     started = time.monotonic()
     initial_sha256 = {name: hashlib.sha256((PAGE.parent / name).read_bytes()).hexdigest() for name in SOURCE_FILES}
     failure = None
+    server = None
+    if args.project_prefix:
+        class QuietHandler(SimpleHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+        server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=isolation.name))
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        HTTP_BASE = f'http://127.0.0.1:{server.server_port}/sberindex-municipal-forecasting/'
     flags = [
         str(EDGE), "--headless", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
         "--disable-extensions", "--disable-background-networking", "--disable-component-update",
@@ -542,6 +564,8 @@ def main():
         "--no-sandbox", "--disable-features=RendererCodeIntegrity", "--proxy-server=127.0.0.1:9",
         "--remote-debugging-address=127.0.0.1", "--remote-debugging-port=0", "--user-data-dir=" + str(profile), "about:blank",
     ]
+    if HTTP_BASE:
+        flags.insert(-1, '--proxy-bypass-list=127.0.0.1;localhost')
     try:
         with (OUTPUT / "browser_stdout.log").open("wb") as stdout, (OUTPUT / "browser_stderr.log").open("wb") as stderr:
             process = subprocess.Popen(flags, stdout=stdout, stderr=stderr, creationflags=subprocess.CREATE_NO_WINDOW)
@@ -568,10 +592,21 @@ def main():
         events = client.events if client else []
         exceptions = [event for event in events if event.get("method") == "Runtime.exceptionThrown"]
         console_errors = [event for event in events if event.get("method") == "Runtime.consoleAPICalled" and event.get("params", {}).get("type") == "error"]
-        log_errors = [event for event in events if event.get("method") == "Log.entryAdded" and event.get("params", {}).get("entry", {}).get("level") == "error"]
+        # Edge's native PDF viewer requests /favicon.ico at the domain root,
+        # independently of all site href/src URLs. Record that browser UI request
+        # separately; no other root request or missing site asset is exempted.
+        pdf_icon_events = [event for event in events if HTTP_BASE
+                           and event.get('method') == 'Network.requestWillBeSent'
+                           and event.get('params', {}).get('request', {}).get('url') == urllib.parse.urljoin(HTTP_BASE, '/favicon.ico')
+                           and event.get('params', {}).get('documentURL') == page_url(PAGE.parent / 'presentation/presentation.pdf')]
+        pdf_icon_ids = {event['params']['requestId'] for event in pdf_icon_events}
+        log_errors = [event for event in events if event.get("method") == "Log.entryAdded" and event.get("params", {}).get("entry", {}).get("level") == "error"
+                      and event.get('params', {}).get('entry', {}).get('networkRequestId') not in pdf_icon_ids]
         external = [event.get("params", {}).get("request", {}).get("url") for event in events
                     if event.get("method") == "Network.requestWillBeSent"
-                    and urllib.parse.urlsplit(event.get("params", {}).get("request", {}).get("url", "")).scheme in {"http", "https", "ws", "wss"}]
+                    and urllib.parse.urlsplit(event.get("params", {}).get("request", {}).get("url", "")).scheme in {"http", "https", "ws", "wss"}
+                    and not (HTTP_BASE and event.get('params', {}).get('request', {}).get('url', '').startswith(HTTP_BASE))
+                    and event.get('params', {}).get('requestId') not in pdf_icon_ids]
         check("no uncaught JavaScript exceptions", not exceptions, exceptions)
         check("no console.error messages", not console_errors, console_errors)
         check("no browser page error logs", not log_errors, log_errors)
@@ -594,13 +629,17 @@ def main():
             "task": "Isolated publication package browser QA", "status": "PASS" if all(item["passed"] for item in checks) else "FAIL",
             "runtime_seconds": round(time.monotonic() - started, 3), "source": "isolated publication package/index.html",
             "source_sha256": final_sha256, "checks": checks, "screenshots": screenshots,
-            "connection": "Local Edge CDP over 127.0.0.1, stdlib WebSocket; HTTP/HTTPS/WS/WSS page requests blocked",
+            "connection": 'Local Edge CDP; loopback-only isolated Pages project prefix; external proxy blocked' if HTTP_BASE else "Local Edge CDP over 127.0.0.1, stdlib WebSocket; HTTP/HTTPS/WS/WSS page requests blocked",
             "page_edits": 0, "new_model_fits": 0, "new_experiments": 0, "package_installs": 0,
             "presentation_export": False, "commit_push": False,
+            "native_pdf_viewer_icon_requests": [{key: event['params'].get(key) for key in ['requestId', 'documentURL', 'type', 'initiator']} for event in pdf_icon_events],
         }
         (OUTPUT / "frontend_browser_check.json").write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(json.dumps({"status": proof["status"], "runtime_seconds": proof["runtime_seconds"], "checks": len(checks),
                           "failures": [item for item in checks if not item["passed"]], "screenshots": screenshots}, ensure_ascii=False, indent=2))
+        if server:
+            server.shutdown()
+            server.server_close()
         isolation.cleanup()
     return 0 if all(item["passed"] for item in checks) else 1
 
